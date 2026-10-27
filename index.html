@@ -41,6 +41,9 @@
         <button id="btnReset" onclick="resetToGenerator()" class="hidden text-xs md:text-sm font-semibold text-slate-600 hover:text-emerald-700 px-3 py-1.5 rounded-lg border border-slate-200 hover:border-emerald-300 transition-all flex items-center gap-1.5">
           <i data-lucide="plus-circle" class="w-4 h-4"></i> Bikin Toko Baru
         </button>
+        <button id="btnHeaderLogout" onclick="logoutFromStore()" class="hidden text-xs md:text-sm font-bold text-rose-600 hover:text-rose-700 bg-rose-50 hover:bg-rose-100 px-3 py-1.5 rounded-xl border border-rose-200 transition-all flex items-center gap-1.5 shadow-sm">
+          <i data-lucide="log-out" class="w-4 h-4"></i> Keluar
+        </button>
       </div>
     </div>
   </header>
@@ -290,6 +293,9 @@
           </button>
           <button onclick="openShareModal()" class="flex-1 md:flex-none px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs md:text-sm rounded-xl shadow flex items-center justify-center gap-1.5 transition-all">
             <i data-lucide="share-2" class="w-4 h-4"></i> Bagikan Link Toko
+          </button>
+          <button onclick="logoutFromStore()" class="flex-1 md:flex-none px-3 py-2 bg-rose-600/20 hover:bg-rose-600/30 text-rose-300 font-bold text-xs md:text-sm rounded-xl border border-rose-500/30 flex items-center justify-center gap-1.5 transition-all">
+            <i data-lucide="log-out" class="w-4 h-4"></i> Keluar Toko
           </button>
         </div>
       </div>
@@ -629,9 +635,14 @@
             <p class="text-xs text-slate-400">Kelola semua member, lisensi, dan toko online TokoKilat WA</p>
           </div>
         </div>
-        <button onclick="closeMasterAdminGenerator()" class="w-8 h-8 rounded-full hover:bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center transition-colors">
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
+        <div class="flex items-center gap-2">
+          <button onclick="logoutFromStore()" class="px-3 py-1.5 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-500/30 text-xs font-bold flex items-center gap-1 transition-colors">
+            <i data-lucide="log-out" class="w-3.5 h-3.5"></i> Keluar Admin
+          </button>
+          <button onclick="closeMasterAdminGenerator()" class="w-8 h-8 rounded-full hover:bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center transition-colors">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
       </div>
 
       <!-- TAB MENU: LIST TOKO vs BUAT LISENSI -->
@@ -836,6 +847,7 @@
     function updateSuperAdminButtons() {
       const btnHeader = document.getElementById('btnHeaderSuperAdmin');
       const btnPanel = document.getElementById('btnSuperAdminPanel');
+      const btnLogout = document.getElementById('btnHeaderLogout');
       if (isSuperAdmin) {
         if (btnHeader) btnHeader.classList.remove('hidden');
         if (btnPanel) btnPanel.classList.remove('hidden');
@@ -843,6 +855,45 @@
         if (btnHeader) btnHeader.classList.add('hidden');
         if (btnPanel) btnPanel.classList.add('hidden');
       }
+      if (isOwner || isSuperAdmin) {
+        if (btnLogout) btnLogout.classList.remove('hidden');
+      } else {
+        if (btnLogout) btnLogout.classList.add('hidden');
+      }
+    }
+
+    // Fungsi Keluar / Logout dari Toko maupun Super Admin (Bersihkan sesi agar aman)
+    function logoutFromStore() {
+      if (!confirm('Keluar dari akun toko / Super Admin sekarang?')) return;
+
+      if (currentStore && currentStore.name) {
+        const slug = makeSlug(currentStore.name);
+        try { localStorage.removeItem('tokokilat_owner_' + slug); } catch (e) {}
+      }
+      try {
+        localStorage.removeItem('tokokilat_superadmin');
+        localStorage.removeItem('tokokilat_owner_jbgold');
+        localStorage.removeItem('tokokilat_owner_jbantam');
+        localStorage.removeItem('tokokilat_active_store');
+      } catch (e) {}
+
+      isOwner = false;
+      isSuperAdmin = false;
+      isEditMode = false;
+      cart = {};
+      currentStore = null;
+
+      updateSuperAdminButtons();
+      closeMasterAdminGenerator();
+      try { window.history.replaceState({}, document.title, window.location.pathname); } catch (e) {}
+
+      document.getElementById('storeView').classList.add('hidden');
+      document.getElementById('btnReset').classList.add('hidden');
+      document.getElementById('floatingCartContainer').classList.add('hidden');
+      document.getElementById('generatorView').classList.remove('hidden');
+      lucide.createIcons();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      alert('✅ Anda telah berhasil keluar dari sesi Toko / Super Admin.');
     }
 
     function openSuperAdminDashboardDirect() {
@@ -2493,7 +2544,12 @@ Mohon info ketersediaan barang dan petunjuk pembayarannya ya, terima kasih! 🙏
         cart = {};
         currentStore = null;
         isOwner = false;
-        try { window.history.replaceState({}, document.title, window.location.pathname); } catch (e) {}
+        isSuperAdmin = false;
+        try {
+          localStorage.removeItem('tokokilat_superadmin');
+          window.history.replaceState({}, document.title, window.location.pathname);
+        } catch (e) {}
+        updateSuperAdminButtons();
         document.getElementById('storeView').classList.add('hidden');
         document.getElementById('btnReset').classList.add('hidden');
         document.getElementById('floatingCartContainer').classList.add('hidden');
