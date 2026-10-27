@@ -1620,6 +1620,10 @@
       const rawPhone = document.getElementById('loginPhone').value.trim();
       const password = document.getElementById('loginPassword').value.trim();
       const cleanPhone = normalizeWaPhone(rawPhone);
+      const submitBtn = document.getElementById('btnLoginSubmit');
+      const originalText = submitBtn.innerHTML;
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = `<span>Mengecek data toko...</span>`;
 
       // JALUR KHUSUS SUPER ADMIN: Langsung buka panel Admin Pusat & Toko Utama
       if (cleanPhone === SUPER_ADMIN_PHONE && password === SUPER_ADMIN_PASSWORD) {
@@ -1655,14 +1659,11 @@
       }
 
       if (!cleanPhone || cleanPhone.length < 9) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalText;
         alert('Mohon masukkan Nomor WhatsApp yang valid!');
         return;
       }
-
-      const submitBtn = document.getElementById('btnLoginSubmit');
-      const originalText = submitBtn.innerHTML;
-      submitBtn.disabled = true;
-      submitBtn.innerHTML = `<span>Mengecek data toko...</span>`;
 
       try {
         // Ambil semua daftar toko dari Firebase Realtime Database
