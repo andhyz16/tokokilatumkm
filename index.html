@@ -54,9 +54,6 @@
           Bikin Web Jualan Siap Order WA <br>
           <span class="bg-gradient-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent">Hanya dalam 10 Detik!</span>
         </h1>
-        <p class="text-slate-600 text-sm md:text-base mt-2 max-w-lg mx-auto">
-          Cukup isi nama tokomu & apa yang kamu jual. Sistem otomatis menyusun katalog produk estetik yang langsung terhubung ke WhatsApp penjual!
-        </p>
       </div>
 
       <!-- THE FORM -->
@@ -255,7 +252,7 @@
             <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400"></i>
           </button>
           <button onclick="openRenewLicenseModal(); closeOwnerMenuDropdown();" class="w-full px-4 py-3 bg-slate-800 hover:bg-slate-700 text-amber-300 font-bold text-xs md:text-sm rounded-xl border border-slate-700 flex items-center justify-between transition-all">
-            <span class="flex items-center gap-2.5"><i data-lucide="key-round" class="w-4 h-4 text-amber-400"></i> Perpanjang Masa Sewa</span>
+            <span class="flex items-center gap-2.5"><i data-lucide="crown" class="w-4 h-4 text-amber-400"></i> Pilih Paket & Perpanjang Aktif</span>
             <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400"></i>
           </button>
           <button onclick="openShareModal(); closeOwnerMenuDropdown();" class="w-full px-4 py-3 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs md:text-sm rounded-xl shadow flex items-center justify-between transition-all">
@@ -275,54 +272,50 @@
           <i data-lucide="clock-alert" class="w-9 h-9"></i>
         </div>
         <div>
-          <span class="px-3 py-1 rounded-full bg-rose-100 text-rose-800 font-bold text-xs uppercase tracking-wider">Masa Sewa Berakhir</span>
+          <span class="px-3 py-1 rounded-full bg-rose-100 text-rose-800 font-bold text-xs uppercase tracking-wider">Masa Aktif Berakhir</span>
           <h2 id="expiredStoreTitle" class="text-2xl font-extrabold text-slate-900 mt-2">Toko Online Sedang Nonaktif Sementara</h2>
           <p class="text-xs md:text-sm text-slate-600 mt-2 leading-relaxed">
-            Masa sewa bulanan untuk katalog toko ini telah berakhir pada <b id="expiredDateText" class="text-rose-600">-</b>.<br>
-            Bagi pemilik toko, silakan hubungi Admin untuk memperpanjang masa aktif sewa bulanan. Semua data produk & harga Anda tetap tersimpan aman.
+            Masa aktif katalog toko ini telah berakhir pada <b id="expiredDateText" class="text-rose-600">-</b>.<br>
+            Bagi pemilik toko, silakan pilih paket member di bawah ini untuk mengaktifkan kembali toko Anda. Semua data produk & harga tetap tersimpan aman.
           </p>
         </div>
         <div class="text-left space-y-2.5 pt-2">
-          <p class="text-xs font-extrabold text-slate-800 text-center uppercase tracking-wider">Pilih Paket Sewa untuk Mengaktifkan Kembali:</p>
-          <!-- Paket 1 Bulan -->
-          <button type="button" onclick="orderSubscriptionPackage('1 Bulan (30 Hari)', 'Rp 30.000')" class="w-full p-3.5 rounded-2xl border-2 border-slate-200 hover:border-emerald-500 bg-slate-50 hover:bg-emerald-50/40 flex items-center justify-between transition-all text-left group">
+          <p class="text-xs font-extrabold text-slate-800 text-center uppercase tracking-wider">Pilih Paket Member untuk Mengaktifkan Toko:</p>
+          <!-- Paket Standar -->
+          <button type="button" onclick="orderSubscriptionPackage('Paket Standar (1 Bulan)', 'Rp 30.000/bulan')" class="w-full p-3.5 rounded-2xl border-2 border-slate-200 hover:border-emerald-500 bg-slate-50 hover:bg-emerald-50/40 flex items-center justify-between transition-all text-left group">
             <div>
-              <div class="font-extrabold text-slate-900 text-sm group-hover:text-emerald-800">Paket Sewa 1 Bulan</div>
-              <div class="text-[11px] text-slate-500">Masa aktif 30 hari penuh</div>
+              <div class="font-extrabold text-slate-900 text-sm group-hover:text-emerald-800">Paket Standar (1 Bulan)</div>
+              <div class="text-[11px] text-slate-500">Aktif penuh selama 30 hari</div>
             </div>
             <div class="text-right">
-              <div class="text-base font-black text-emerald-700">Rp 30.000</div>
+              <div class="text-base font-black text-emerald-700">Rp 30.000<span class="text-[11px] font-bold text-slate-500">/bulan</span></div>
             </div>
           </button>
 
-          <!-- Paket 6 Bulan -->
-          <button type="button" onclick="orderSubscriptionPackage('6 Bulan (180 Hari)', 'Rp 150.000')" class="w-full p-3.5 rounded-2xl border-2 border-emerald-500 bg-emerald-50/50 hover:bg-emerald-50 flex items-center justify-between transition-all text-left relative">
-            <span class="absolute -top-2.5 right-3 px-2 py-0.5 rounded-full bg-emerald-600 text-white text-[10px] font-black uppercase">Hemat Rp 30rb</span>
+          <!-- Paket Premium -->
+          <button type="button" onclick="orderSubscriptionPackage('Paket Premium (6 Bulan)', 'Rp 25.000/bulan (Total Rp 150.000)')" class="w-full p-3.5 rounded-2xl border-2 border-emerald-500 bg-emerald-50/50 hover:bg-emerald-50 flex items-center justify-between transition-all text-left relative">
+            <span class="absolute -top-2.5 right-3 px-2 py-0.5 rounded-full bg-emerald-600 text-white text-[10px] font-black uppercase">Populer • Hemat</span>
             <div>
-              <div class="font-extrabold text-slate-900 text-sm">Paket Sewa 6 Bulan</div>
-              <div class="text-[11px] text-emerald-700 font-semibold">Masa aktif 180 hari penuh</div>
+              <div class="font-extrabold text-slate-900 text-sm">Paket Premium (6 Bulan)</div>
+              <div class="text-[11px] text-emerald-700 font-semibold">Aktif penuh selama 180 hari</div>
             </div>
             <div class="text-right">
-              <div class="text-xs text-rose-500 line-through font-bold">Rp 180.000</div>
-              <div class="text-base font-black text-emerald-700">Rp 150.000</div>
+              <div class="text-xs text-rose-500 line-through font-bold">Rp 30.000/bulan</div>
+              <div class="text-base font-black text-emerald-700">Rp 25.000<span class="text-[11px] font-bold">/bulan</span></div>
             </div>
           </button>
 
-          <!-- Paket 12 Bulan -->
-          <button type="button" onclick="orderSubscriptionPackage('12 Bulan / 1 Tahun (365 Hari)', 'Rp 250.000')" class="w-full p-3.5 rounded-2xl border-2 border-amber-400 bg-amber-50/60 hover:bg-amber-50 flex items-center justify-between transition-all text-left relative">
-            <span class="absolute -top-2.5 right-3 px-2 py-0.5 rounded-full bg-amber-500 text-slate-950 text-[10px] font-black uppercase">Paling Hemat • Diskon Rp 110rb</span>
+          <!-- Paket Eksklusif -->
+          <button type="button" onclick="orderSubscriptionPackage('Paket Eksklusif (12 Bulan)', 'Rp 20.000/bulan (Total Rp 240.000)')" class="w-full p-3.5 rounded-2xl border-2 border-amber-400 bg-amber-50/60 hover:bg-amber-50 flex items-center justify-between transition-all text-left relative">
+            <span class="absolute -top-2.5 right-3 px-2 py-0.5 rounded-full bg-amber-500 text-slate-950 text-[10px] font-black uppercase">Paling Hemat</span>
             <div>
-              <div class="font-extrabold text-slate-900 text-sm">Paket Sewa 12 Bulan (1 Tahun)</div>
-              <div class="text-[11px] text-amber-800 font-semibold">Masa aktif 365 hari penuh</div>
+              <div class="font-extrabold text-slate-900 text-sm">Paket Eksklusif (12 Bulan)</div>
+              <div class="text-[11px] text-amber-800 font-semibold">Aktif penuh selama 1 tahun</div>
             </div>
             <div class="text-right">
-              <div class="text-xs text-rose-500 line-through font-bold">Rp 360.000</div>
-              <div class="text-base font-black text-amber-700">Rp 250.000</div>
+              <div class="text-xs text-rose-500 line-through font-bold">Rp 30.000/bulan</div>
+              <div class="text-base font-black text-amber-700">Rp 20.000<span class="text-[11px] font-bold">/bulan</span></div>
             </div>
-          </button>
-
-          <button onclick="openRenewLicenseModal()" class="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl flex items-center justify-center gap-2 transition-all mt-2">
-            <i data-lucide="key-round" class="w-4 h-4 text-amber-400"></i> Sudah Punya Kode Lisensi? Masukkan di Sini
           </button>
         </div>
       </div>
@@ -645,9 +638,9 @@
       <div class="p-5 border-b border-slate-100 flex items-center justify-between bg-amber-50">
         <div class="flex items-center gap-2">
           <div class="w-8 h-8 rounded-lg bg-amber-500 text-white flex items-center justify-center">
-            <i data-lucide="key-round" class="w-4 h-4"></i>
+            <i data-lucide="crown" class="w-4 h-4"></i>
           </div>
-          <h3 class="font-bold text-slate-900 text-base">Perpanjang Masa Aktif Sewa</h3>
+          <h3 class="font-bold text-slate-900 text-base">Pilih Paket Member Toko</h3>
         </div>
         <button onclick="closeRenewLicenseModal()" class="w-8 h-8 rounded-full hover:bg-slate-200 text-slate-500 flex items-center justify-center">
           <i data-lucide="x" class="w-5 h-5"></i>
@@ -660,54 +653,45 @@
           <div>Masa Aktif Saat Ini: <b id="renewModalCurrentExp" class="text-amber-700">-</b></div>
         </div>
 
-        <!-- PILIHAN PAKET SEWA LANJUTAN -->
+        <!-- PILIHAN PAKET MEMBER LANJUTAN -->
         <div class="space-y-2.5">
-          <label class="block text-xs font-extrabold text-slate-800 uppercase tracking-wider">Pilih Paket Perpanjangan Sewa (Klik untuk Pesan via WA):</label>
+          <label class="block text-xs font-extrabold text-slate-800 uppercase tracking-wider">Pilih Paket Aktifasi Toko (Klik untuk Pesan via WA):</label>
 
-          <!-- 1 Bulan -->
-          <button type="button" onclick="orderSubscriptionPackage('1 Bulan (30 Hari)', 'Rp 30.000')" class="w-full p-3.5 rounded-2xl border-2 border-slate-200 hover:border-emerald-500 bg-white hover:bg-emerald-50/40 flex items-center justify-between transition-all text-left group">
+          <!-- Paket Standar (1 Bulan) -->
+          <button type="button" onclick="orderSubscriptionPackage('Paket Standar (1 Bulan)', 'Rp 30.000/bulan')" class="w-full p-3.5 rounded-2xl border-2 border-slate-200 hover:border-emerald-500 bg-white hover:bg-emerald-50/40 flex items-center justify-between transition-all text-left group">
             <div>
-              <div class="font-extrabold text-slate-900 text-sm group-hover:text-emerald-800">Sewa 1 Bulan (30 Hari)</div>
-              <div class="text-[11px] text-slate-500">Klik untuk perpanjang 1 bulan</div>
+              <div class="font-extrabold text-slate-900 text-sm group-hover:text-emerald-800">Paket Standar (1 Bulan)</div>
+              <div class="text-[11px] text-slate-500">Masa aktif penuh 30 hari</div>
             </div>
             <div class="text-right">
-              <div class="text-base font-black text-emerald-700">Rp 30.000</div>
+              <div class="text-base font-black text-emerald-700">Rp 30.000<span class="text-[11px] font-bold text-slate-500">/bulan</span></div>
             </div>
           </button>
 
-          <!-- 6 Bulan -->
-          <button type="button" onclick="orderSubscriptionPackage('6 Bulan (180 Hari)', 'Rp 150.000')" class="w-full p-3.5 rounded-2xl border-2 border-emerald-500 bg-emerald-50/40 hover:bg-emerald-50 flex items-center justify-between transition-all text-left relative">
-            <span class="absolute -top-2.5 right-3 px-2 py-0.5 rounded-full bg-emerald-600 text-white text-[10px] font-black uppercase">Hemat Rp 30.000</span>
+          <!-- Paket Premium (6 Bulan) -->
+          <button type="button" onclick="orderSubscriptionPackage('Paket Premium (6 Bulan)', 'Rp 25.000/bulan (Total Rp 150.000)')" class="w-full p-3.5 rounded-2xl border-2 border-emerald-500 bg-emerald-50/40 hover:bg-emerald-50 flex items-center justify-between transition-all text-left relative">
+            <span class="absolute -top-2.5 right-3 px-2 py-0.5 rounded-full bg-emerald-600 text-white text-[10px] font-black uppercase">Populer • Hemat</span>
             <div>
-              <div class="font-extrabold text-slate-900 text-sm">Sewa 6 Bulan (180 Hari)</div>
-              <div class="text-[11px] text-emerald-700 font-semibold">Klik untuk perpanjang 6 bulan</div>
+              <div class="font-extrabold text-slate-900 text-sm">Paket Premium (6 Bulan)</div>
+              <div class="text-[11px] text-emerald-700 font-semibold">Masa aktif penuh 180 hari</div>
             </div>
             <div class="text-right">
-              <div class="text-xs text-rose-500 line-through font-bold">Rp 180.000</div>
-              <div class="text-base font-black text-emerald-700">Rp 150.000</div>
+              <div class="text-xs text-rose-500 line-through font-bold">Rp 30.000/bulan</div>
+              <div class="text-base font-black text-emerald-700">Rp 25.000<span class="text-[11px] font-bold">/bulan</span></div>
             </div>
           </button>
 
-          <!-- 12 Bulan -->
-          <button type="button" onclick="orderSubscriptionPackage('12 Bulan / 1 Tahun (365 Hari)', 'Rp 250.000')" class="w-full p-3.5 rounded-2xl border-2 border-amber-400 bg-amber-50/50 hover:bg-amber-50 flex items-center justify-between transition-all text-left relative">
-            <span class="absolute -top-2.5 right-3 px-2 py-0.5 rounded-full bg-amber-500 text-slate-950 text-[10px] font-black uppercase">Paling Hemat • Diskon Rp 110.000</span>
+          <!-- Paket Eksklusif (12 Bulan) -->
+          <button type="button" onclick="orderSubscriptionPackage('Paket Eksklusif (12 Bulan)', 'Rp 20.000/bulan (Total Rp 240.000)')" class="w-full p-3.5 rounded-2xl border-2 border-amber-400 bg-amber-50/50 hover:bg-amber-50 flex items-center justify-between transition-all text-left relative">
+            <span class="absolute -top-2.5 right-3 px-2 py-0.5 rounded-full bg-amber-500 text-slate-950 text-[10px] font-black uppercase">Paling Hemat</span>
             <div>
-              <div class="font-extrabold text-slate-900 text-sm">Sewa 12 Bulan / 1 Tahun</div>
-              <div class="text-[11px] text-amber-800 font-semibold">Klik untuk perpanjang 1 tahun penuh</div>
+              <div class="font-extrabold text-slate-900 text-sm">Paket Eksklusif (12 Bulan)</div>
+              <div class="text-[11px] text-amber-800 font-semibold">Masa aktif penuh 1 tahun</div>
             </div>
             <div class="text-right">
-              <div class="text-xs text-rose-500 line-through font-bold">Rp 360.000</div>
-              <div class="text-base font-black text-amber-700">Rp 250.000</div>
+              <div class="text-xs text-rose-500 line-through font-bold">Rp 30.000/bulan</div>
+              <div class="text-base font-black text-amber-700">Rp 20.000<span class="text-[11px] font-bold">/bulan</span></div>
             </div>
-          </button>
-        </div>
-
-        <div class="pt-3 border-t border-slate-200 space-y-2.5">
-          <label class="block text-xs font-bold text-slate-700">Atau Masukkan Kode Lisensi (Jika Sudah Diberikan Admin):</label>
-          <input type="text" id="inputRenewLicenseKey" placeholder="Contoh: TK-62812...-20261226-XXXX"
-            class="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-xs md:text-sm font-mono font-bold uppercase tracking-wider focus:outline-none focus:ring-2 focus:ring-emerald-500">
-          <button onclick="applyRenewalLicenseKey()" class="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs rounded-xl shadow flex items-center justify-center gap-2">
-            <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400"></i> Aktifkan dengan Kode Lisensi
           </button>
         </div>
       </div>
@@ -781,16 +765,16 @@
           </div>
 
           <div>
-            <label class="block text-xs font-bold text-slate-800 mb-1">2. Pilih Paket Sewa:</label>
+            <label class="block text-xs font-bold text-slate-800 mb-1">2. Pilih Paket Member:</label>
             <select id="genDurationDays" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500">
-              <option value="30">Paket 1 Bulan (30 Hari) — Rp 30.000</option>
-              <option value="180">Paket 6 Bulan (180 Hari) — Rp 150.000 (Harga Normal Rp 180.000)</option>
-              <option value="365">Paket 12 Bulan / 1 Tahun (365 Hari) — Rp 250.000 (Harga Normal Rp 360.000)</option>
+              <option value="30">Paket Standar (1 Bulan) — Rp 30.000/bulan</option>
+              <option value="180">Paket Premium (6 Bulan) — Rp 25.000/bulan</option>
+              <option value="365">Paket Eksklusif (12 Bulan) — Rp 20.000/bulan</option>
             </select>
           </div>
 
           <button onclick="createMemberLicenseKey()" class="w-full py-3.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-extrabold text-xs md:text-sm rounded-xl shadow-md flex items-center justify-center gap-2 transition-all">
-            <i data-lucide="zap" class="w-4 h-4 fill-current"></i> CETAK LISENSI & OTOMATIS PERPANJANG SEWA
+            <i data-lucide="zap" class="w-4 h-4 fill-current"></i> CETAK LISENSI & AKTIFKAN PAKET OTOMATIS
           </button>
 
           <div id="generatedLicenseResultBox" class="hidden p-4 bg-emerald-50 border border-emerald-200 rounded-2xl space-y-2.5">
@@ -2443,7 +2427,9 @@
       document.getElementById('renewModalStoreName').innerText = currentStore.name || '-';
       document.getElementById('renewModalStorePhone').innerText = '+' + (currentStore.phone || '-');
       document.getElementById('renewModalCurrentExp').innerText = formatYmdIndonesian(currentStore.exp || '20991231');
-      document.getElementById('inputRenewLicenseKey').value = '';
+      if (document.getElementById('inputRenewLicenseKey')) {
+        document.getElementById('inputRenewLicenseKey').value = '';
+      }
       document.getElementById('renewLicenseModal').classList.remove('hidden');
       lucide.createIcons();
     }
@@ -2599,12 +2585,12 @@ Mohon info rekening / cara pembayarannya ya Admin. Terima kasih!`;
               </button>
               <div class="inline-flex items-center bg-amber-50 border border-amber-300 rounded-xl overflow-hidden shadow-sm">
                 <select id="extPkg_${slug}" class="bg-transparent pl-2 pr-1 py-1.5 text-[11px] font-extrabold text-slate-900 focus:outline-none cursor-pointer">
-                  <option value="30">1 Bln (30rb)</option>
-                  <option value="180">6 Bln (150rb)</option>
-                  <option value="365">12 Bln (250rb)</option>
+                  <option value="30">Standar • 1 Bln</option>
+                  <option value="180">Premium • 6 Bln</option>
+                  <option value="365">Eksklusif • 12 Bln</option>
                 </select>
-                <button onclick="superAdminQuickExtend('${slug}')" title="Perpanjang Masa Sewa Sesuai Paket" class="px-2.5 py-1.5 bg-amber-500 hover:bg-amber-600 text-slate-950 text-xs font-extrabold flex items-center gap-1">
-                  <i data-lucide="plus" class="w-3 h-3"></i> Perpanjang
+                <button onclick="superAdminQuickExtend('${slug}')" title="Perpanjang Masa Aktif Sesuai Paket" class="px-2.5 py-1.5 bg-amber-500 hover:bg-amber-600 text-slate-950 text-xs font-extrabold flex items-center gap-1">
+                  <i data-lucide="plus" class="w-3 h-3"></i> Aktifkan
                 </button>
               </div>
               <a href="${storeUrl}" target="_blank" title="Lihat Tampilan Pembeli" class="p-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl">
@@ -2694,7 +2680,7 @@ ${directResetUrl}
 
       const selectEl = document.getElementById('extPkg_' + slug);
       const days = customDays || parseInt(selectEl?.value || '30', 10) || 30;
-      const pkgText = days === 365 ? '12 Bulan / 1 Tahun (Rp 250.000)' : (days === 180 ? '6 Bulan (Rp 150.000)' : '1 Bulan (Rp 30.000)');
+      const pkgText = days === 365 ? 'Paket Eksklusif (12 Bulan)' : (days === 180 ? 'Paket Premium (6 Bulan)' : 'Paket Standar (1 Bulan)');
 
       if (!confirm(`Perpanjang masa sewa toko "${store.name}" untuk Paket ${pkgText} (+${days} hari)?`)) return;
 
@@ -2809,7 +2795,7 @@ ${directResetUrl}
     function sendGeneratedLicenseToClientWa() {
       if (!lastGeneratedLicense.key) return;
       const baseUrl = window.location.origin + window.location.pathname;
-      const pkgLabel = lastGeneratedLicense.days === 365 ? '12 Bulan / 1 Tahun (Rp 250.000)' : (lastGeneratedLicense.days === 180 ? '6 Bulan (Rp 150.000)' : '1 Bulan (Rp 30.000)');
+      const pkgLabel = lastGeneratedLicense.days === 365 ? 'Paket Eksklusif (12 Bulan)' : (lastGeneratedLicense.days === 180 ? 'Paket Premium (6 Bulan)' : 'Paket Standar (1 Bulan)');
       const msg = 
 `Halo Kak! Terima kasih sudah berlangganan *TokoKilat WA* 🙏
 
