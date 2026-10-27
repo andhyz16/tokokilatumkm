@@ -62,22 +62,6 @@
       <!-- THE FORM -->
       <div class="bg-white rounded-3xl shadow-xl shadow-slate-200/60 border border-slate-200 p-6 md:p-8">
         <form id="storeForm" onsubmit="generateStore(event)" class="space-y-5">
-
-          <!-- BANNER TRIAL GRATIS 7 HARI OTOMATIS -->
-          <div class="p-4 rounded-2xl bg-gradient-to-r from-emerald-50 via-teal-50 to-amber-50 border border-emerald-200 flex items-center justify-between gap-3">
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-sm flex-shrink-0">
-                <i data-lucide="gift" class="w-5 h-5"></i>
-              </div>
-              <div>
-                <div class="flex items-center gap-2 flex-wrap">
-                  <span class="text-xs md:text-sm font-extrabold text-slate-900">Gratis Uji Coba 7 Hari!</span>
-                  <span class="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-emerald-600 text-white">Langsung Aktif</span>
-                </div>
-                <p class="text-[11px] text-slate-600 mt-0.5">Buat toko sekarang tanpa kode lisensi. Berlaku 1x untuk setiap Email & Nomor WhatsApp.</p>
-              </div>
-            </div>
-          </div>
           
           <!-- NAMA TOKO -->
           <div>
@@ -123,7 +107,6 @@
                   placeholder="nama@email.com"
                   class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-sm md:text-base font-medium transition-all">
               </div>
-              <p class="text-[11px] text-slate-400 mt-1">🔒 1 Email hanya untuk 1 toko.</p>
             </div>
 
             <!-- NOMOR WA -->
@@ -137,7 +120,6 @@
                   placeholder="81234567890"
                   class="w-full pl-14 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-sm md:text-base font-bold transition-all">
               </div>
-              <p class="text-[11px] text-slate-400 mt-1">🔒 1 Nomor WA hanya untuk 1 toko.</p>
             </div>
           </div>
 
@@ -300,13 +282,47 @@
             Bagi pemilik toko, silakan hubungi Admin untuk memperpanjang masa aktif sewa bulanan. Semua data produk & harga Anda tetap tersimpan aman.
           </p>
         </div>
-        <div class="space-y-2.5 pt-2">
-          <a id="btnWaAdminRenew" href="https://wa.me/6282299777924?text=Halo%20Admin,%20saya%20mau%20perpanjang%20masa%20sewa%20bulanan%20TokoKilat%20WA" target="_blank"
-            class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-sm rounded-2xl shadow-lg flex items-center justify-center gap-2 transition-all">
-            <i data-lucide="message-circle" class="w-5 h-5"></i> Hubungi Admin untuk Perpanjang Sewa
-          </a>
-          <button onclick="openRenewLicenseModal()" class="w-full py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-2xl flex items-center justify-center gap-2 transition-all">
-            <i data-lucide="key-round" class="w-4 h-4 text-amber-400"></i> Pemilik Toko: Masukkan Kode Lisensi Perpanjangan
+        <div class="text-left space-y-2.5 pt-2">
+          <p class="text-xs font-extrabold text-slate-800 text-center uppercase tracking-wider">Pilih Paket Sewa untuk Mengaktifkan Kembali:</p>
+          <!-- Paket 1 Bulan -->
+          <button type="button" onclick="orderSubscriptionPackage('1 Bulan (30 Hari)', 'Rp 30.000')" class="w-full p-3.5 rounded-2xl border-2 border-slate-200 hover:border-emerald-500 bg-slate-50 hover:bg-emerald-50/40 flex items-center justify-between transition-all text-left group">
+            <div>
+              <div class="font-extrabold text-slate-900 text-sm group-hover:text-emerald-800">Paket Sewa 1 Bulan</div>
+              <div class="text-[11px] text-slate-500">Masa aktif 30 hari penuh</div>
+            </div>
+            <div class="text-right">
+              <div class="text-base font-black text-emerald-700">Rp 30.000</div>
+            </div>
+          </button>
+
+          <!-- Paket 6 Bulan -->
+          <button type="button" onclick="orderSubscriptionPackage('6 Bulan (180 Hari)', 'Rp 150.000')" class="w-full p-3.5 rounded-2xl border-2 border-emerald-500 bg-emerald-50/50 hover:bg-emerald-50 flex items-center justify-between transition-all text-left relative">
+            <span class="absolute -top-2.5 right-3 px-2 py-0.5 rounded-full bg-emerald-600 text-white text-[10px] font-black uppercase">Hemat Rp 30rb</span>
+            <div>
+              <div class="font-extrabold text-slate-900 text-sm">Paket Sewa 6 Bulan</div>
+              <div class="text-[11px] text-emerald-700 font-semibold">Masa aktif 180 hari penuh</div>
+            </div>
+            <div class="text-right">
+              <div class="text-xs text-rose-500 line-through font-bold">Rp 180.000</div>
+              <div class="text-base font-black text-emerald-700">Rp 150.000</div>
+            </div>
+          </button>
+
+          <!-- Paket 12 Bulan -->
+          <button type="button" onclick="orderSubscriptionPackage('12 Bulan / 1 Tahun (365 Hari)', 'Rp 250.000')" class="w-full p-3.5 rounded-2xl border-2 border-amber-400 bg-amber-50/60 hover:bg-amber-50 flex items-center justify-between transition-all text-left relative">
+            <span class="absolute -top-2.5 right-3 px-2 py-0.5 rounded-full bg-amber-500 text-slate-950 text-[10px] font-black uppercase">Paling Hemat • Diskon Rp 110rb</span>
+            <div>
+              <div class="font-extrabold text-slate-900 text-sm">Paket Sewa 12 Bulan (1 Tahun)</div>
+              <div class="text-[11px] text-amber-800 font-semibold">Masa aktif 365 hari penuh</div>
+            </div>
+            <div class="text-right">
+              <div class="text-xs text-rose-500 line-through font-bold">Rp 360.000</div>
+              <div class="text-base font-black text-amber-700">Rp 250.000</div>
+            </div>
+          </button>
+
+          <button onclick="openRenewLicenseModal()" class="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl flex items-center justify-center gap-2 transition-all mt-2">
+            <i data-lucide="key-round" class="w-4 h-4 text-amber-400"></i> Sudah Punya Kode Lisensi? Masukkan di Sini
           </button>
         </div>
       </div>
@@ -637,25 +653,62 @@
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
-      <div class="p-5 space-y-4">
+      <div class="p-5 space-y-4 max-h-[82vh] overflow-y-auto">
         <div class="p-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-xs text-slate-600 space-y-1">
           <div>Toko: <b id="renewModalStoreName" class="text-slate-900">-</b></div>
           <div>Nomor WA Terdaftar: <b id="renewModalStorePhone" class="text-emerald-700">-</b></div>
           <div>Masa Aktif Saat Ini: <b id="renewModalCurrentExp" class="text-amber-700">-</b></div>
         </div>
-        <div>
-          <label class="block text-xs font-bold text-slate-800 mb-1.5">Masukkan Kode Lisensi Perpanjangan Baru dari Admin:</label>
-          <input type="text" id="inputRenewLicenseKey" placeholder="Contoh: TK-62812...-20261226-XXXX"
-            class="w-full px-3.5 py-3 bg-white border border-slate-300 rounded-xl text-xs md:text-sm font-mono font-bold uppercase tracking-wider focus:outline-none focus:ring-2 focus:ring-emerald-500">
+
+        <!-- PILIHAN PAKET SEWA LANJUTAN -->
+        <div class="space-y-2.5">
+          <label class="block text-xs font-extrabold text-slate-800 uppercase tracking-wider">Pilih Paket Perpanjangan Sewa (Klik untuk Pesan via WA):</label>
+
+          <!-- 1 Bulan -->
+          <button type="button" onclick="orderSubscriptionPackage('1 Bulan (30 Hari)', 'Rp 30.000')" class="w-full p-3.5 rounded-2xl border-2 border-slate-200 hover:border-emerald-500 bg-white hover:bg-emerald-50/40 flex items-center justify-between transition-all text-left group">
+            <div>
+              <div class="font-extrabold text-slate-900 text-sm group-hover:text-emerald-800">Sewa 1 Bulan (30 Hari)</div>
+              <div class="text-[11px] text-slate-500">Klik untuk perpanjang 1 bulan</div>
+            </div>
+            <div class="text-right">
+              <div class="text-base font-black text-emerald-700">Rp 30.000</div>
+            </div>
+          </button>
+
+          <!-- 6 Bulan -->
+          <button type="button" onclick="orderSubscriptionPackage('6 Bulan (180 Hari)', 'Rp 150.000')" class="w-full p-3.5 rounded-2xl border-2 border-emerald-500 bg-emerald-50/40 hover:bg-emerald-50 flex items-center justify-between transition-all text-left relative">
+            <span class="absolute -top-2.5 right-3 px-2 py-0.5 rounded-full bg-emerald-600 text-white text-[10px] font-black uppercase">Hemat Rp 30.000</span>
+            <div>
+              <div class="font-extrabold text-slate-900 text-sm">Sewa 6 Bulan (180 Hari)</div>
+              <div class="text-[11px] text-emerald-700 font-semibold">Klik untuk perpanjang 6 bulan</div>
+            </div>
+            <div class="text-right">
+              <div class="text-xs text-rose-500 line-through font-bold">Rp 180.000</div>
+              <div class="text-base font-black text-emerald-700">Rp 150.000</div>
+            </div>
+          </button>
+
+          <!-- 12 Bulan -->
+          <button type="button" onclick="orderSubscriptionPackage('12 Bulan / 1 Tahun (365 Hari)', 'Rp 250.000')" class="w-full p-3.5 rounded-2xl border-2 border-amber-400 bg-amber-50/50 hover:bg-amber-50 flex items-center justify-between transition-all text-left relative">
+            <span class="absolute -top-2.5 right-3 px-2 py-0.5 rounded-full bg-amber-500 text-slate-950 text-[10px] font-black uppercase">Paling Hemat • Diskon Rp 110.000</span>
+            <div>
+              <div class="font-extrabold text-slate-900 text-sm">Sewa 12 Bulan / 1 Tahun</div>
+              <div class="text-[11px] text-amber-800 font-semibold">Klik untuk perpanjang 1 tahun penuh</div>
+            </div>
+            <div class="text-right">
+              <div class="text-xs text-rose-500 line-through font-bold">Rp 360.000</div>
+              <div class="text-base font-black text-amber-700">Rp 250.000</div>
+            </div>
+          </button>
         </div>
-        <button onclick="applyRenewalLicenseKey()" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs md:text-sm rounded-xl shadow-md flex items-center justify-center gap-2">
-          <i data-lucide="check-circle-2" class="w-4 h-4"></i> Aktifkan Perpanjangan Sekarang
-        </button>
-        <div class="pt-2 border-t border-slate-100 text-center">
-          <a href="https://wa.me/6282299777924?text=Halo%20Admin,%20saya%20mau%20beli%20Kode%20Perpanjangan%20Sewa%20TokoKilat%20WA" target="_blank"
-            class="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-700 hover:underline">
-            <i data-lucide="message-circle" class="w-3.5 h-3.5"></i> Belum punya kode baru? Hubungi Admin via WhatsApp
-          </a>
+
+        <div class="pt-3 border-t border-slate-200 space-y-2.5">
+          <label class="block text-xs font-bold text-slate-700">Atau Masukkan Kode Lisensi (Jika Sudah Diberikan Admin):</label>
+          <input type="text" id="inputRenewLicenseKey" placeholder="Contoh: TK-62812...-20261226-XXXX"
+            class="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-xs md:text-sm font-mono font-bold uppercase tracking-wider focus:outline-none focus:ring-2 focus:ring-emerald-500">
+          <button onclick="applyRenewalLicenseKey()" class="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs rounded-xl shadow flex items-center justify-center gap-2">
+            <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400"></i> Aktifkan dengan Kode Lisensi
+          </button>
         </div>
       </div>
     </div>
@@ -728,18 +781,16 @@
           </div>
 
           <div>
-            <label class="block text-xs font-bold text-slate-800 mb-1">2. Pilih Durasi Paket Sewa:</label>
+            <label class="block text-xs font-bold text-slate-800 mb-1">2. Pilih Paket Sewa:</label>
             <select id="genDurationDays" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500">
-              <option value="30">30 Hari (Paket Sewa 1 Bulan)</option>
-              <option value="90">90 Hari (Paket Sewa 3 Bulan)</option>
-              <option value="180">180 Hari (Paket Sewa 6 Bulan)</option>
-              <option value="365">365 Hari (Paket Sewa 1 Tahun)</option>
-              <option value="3">3 Hari (Uji Coba / Free Trial)</option>
+              <option value="30">Paket 1 Bulan (30 Hari) — Rp 30.000</option>
+              <option value="180">Paket 6 Bulan (180 Hari) — Rp 150.000 (Harga Normal Rp 180.000)</option>
+              <option value="365">Paket 12 Bulan / 1 Tahun (365 Hari) — Rp 250.000 (Harga Normal Rp 360.000)</option>
             </select>
           </div>
 
           <button onclick="createMemberLicenseKey()" class="w-full py-3.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-extrabold text-xs md:text-sm rounded-xl shadow-md flex items-center justify-center gap-2 transition-all">
-            <i data-lucide="zap" class="w-4 h-4 fill-current"></i> CETAK KODE LISENSI MEMBER BARU
+            <i data-lucide="zap" class="w-4 h-4 fill-current"></i> CETAK LISENSI & OTOMATIS PERPANJANG SEWA
           </button>
 
           <div id="generatedLicenseResultBox" class="hidden p-4 bg-emerald-50 border border-emerald-200 rounded-2xl space-y-2.5">
@@ -2401,6 +2452,22 @@
       document.getElementById('renewLicenseModal').classList.add('hidden');
     }
 
+    function orderSubscriptionPackage(pkgLabel, priceLabel) {
+      const storeName = currentStore?.name || 'Toko Saya';
+      const storePhone = currentStore?.phone ? `+${currentStore.phone}` : '-';
+      const msg =
+`Halo Admin *TokoKilat WA*, saya ingin memperpanjang masa aktif sewa toko saya 🙏
+
+📌 *Detail Toko:*
+• Nama Toko: *${storeName}*
+• Nomor WA Toko: *${storePhone}*
+• Paket Dipilih: *${pkgLabel}*
+• Harga Paket: *${priceLabel}*
+
+Mohon info rekening / cara pembayarannya ya Admin. Terima kasih!`;
+      window.open(`https://api.whatsapp.com/send?phone=${SUPER_ADMIN_PHONE}&text=${encodeURIComponent(msg)}`, '_blank');
+    }
+
     function applyRenewalLicenseKey() {
       if (!currentStore) return;
       const rawKey = document.getElementById('inputRenewLicenseKey').value.trim();
@@ -2530,12 +2597,16 @@
               <button onclick="openSuperAdminClientModal('${slug}')" title="Sesuaikan Nomor HP/Email & Buka Reset Password" class="px-2.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold flex items-center gap-1 shadow-sm">
                 <i data-lucide="key-round" class="w-3.5 h-3.5"></i> Reset / Kontak
               </button>
-              <button onclick="superAdminEnterStore('${slug}')" title="Masuk Edit Toko Ini" class="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold flex items-center gap-1 shadow-sm">
-                <i data-lucide="wrench" class="w-3.5 h-3.5"></i> Masuk Admin
-              </button>
-              <button onclick="superAdminQuickExtend('${slug}', 30)" title="Tambah 30 Hari Sewa" class="px-2.5 py-1.5 bg-amber-500 hover:bg-amber-600 text-slate-950 rounded-xl text-xs font-extrabold flex items-center gap-1 shadow-sm">
-                <i data-lucide="plus" class="w-3 h-3"></i> +30 Hari
-              </button>
+              <div class="inline-flex items-center bg-amber-50 border border-amber-300 rounded-xl overflow-hidden shadow-sm">
+                <select id="extPkg_${slug}" class="bg-transparent pl-2 pr-1 py-1.5 text-[11px] font-extrabold text-slate-900 focus:outline-none cursor-pointer">
+                  <option value="30">1 Bln (30rb)</option>
+                  <option value="180">6 Bln (150rb)</option>
+                  <option value="365">12 Bln (250rb)</option>
+                </select>
+                <button onclick="superAdminQuickExtend('${slug}')" title="Perpanjang Masa Sewa Sesuai Paket" class="px-2.5 py-1.5 bg-amber-500 hover:bg-amber-600 text-slate-950 text-xs font-extrabold flex items-center gap-1">
+                  <i data-lucide="plus" class="w-3 h-3"></i> Perpanjang
+                </button>
+              </div>
               <a href="${storeUrl}" target="_blank" title="Lihat Tampilan Pembeli" class="p-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl">
                 <i data-lucide="external-link" class="w-4 h-4"></i>
               </a>
@@ -2616,36 +2687,16 @@ ${directResetUrl}
       }
     }
 
-    // Akses Spesial Super Admin: Masuk ke toko mana saja sebagai Pemilik Toko
-    function superAdminEnterStore(slug) {
-      const store = superAdminAllStoresCache[slug];
-      if (!store) {
-        alert('Data toko tidak ditemukan!');
-        return;
-      }
-      currentStore = store;
-      isOwner = true;
-      try {
-        localStorage.setItem('tokokilat_owner_' + slug, 'true');
-        localStorage.setItem('tokokilat_store_' + slug, JSON.stringify(store));
-        localStorage.setItem('tokokilat_active_store', JSON.stringify(store));
-      } catch (err) {}
-
-      closeMasterAdminGenerator();
-      document.getElementById('generatorView').classList.add('hidden');
-      renderStore();
-      document.getElementById('storeView').classList.remove('hidden');
-      document.getElementById('floatingCartContainer').classList.remove('hidden');
-      cleanBrowserAddressBar();
-      lucide.createIcons();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    // Akses Spesial Super Admin: Perpanjang masa sewa toko langsung 1-klik tanpa repot
-    async function superAdminQuickExtend(slug, days = 30) {
+    // Akses Spesial Super Admin: Perpanjang masa sewa toko langsung sesuai paket (1 Bulan / 6 Bulan / 12 Bulan)
+    async function superAdminQuickExtend(slug, customDays = null) {
       const store = superAdminAllStoresCache[slug];
       if (!store) return;
-      if (!confirm(`Perpanjang sewa toko "${store.name}" sebanyak ${days} hari?`)) return;
+
+      const selectEl = document.getElementById('extPkg_' + slug);
+      const days = customDays || parseInt(selectEl?.value || '30', 10) || 30;
+      const pkgText = days === 365 ? '12 Bulan / 1 Tahun (Rp 250.000)' : (days === 180 ? '6 Bulan (Rp 150.000)' : '1 Bulan (Rp 30.000)');
+
+      if (!confirm(`Perpanjang masa sewa toko "${store.name}" untuk Paket ${pkgText} (+${days} hari)?`)) return;
 
       const newExp = addDaysToYmd(days);
       const newSig = generateLicenseSignature(store.phone, newExp);
@@ -2656,7 +2707,7 @@ ${directResetUrl}
       await saveToFirebase(slug, store);
       try { localStorage.setItem('tokokilat_store_' + slug, JSON.stringify(store)); } catch (e) {}
 
-      alert(`✅ Berhasil! Masa sewa toko "${store.name}" diperpanjang hingga ${formatYmdIndonesian(newExp)}.`);
+      alert(`✅ Berhasil! Masa sewa toko "${store.name}" (${pkgText}) diperpanjang hingga ${formatYmdIndonesian(newExp)}.`);
       loadAllStoresForSuperAdmin();
     }
 
@@ -2699,7 +2750,7 @@ ${directResetUrl}
       document.getElementById('adminLicenseModal').classList.add('hidden');
     }
 
-    function createMemberLicenseKey() {
+    async function createMemberLicenseKey() {
       const rawPhone = document.getElementById('genClientPhone').value.trim();
       const cleanPhone = normalizeWaPhone(rawPhone);
       const days = parseInt(document.getElementById('genDurationDays').value, 10) || 30;
@@ -2712,11 +2763,36 @@ ${directResetUrl}
       const expYmd = addDaysToYmd(days);
       const key = buildLicenseKey(cleanPhone, expYmd);
       const expFormatted = formatYmdIndonesian(expYmd);
+      const newSig = generateLicenseSignature(cleanPhone, expYmd);
 
       lastGeneratedLicense = { key, phone: cleanPhone, expFormatted, days };
 
+      // Otomatis cari toko dengan nomor WA tersebut di Firebase & langsung perpanjang masa sewanya!
+      let autoExtendedStoreName = null;
+      try {
+        const res = await fetch(`${FIREBASE_DB_URL}/stores.json?t=${Date.now()}`);
+        if (res.ok) {
+          const stores = await res.json() || {};
+          for (const [slug, store] of Object.entries(stores)) {
+            if (store && normalizeWaPhone(store.phone) === cleanPhone) {
+              store.exp = expYmd;
+              store.sig = newSig;
+              await saveToFirebase(slug, store);
+              superAdminAllStoresCache[slug] = store;
+              try { localStorage.setItem('tokokilat_store_' + slug, JSON.stringify(store)); } catch (e) {}
+              autoExtendedStoreName = store.name || slug;
+              break;
+            }
+          }
+        }
+      } catch (e) {
+        console.warn('Gagal auto-extend saat cetak lisensi:', e);
+      }
+
       document.getElementById('generatedLicenseOutput').value = key;
-      document.getElementById('genExpPreview').innerText = `Aktif s/d: ${expFormatted}`;
+      document.getElementById('genExpPreview').innerText = autoExtendedStoreName
+        ? `✅ Toko "${autoExtendedStoreName}" Otomatis Aktif s/d: ${expFormatted}`
+        : `Aktif s/d: ${expFormatted}`;
       document.getElementById('generatedLicenseResultBox').classList.remove('hidden');
       lucide.createIcons();
     }
@@ -2733,21 +2809,19 @@ ${directResetUrl}
     function sendGeneratedLicenseToClientWa() {
       if (!lastGeneratedLicense.key) return;
       const baseUrl = window.location.origin + window.location.pathname;
+      const pkgLabel = lastGeneratedLicense.days === 365 ? '12 Bulan / 1 Tahun (Rp 250.000)' : (lastGeneratedLicense.days === 180 ? '6 Bulan (Rp 150.000)' : '1 Bulan (Rp 30.000)');
       const msg = 
 `Halo Kak! Terima kasih sudah berlangganan *TokoKilat WA* 🙏
 
-Berikut adalah *Kode Lisensi Member Resmi* Anda:
-🔑 *${lastGeneratedLicense.key}*
+Masa aktif sewa toko Anda telah *OTOMATIS DIPERPANJANG* di sistem kami! ✅
 
-📌 *Detail Lisensi:*
+📌 *Detail Langganan:*
 • Nomor WA Toko: +${lastGeneratedLicense.phone}
-• Paket Sewa: ${lastGeneratedLicense.days} Hari
+• Paket Sewa: *${pkgLabel}* (${lastGeneratedLicense.days} Hari)
 • Masa Aktif s/d: *${lastGeneratedLicense.expFormatted}*
+• Kode Lisensi Cadangan: *${lastGeneratedLicense.key}*
 
-🚀 *Cara Membuat / Perpanjang Toko Anda:*
-1. Buka web: ${baseUrl}
-2. Tempel Kode Lisensi di atas pada kolom pertama.
-3. Isi Nama Toko & Produk, lalu klik *Sulap Jadi Toko Online*.`;
+Silakan buka kembali toko Anda di: ${baseUrl}`;
 
       window.open(`https://api.whatsapp.com/send?phone=${lastGeneratedLicense.phone}&text=${encodeURIComponent(msg)}`, '_blank');
     }
