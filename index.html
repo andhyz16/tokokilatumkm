@@ -1,0 +1,2463 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TokoKilat WA - Platform Toko Online UMKM Instan</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Font: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen antialiased flex flex-col">
+
+  <!-- TOP APP BAR -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-40">
+    <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-2">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-green-500 flex items-center justify-center text-white shadow-md shadow-emerald-500/20">
+          <i data-lucide="zap" class="w-6 h-6"></i>
+        </div>
+        <div>
+          <span class="font-extrabold text-lg tracking-tight bg-gradient-to-r from-emerald-700 to-green-600 bg-clip-text text-transparent">TokoKilat WA</span>
+          <span class="text-xs ml-1.5 px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-semibold">Semua Bisnis Bisa</span>
+        </div>
+      </div>
+
+      <div class="flex items-center space-x-2 md:space-x-3">
+        <button id="btnLoginStore" onclick="openLoginModal()" class="text-xs md:text-sm font-bold text-emerald-700 hover:text-emerald-800 bg-emerald-50 hover:bg-emerald-100 px-3.5 py-1.5 rounded-xl border border-emerald-200 transition-all flex items-center gap-1.5 shadow-sm">
+          <i data-lucide="log-in" class="w-4 h-4"></i> Masuk Toko
+        </button>
+        <button id="btnReset" onclick="resetToGenerator()" class="hidden text-xs md:text-sm font-semibold text-slate-600 hover:text-emerald-700 px-3 py-1.5 rounded-lg border border-slate-200 hover:border-emerald-300 transition-all flex items-center gap-1.5">
+          <i data-lucide="plus-circle" class="w-4 h-4"></i> Bikin Toko Baru
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="flex-1 max-w-6xl w-full mx-auto p-4 md:py-8">
+
+    <!-- ============================================== -->
+    <!-- VIEW 1: GENERATOR WIZARD (FORM 10 DETIK)       -->
+    <!-- ============================================== -->
+    <div id="generatorView" class="max-w-2xl mx-auto">
+      <div class="text-center mb-8">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold mb-3">
+          <i data-lucide="sparkles" class="w-4 h-4 text-emerald-600"></i> Generator Toko Online Kilat Berbasis WhatsApp
+        </div>
+        <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
+          Bikin Web Jualan Siap Order WA <br>
+          <span class="bg-gradient-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent">Hanya dalam 10 Detik!</span>
+        </h1>
+        <p class="text-slate-600 text-sm md:text-base mt-2 max-w-lg mx-auto">
+          Cukup isi nama tokomu & apa yang kamu jual. Sistem otomatis menyusun katalog produk estetik yang langsung terhubung ke WhatsApp penjual!
+        </p>
+      </div>
+
+      <!-- THE FORM -->
+      <div class="bg-white rounded-3xl shadow-xl shadow-slate-200/60 border border-slate-200 p-6 md:p-8">
+        <form id="storeForm" onsubmit="generateStore(event)" class="space-y-5">
+
+          <!-- KODE LISENSI MEMBER (PENGUNCI SEWA BULANAN) -->
+          <div class="p-4 rounded-2xl bg-gradient-to-br from-amber-50 to-emerald-50 border-2 border-emerald-300/80 space-y-2.5">
+            <div class="flex items-center justify-between">
+              <label class="block text-sm font-extrabold text-slate-900 flex items-center gap-1.5">
+                <i data-lucide="key-round" class="w-4 h-4 text-emerald-600"></i>
+                Kode Lisensi Member (Wajib)
+              </label>
+              <span id="licenseStatusBadge" class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800">
+                Khusus Member Aktif
+              </span>
+            </div>
+            <div class="relative">
+              <input type="text" id="inputLicenseKey" required oninput="handleLicenseInput(event)"
+                placeholder="Tempel Kode Lisensi dari Admin (Contoh: TK-62812...-20261126-XXXX)"
+                class="w-full px-4 py-3 bg-white border border-emerald-300 rounded-xl text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-600 text-xs md:text-sm font-mono font-bold uppercase tracking-wider transition-all">
+            </div>
+            <div id="licenseHelperBox" class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-1">
+              <p id="licenseInfoText" class="text-xs text-slate-600">
+                Belum punya Kode Lisensi? Sewa akses toko online bulanan via Admin.
+              </p>
+              <a id="btnOrderLicenseWa" href="https://wa.me/6282299777924?text=Halo%20Admin%20TokoKilat,%20saya%20mau%20sewa%20bulanan%20dan%20beli%20Kode%20Lisensi%20Toko%20Online%20WA" target="_blank"
+                class="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-sm transition-all flex-shrink-0">
+                <i data-lucide="message-circle" class="w-3.5 h-3.5"></i> Beli Kode Lisensi (Chat Admin)
+              </a>
+            </div>
+          </div>
+          
+          <!-- NAMA TOKO -->
+          <div>
+            <label class="block text-sm font-bold text-slate-800 mb-1.5">
+              1. Apa Nama Toko / Usahamu?
+            </label>
+            <div class="relative">
+              <i data-lucide="store" class="w-5 h-5 text-slate-400 absolute left-3.5 top-3.5"></i>
+              <input type="text" id="inputStoreName" required
+                placeholder="Contoh: JBGold, Rumah Daster Cantik, Dapur Bu Siti, Kopi Senja"
+                class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-sm md:text-base font-medium transition-all">
+            </div>
+          </div>
+
+          <!-- JUALAN APA -->
+          <div>
+            <div class="flex items-center justify-between mb-1.5">
+              <label class="block text-sm font-bold text-slate-800">
+                2. Kamu Jualan Apa Saja? / Bidang Usaha Apa?
+              </label>
+            </div>
+            <div class="relative">
+              <i data-lucide="shopping-bag" class="w-5 h-5 text-slate-400 absolute left-3.5 top-3.5"></i>
+              <input type="text" id="inputProducts" required
+                placeholder="Contoh: 'logam mulia', 'daster rayon', 'cuci sepatu', atau sebutkan barangmu"
+                class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-sm md:text-base font-medium transition-all">
+            </div>
+            <p class="text-xs text-slate-500 mt-1.5">
+              💡 <em>Ketik 1 kata kategori umum (misal: "logam mulia" atau "daster"), sistem otomatis menyusun katalog produk terlaris lengkap dengan harga!</em>
+            </p>
+          </div>
+
+          <!-- NOMOR WA & KOTA GRID -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- NOMOR WA -->
+            <div>
+              <label class="block text-sm font-bold text-slate-800 mb-1.5">
+                3. Nomor WhatsApp Penerima Order
+              </label>
+              <div class="relative">
+                <span class="absolute left-3.5 top-3.5 text-slate-500 font-bold text-sm">+62</span>
+                <input type="tel" id="inputPhone" required readonly
+                  placeholder="Otomatis terisi dari Kode Lisensi"
+                  class="w-full pl-14 pr-4 py-3 bg-slate-100 border border-slate-300 rounded-xl text-slate-700 cursor-not-allowed text-sm md:text-base font-bold transition-all">
+              </div>
+              <p class="text-[11px] text-slate-400 mt-1">🔒 Terkunci otomatis sesuai nomor WA yang terdaftar pada Lisensi Member.</p>
+            </div>
+
+            <!-- KOTA -->
+            <div>
+              <label class="block text-sm font-bold text-slate-800 mb-1.5">
+                4. Kota / Lokasi Toko
+              </label>
+              <div class="relative">
+                <i data-lucide="map-pin" class="w-5 h-5 text-slate-400 absolute left-3.5 top-3.5"></i>
+                <input type="text" id="inputLocation"
+                  placeholder="Contoh: Makassar, Jakarta, Bandung"
+                  class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-sm md:text-base font-medium transition-all">
+              </div>
+            </div>
+          </div>
+
+          <!-- PASSWORD & KONFIRMASI PASSWORD TOKO (UNTUK LOGIN PENJUAL) -->
+          <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl space-y-3">
+            <div class="flex items-center justify-between">
+              <label class="block text-sm font-bold text-slate-900 flex items-center gap-1.5">
+                <i data-lucide="lock" class="w-4 h-4 text-emerald-600"></i>
+                5. Buat Password Toko (Untuk Login Penjual)
+              </label>
+              <span class="text-[11px] font-bold text-slate-500">Min. 8 Karakter</span>
+            </div>
+
+            <div>
+              <input type="password" id="inputStorePassword" required oninput="validatePasswordStrength(this.value)"
+                placeholder="Contoh: Tokoku123 (Huruf Besar, Kecil & Angka)"
+                class="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm font-semibold tracking-wide transition-all">
+              
+              <!-- INDIKATOR SYARAT PASSWORD -->
+              <div class="grid grid-cols-3 gap-1.5 mt-2 text-[11px] font-semibold text-slate-500" id="passwordCheckList">
+                <span id="pwdLen" class="flex items-center gap-1">❌ Min. 8 Karakter</span>
+                <span id="pwdCase" class="flex items-center gap-1">❌ Huruf Besar & Kecil</span>
+                <span id="pwdNum" class="flex items-center gap-1">❌ Ada Angka</span>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Ulangi / Konfirmasi Password:</label>
+              <input type="password" id="inputStorePasswordConfirm" required oninput="validatePasswordMatch()"
+                placeholder="Ketik ulang password yang sama"
+                class="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm font-semibold tracking-wide transition-all">
+              <p id="passwordMatchText" class="text-[11px] font-semibold text-slate-500 mt-1"></p>
+            </div>
+            <p class="text-[11px] text-slate-400">💡 Simpan password ini! Gunakan Nomor WA + Password ini untuk login mengedit toko dari HP/komputer mana pun.</p>
+          </div>
+
+          <!-- METODE PEMBAYARAN -->
+          <div class="pt-1">
+            <label class="block text-sm font-bold text-slate-800 mb-2 flex items-center gap-1.5">
+              <i data-lucide="credit-card" class="w-4 h-4 text-emerald-600"></i>
+              6. Pilihan Metode Pembayaran yang Diterima Toko:
+            </label>
+            <div class="grid grid-cols-3 gap-3">
+              <label class="flex items-center gap-2 p-3 border border-slate-200 rounded-xl bg-slate-50 hover:bg-emerald-50 cursor-pointer transition-colors">
+                <input type="checkbox" id="payQris" checked class="w-4 h-4 text-emerald-600 rounded focus:ring-emerald-500">
+                <span class="text-xs md:text-sm font-bold text-slate-800">QRIS</span>
+              </label>
+              <label class="flex items-center gap-2 p-3 border border-slate-200 rounded-xl bg-slate-50 hover:bg-emerald-50 cursor-pointer transition-colors">
+                <input type="checkbox" id="payTransfer" checked class="w-4 h-4 text-emerald-600 rounded focus:ring-emerald-500">
+                <span class="text-xs md:text-sm font-bold text-slate-800">Transfer</span>
+              </label>
+              <label class="flex items-center gap-2 p-3 border border-slate-200 rounded-xl bg-slate-50 hover:bg-emerald-50 cursor-pointer transition-colors">
+                <input type="checkbox" id="payCash" checked class="w-4 h-4 text-emerald-600 rounded focus:ring-emerald-500">
+                <span class="text-xs md:text-sm font-bold text-slate-800">Tunai / COD</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- SUBMIT BUTTON -->
+          <button type="submit" id="btnSubmitGenerate"
+            class="w-full py-4 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white font-extrabold text-base md:text-lg rounded-2xl shadow-lg shadow-emerald-600/30 hover:shadow-emerald-600/40 transform active:scale-[0.99] transition-all flex items-center justify-center gap-2">
+            <i data-lucide="zap" class="w-5 h-5 fill-current"></i>
+            <span>SULAP JADI TOKO ONLINE (10 DETIK)</span>
+          </button>
+        </form>
+      </div>
+
+      <!-- TOMBOL RAHASIA ADMIN PUSAT (PEMBUAT KODE LISENSI SEWA BULANAN) -->
+      <div class="mt-6 text-center">
+        <button onclick="openMasterAdminGenerator()" class="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-slate-700 font-semibold px-3 py-1.5 rounded-lg hover:bg-slate-200/50 transition-all">
+          <i data-lucide="key" class="w-3.5 h-3.5"></i> Admin Pusat: Buat Kode Lisensi Sewa
+        </button>
+      </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- VIEW 2: LOADING SIMULATION SCREEN              -->
+    <!-- ============================================== -->
+    <div id="loadingView" class="hidden max-w-md mx-auto text-center py-16">
+      <div class="w-20 h-20 mx-auto mb-6 relative">
+        <div class="absolute inset-0 rounded-full border-4 border-emerald-100 animate-ping"></div>
+        <div class="w-20 h-20 rounded-full border-4 border-emerald-600 border-t-transparent animate-spin flex items-center justify-center">
+          <i data-lucide="sparkles" class="w-8 h-8 text-emerald-600"></i>
+        </div>
+      </div>
+      <h2 id="loadingStatusText" class="text-xl font-bold text-slate-800 mb-2">Menyiapkan Katalog Toko...</h2>
+      <p class="text-slate-500 text-sm">Memverifikasi Lisensi Member & Katalog WA...</p>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- VIEW 3: LIVE STORE PREVIEW (HASIL TOKO KILAT)   -->
+    <!-- ============================================== -->
+    <div id="storeView" class="hidden">
+      
+      <!-- ACTION BAR: CONTROLS & SHARE (HANYA MUNCUL UNTUK PENJUAL / PEMILIK TOKO) -->
+      <div id="adminActionBar" class="hidden bg-slate-900 text-slate-50 rounded-2xl p-4 md:p-5 mb-6 flex flex-col md:flex-row items-center justify-between gap-4 shadow-lg border border-slate-800">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-emerald-600 flex items-center justify-center text-white shadow flex-shrink-0">
+            <i data-lucide="shield-check" class="w-6 h-6"></i>
+          </div>
+          <div>
+            <div class="flex flex-wrap items-center gap-2">
+              <h3 class="font-bold text-base md:text-lg text-white">Panel Pemilik Toko</h3>
+              <span id="ownerExpiryBadge" class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-500/20 text-amber-300 border border-amber-400/30">
+                ⏳ Aktif s/d: -
+              </span>
+            </div>
+            <p class="text-slate-300 text-xs">Hanya kamu yang bisa melihat panel ini. Pembeli hanya melihat katalog di bawah.</p>
+          </div>
+        </div>
+        
+        <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
+          <button onclick="toggleEditMode()" id="btnEditMode" class="flex-1 md:flex-none px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs md:text-sm rounded-xl border border-slate-700 flex items-center justify-center gap-1.5 transition-all">
+            <i data-lucide="edit-3" class="w-4 h-4"></i> <span id="textEditMode">Edit Barang & Foto</span>
+          </button>
+          <button onclick="openStoreSettingsModal()" class="flex-1 md:flex-none px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs md:text-sm rounded-xl border border-slate-700 flex items-center justify-center gap-1.5 transition-all">
+            <i data-lucide="settings" class="w-4 h-4"></i> Pengaturan
+          </button>
+          <button onclick="openRenewLicenseModal()" class="flex-1 md:flex-none px-3 py-2 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 font-bold text-xs md:text-sm rounded-xl border border-amber-400/30 flex items-center justify-center gap-1.5 transition-all">
+            <i data-lucide="key-round" class="w-4 h-4"></i> Perpanjang Sewa
+          </button>
+          <button onclick="openShareModal()" class="flex-1 md:flex-none px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs md:text-sm rounded-xl shadow flex items-center justify-center gap-1.5 transition-all">
+            <i data-lucide="share-2" class="w-4 h-4"></i> Bagikan Link Toko
+          </button>
+        </div>
+      </div>
+
+      <!-- LAYAR TERKUNCI BILA MASA AKTIF SEWA BULANAN SUDAH HABIS -->
+      <div id="expiredStoreLockBox" class="hidden bg-white rounded-3xl border-2 border-rose-200 shadow-xl p-8 max-w-lg mx-auto text-center my-8 space-y-5">
+        <div class="w-16 h-16 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center mx-auto">
+          <i data-lucide="clock-alert" class="w-9 h-9"></i>
+        </div>
+        <div>
+          <span class="px-3 py-1 rounded-full bg-rose-100 text-rose-800 font-bold text-xs uppercase tracking-wider">Masa Sewa Berakhir</span>
+          <h2 id="expiredStoreTitle" class="text-2xl font-extrabold text-slate-900 mt-2">Toko Online Sedang Nonaktif Sementara</h2>
+          <p class="text-xs md:text-sm text-slate-600 mt-2 leading-relaxed">
+            Masa sewa bulanan untuk katalog toko ini telah berakhir pada <b id="expiredDateText" class="text-rose-600">-</b>.<br>
+            Bagi pemilik toko, silakan hubungi Admin untuk memperpanjang masa aktif sewa bulanan. Semua data produk & harga Anda tetap tersimpan aman.
+          </p>
+        </div>
+        <div class="space-y-2.5 pt-2">
+          <a id="btnWaAdminRenew" href="https://wa.me/6282299777924?text=Halo%20Admin,%20saya%20mau%20perpanjang%20masa%20sewa%20bulanan%20TokoKilat%20WA" target="_blank"
+            class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-sm rounded-2xl shadow-lg flex items-center justify-center gap-2 transition-all">
+            <i data-lucide="message-circle" class="w-5 h-5"></i> Hubungi Admin untuk Perpanjang Sewa
+          </a>
+          <button onclick="openRenewLicenseModal()" class="w-full py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-2xl flex items-center justify-center gap-2 transition-all">
+            <i data-lucide="key-round" class="w-4 h-4 text-amber-400"></i> Pemilik Toko: Masukkan Kode Lisensi Perpanjangan
+          </button>
+        </div>
+      </div>
+
+      <!-- THE STOREFRONT CONTAINER -->
+      <div id="storefrontMainCard" class="bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden max-w-4xl mx-auto">
+        
+        <!-- STORE BANNER HEADER -->
+        <div id="storeBanner" class="relative bg-gradient-to-r from-emerald-800 to-teal-900 text-white p-6 md:p-8 transition-colors duration-500">
+          <div class="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+              <div id="storeAvatar" class="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-3xl font-extrabold shadow-inner">
+                🏪
+              </div>
+              <div>
+                <div class="flex flex-wrap items-center gap-2">
+                  <span id="badgeStoreStatus" class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-white/20 backdrop-blur-sm border border-white/30 text-white">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 mr-1.5 animate-pulse"></span> Buka Sekarang
+                  </span>
+                  <span id="storeLocationBadge" class="text-xs text-white/90 flex items-center gap-1">
+                    <i data-lucide="map-pin" class="w-3.5 h-3.5"></i> <span id="displayLocation">Indonesia</span>
+                  </span>
+                </div>
+                <h2 id="displayStoreName" class="text-2xl md:text-3xl font-black mt-1 tracking-tight">Nama Toko</h2>
+                
+                <!-- PAYMENT METHODS BADGES -->
+                <div id="displayPaymentBadges" class="flex flex-wrap items-center gap-1.5 mt-2"></div>
+              </div>
+            </div>
+
+            <!-- WA BADGE BUTTON -->
+            <a id="btnDirectWa" href="#" target="_blank" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white text-slate-900 hover:bg-slate-100 font-bold text-xs md:text-sm shadow-md transition-all">
+              <i data-lucide="phone" class="w-4 h-4 text-emerald-600"></i> Hubungi Penjual
+            </a>
+          </div>
+        </div>
+
+        <!-- SEARCH & FILTER BAR -->
+        <div class="p-4 md:px-8 border-b border-slate-100 bg-slate-50/50 flex flex-col md:flex-row items-center justify-between gap-3">
+          <div class="relative w-full md:w-72">
+            <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-3"></i>
+            <input type="text" id="searchProductInput" oninput="filterProducts()" placeholder="Cari barang / menu..."
+              class="w-full pl-9 pr-3 py-2 bg-white border border-slate-200 rounded-xl text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+          </div>
+          <div id="productCountText" class="text-xs text-slate-500 font-semibold self-end md:self-center">
+            Menampilkan produk
+          </div>
+        </div>
+
+        <!-- ADD PRODUCT BAR (VISIBLE ONLY IN EDIT MODE) -->
+        <div id="adminAddProductBar" class="hidden p-4 bg-amber-50 border-b border-amber-200 flex justify-between items-center">
+          <span class="text-xs font-bold text-amber-900 flex items-center gap-1.5">
+            <i data-lucide="wrench" class="w-4 h-4 text-amber-600"></i> Mode Edit Aktif: Klik pada kartu produk untuk ubah harga & pasang foto
+          </span>
+          <button onclick="openProductModal()" class="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-xs font-bold flex items-center gap-1 shadow-sm">
+            <i data-lucide="plus" class="w-4 h-4"></i> Tambah Produk Baru
+          </button>
+        </div>
+
+        <!-- PRODUCTS GRID -->
+        <div class="p-4 md:p-8">
+          <div id="productsGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            <!-- Dynamically populated products -->
+          </div>
+        </div>
+
+        <!-- FOOTER STORE -->
+        <div class="border-t border-slate-100 p-6 text-center bg-slate-50 text-slate-400 text-xs">
+          <div>Dibuat otomatis oleh <span class="font-bold text-emerald-700">TokoKilat WA</span> • Pesan Cepat via WhatsApp</div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- ============================================== -->
+  <!-- MODAL: TAMBAH / EDIT PRODUK                    -->
+  <!-- ============================================== -->
+  <div id="productModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+    <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl overflow-hidden flex flex-col">
+      <div class="p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+        <h3 id="productModalTitle" class="font-bold text-slate-900 text-base">Tambah Produk Baru</h3>
+        <button onclick="closeProductModal()" class="w-8 h-8 rounded-full hover:bg-slate-200 text-slate-500 flex items-center justify-center">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <div class="p-5 space-y-4 max-h-[75vh] overflow-y-auto">
+        <input type="hidden" id="modalProductId">
+        
+        <!-- FOTO PRODUK PREVIEW & UPLOAD -->
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1.5">Foto Produk (Dari HP / Laptop):</label>
+          <div class="flex items-center gap-3">
+            <div class="w-20 h-20 rounded-2xl bg-slate-100 border border-slate-200 overflow-hidden flex-shrink-0 flex items-center justify-center text-slate-300">
+              <img id="modalImagePreview" src="" class="w-full h-full object-cover hidden">
+              <i id="modalImagePlaceholderIcon" data-lucide="camera" class="w-8 h-8 text-slate-300"></i>
+            </div>
+            <div class="flex-1 space-y-2">
+              <label class="block">
+                <span class="sr-only">Pilih File Foto</span>
+                <input type="file" id="modalFileInput" accept="image/*" onchange="handleModalFileUpload(event)"
+                  class="block w-full text-xs text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 cursor-pointer">
+              </label>
+              <input type="text" id="modalImageUrl" oninput="handleModalUrlInput(event)" placeholder="Atau tempel Link / URL Foto"
+                class="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Nama Produk / Menu:</label>
+          <input type="text" id="modalProductName" placeholder="Contoh: Emas Antam 1 Gram"
+            class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 font-semibold">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Harga (Rupiah):</label>
+          <div class="relative">
+            <span class="absolute left-3.5 top-2.5 text-slate-500 font-bold text-sm">Rp</span>
+            <input type="text" inputmode="numeric" id="modalProductPrice" oninput="formatPriceInput(this)" placeholder="Contoh: 1.480.000"
+              class="w-full pl-10 pr-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 font-extrabold text-emerald-800 tracking-wide">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Deskripsi Singkat:</label>
+          <textarea id="modalProductDesc" rows="2" placeholder="Jelaskan bahan, ukuran, atau keunggulan produk..."
+            class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500"></textarea>
+        </div>
+      </div>
+      <div class="p-4 border-t border-slate-100 bg-slate-50 flex gap-2">
+        <button onclick="closeProductModal()" class="flex-1 py-2.5 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-xs rounded-xl">
+          Batal
+        </button>
+        <button onclick="saveProductModal()" class="flex-1 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-md">
+          Simpan Perubahan
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- MODAL: PENGATURAN TOKO & GANTI PIN             -->
+  <!-- ============================================== -->
+  <div id="storeSettingsModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+    <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl overflow-hidden flex flex-col">
+      <div class="p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-lg bg-slate-800 text-white flex items-center justify-center">
+            <i data-lucide="settings" class="w-4 h-4"></i>
+          </div>
+          <h3 class="font-bold text-slate-900 text-base">Pengaturan Toko & PIN</h3>
+        </div>
+        <button onclick="closeStoreSettingsModal()" class="w-8 h-8 rounded-full hover:bg-slate-200 text-slate-500 flex items-center justify-center">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <div class="p-5 space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Nama Toko:</label>
+          <input type="text" id="settingsStoreName" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Nomor WhatsApp Penerima Order (Terkunci Lisensi):</label>
+          <input type="text" id="settingsStorePhone" readonly class="w-full px-3.5 py-2.5 bg-slate-100 border border-slate-200 rounded-xl text-sm font-bold text-slate-500 cursor-not-allowed">
+          <p class="text-[11px] text-slate-400 mt-1">🔒 Nomor WA terikat pada Kode Lisensi Member dan tidak dapat dipindahtangankan.</p>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Kota / Lokasi:</label>
+          <input type="text" id="settingsStoreLocation" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500">
+        </div>
+        <div class="pt-2 border-t border-slate-100 space-y-2">
+          <label class="block text-xs font-bold text-slate-700">Ganti Password Toko (Untuk Login Penjual):</label>
+          <input type="password" id="settingsStorePin" placeholder="Password baru (Min. 8 karakter, huruf besar, kecil, angka)" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500">
+          <input type="password" id="settingsStorePinConfirm" placeholder="Ketik ulang password baru" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500">
+          <p class="text-[11px] text-slate-400">Kosongkan jika tidak ingin mengubah password saat ini.</p>
+        </div>
+      </div>
+      <div class="p-4 border-t border-slate-100 bg-slate-50 flex gap-2">
+        <button onclick="closeStoreSettingsModal()" class="flex-1 py-2.5 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-xs rounded-xl">Batal</button>
+        <button onclick="saveStoreSettings()" class="flex-1 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-md">Simpan Pengaturan</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- MODAL: LOGIN / MASUK PENJUAL (PEMILIK TOKO)   -->
+  <!-- ============================================== -->
+  <div id="loginModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+    <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl overflow-hidden flex flex-col">
+      <div class="p-5 border-b border-slate-100 flex items-center justify-between bg-emerald-50/60">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-sm">
+            <i data-lucide="store" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="font-extrabold text-slate-900 text-base">Masuk Toko (Login Penjual)</h3>
+            <p class="text-xs text-slate-500">Kelola barang, harga, dan pengaturan tokomu</p>
+          </div>
+        </div>
+        <button onclick="closeLoginModal()" class="w-8 h-8 rounded-full hover:bg-slate-200 text-slate-500 flex items-center justify-center">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form onsubmit="handleSellerLogin(event)" class="p-5 space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1.5">Nomor WhatsApp Toko:</label>
+          <div class="relative">
+            <span class="absolute left-3.5 top-3 text-slate-500 font-bold text-sm">+62</span>
+            <input type="tel" id="loginPhone" required placeholder="81234567890"
+              class="w-full pl-14 pr-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 text-sm font-bold focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
+          </div>
+          <p class="text-[11px] text-slate-400 mt-1">Nomor WA yang terdaftar saat membuat toko.</p>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1.5">Password / PIN Toko:</label>
+          <div class="relative">
+            <i data-lucide="lock" class="w-4 h-4 text-slate-400 absolute left-3.5 top-3"></i>
+            <input type="password" id="loginPassword" required placeholder="Masukkan PIN/Password Tokomu"
+              class="w-full pl-10 pr-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 text-sm font-bold tracking-wider focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
+          </div>
+        </div>
+
+        <button type="submit" id="btnLoginSubmit"
+          class="w-full py-3.5 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white font-extrabold text-sm rounded-xl shadow-lg shadow-emerald-600/30 flex items-center justify-center gap-2 transform active:scale-[0.99] transition-all">
+          <i data-lucide="log-in" class="w-4 h-4"></i>
+          <span>MASUK KE TOKO SAYA</span>
+        </button>
+
+        <div class="pt-2 border-t border-slate-100 text-center">
+          <p class="text-xs text-slate-500">
+            Lupa password atau belum punya toko? <br>
+            <a href="https://wa.me/6282299777924?text=Halo%20Admin%20TokoKilat,%20saya%20butuh%20bantuan%20login%20toko%20saya" target="_blank" class="font-bold text-emerald-700 hover:underline">Chat Bantuan Admin di WhatsApp</a>
+          </p>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- MODAL: PERPANJANG LISENSI SEWA BULANAN (KLIEN) -->
+  <!-- ============================================== -->
+  <div id="renewLicenseModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+    <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl overflow-hidden flex flex-col">
+      <div class="p-5 border-b border-slate-100 flex items-center justify-between bg-amber-50">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-lg bg-amber-500 text-white flex items-center justify-center">
+            <i data-lucide="key-round" class="w-4 h-4"></i>
+          </div>
+          <h3 class="font-bold text-slate-900 text-base">Perpanjang Masa Aktif Sewa</h3>
+        </div>
+        <button onclick="closeRenewLicenseModal()" class="w-8 h-8 rounded-full hover:bg-slate-200 text-slate-500 flex items-center justify-center">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <div class="p-5 space-y-4">
+        <div class="p-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-xs text-slate-600 space-y-1">
+          <div>Toko: <b id="renewModalStoreName" class="text-slate-900">-</b></div>
+          <div>Nomor WA Terdaftar: <b id="renewModalStorePhone" class="text-emerald-700">-</b></div>
+          <div>Masa Aktif Saat Ini: <b id="renewModalCurrentExp" class="text-amber-700">-</b></div>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-800 mb-1.5">Masukkan Kode Lisensi Perpanjangan Baru dari Admin:</label>
+          <input type="text" id="inputRenewLicenseKey" placeholder="Contoh: TK-62812...-20261226-XXXX"
+            class="w-full px-3.5 py-3 bg-white border border-slate-300 rounded-xl text-xs md:text-sm font-mono font-bold uppercase tracking-wider focus:outline-none focus:ring-2 focus:ring-emerald-500">
+        </div>
+        <button onclick="applyRenewalLicenseKey()" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs md:text-sm rounded-xl shadow-md flex items-center justify-center gap-2">
+          <i data-lucide="check-circle-2" class="w-4 h-4"></i> Aktifkan Perpanjangan Sekarang
+        </button>
+        <div class="pt-2 border-t border-slate-100 text-center">
+          <a href="https://wa.me/6282299777924?text=Halo%20Admin,%20saya%20mau%20beli%20Kode%20Perpanjangan%20Sewa%20TokoKilat%20WA" target="_blank"
+            class="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-700 hover:underline">
+            <i data-lucide="message-circle" class="w-3.5 h-3.5"></i> Belum punya kode baru? Hubungi Admin via WhatsApp
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- MODAL RAHASIA SUPER ADMIN: DASHBOARD PUSAT     -->
+  <!-- ============================================== -->
+  <div id="adminLicenseModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-3 md:p-4 bg-slate-950/80 backdrop-blur-md">
+    <div class="bg-white w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh]">
+      <!-- HEADER DASHBOARD SUPER ADMIN -->
+      <div class="p-5 border-b border-slate-800 flex items-center justify-between bg-slate-900 text-white">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-400 to-amber-600 text-slate-950 flex items-center justify-center font-black shadow-md shadow-amber-500/30">
+            <i data-lucide="crown" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h3 class="font-extrabold text-white text-base md:text-lg">Super Admin Dashboard</h3>
+              <span class="px-2 py-0.5 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/40 text-[10px] font-black uppercase tracking-wider">Akses Penuh</span>
+            </div>
+            <p class="text-xs text-slate-400">Kelola semua member, lisensi, dan toko online TokoKilat WA</p>
+          </div>
+        </div>
+        <button onclick="closeMasterAdminGenerator()" class="w-8 h-8 rounded-full hover:bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center transition-colors">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- TAB MENU: LIST TOKO vs BUAT LISENSI -->
+      <div class="flex border-b border-slate-200 bg-slate-50 px-4 pt-3 gap-2">
+        <button id="tabBtnStores" onclick="switchSuperAdminTab('stores')"
+          class="px-4 py-2 text-xs md:text-sm font-extrabold rounded-t-xl border-b-2 border-emerald-600 text-emerald-800 bg-white shadow-sm flex items-center gap-1.5 transition-all">
+          <i data-lucide="users" class="w-4 h-4"></i> Daftar Toko Member (<span id="countStoresBadge">0</span>)
+        </button>
+        <button id="tabBtnGenerate" onclick="switchSuperAdminTab('generate')"
+          class="px-4 py-2 text-xs md:text-sm font-bold rounded-t-xl text-slate-600 hover:text-slate-900 flex items-center gap-1.5 transition-all">
+          <i data-lucide="key" class="w-4 h-4"></i> Cetak Lisensi Baru
+        </button>
+      </div>
+
+      <!-- BODY DASHBOARD -->
+      <div class="p-5 overflow-y-auto flex-1 space-y-4">
+        
+        <!-- VIEW TAB 1: DAFTAR SEMUA TOKO YANG SUDAH MEMBELI AKSES -->
+        <div id="superAdminStoresTab" class="space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 bg-emerald-50/70 p-3.5 rounded-2xl border border-emerald-200">
+            <div>
+              <h4 class="font-bold text-xs md:text-sm text-emerald-950">Daftar Toko & Member Aktif</h4>
+              <p class="text-[11px] text-emerald-700">Data realtime langsung dari server Google Firebase</p>
+            </div>
+            <button onclick="loadAllStoresForSuperAdmin()" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm transition-all self-start sm:self-auto">
+              <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> Segarkan Data
+            </button>
+          </div>
+
+          <!-- LIST TOKO CARDS -->
+          <div id="superAdminStoresList" class="space-y-3">
+            <div class="text-center py-10 text-slate-400 text-xs">Memuat data toko dari Firebase...</div>
+          </div>
+        </div>
+
+        <!-- VIEW TAB 2: GENERATOR LISENSI MEMBER BARU -->
+        <div id="superAdminGenerateTab" class="hidden space-y-4">
+          <div>
+            <label class="block text-xs font-bold text-slate-800 mb-1">1. Nomor WhatsApp Klien (Yang Menyewa):</label>
+            <input type="tel" id="genClientPhone" placeholder="Contoh: 081234567890"
+              class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm font-bold focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
+            <p class="text-[11px] text-slate-500 mt-1">Kode lisensi akan mengunci toko hanya untuk nomor WA ini (anti bagi-bagi).</p>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-800 mb-1">2. Pilih Durasi Paket Sewa:</label>
+            <select id="genDurationDays" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+              <option value="30">30 Hari (Paket Sewa 1 Bulan)</option>
+              <option value="90">90 Hari (Paket Sewa 3 Bulan)</option>
+              <option value="180">180 Hari (Paket Sewa 6 Bulan)</option>
+              <option value="365">365 Hari (Paket Sewa 1 Tahun)</option>
+              <option value="3">3 Hari (Uji Coba / Free Trial)</option>
+            </select>
+          </div>
+
+          <button onclick="createMemberLicenseKey()" class="w-full py-3.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-extrabold text-xs md:text-sm rounded-xl shadow-md flex items-center justify-center gap-2 transition-all">
+            <i data-lucide="zap" class="w-4 h-4 fill-current"></i> CETAK KODE LISENSI MEMBER BARU
+          </button>
+
+          <div id="generatedLicenseResultBox" class="hidden p-4 bg-emerald-50 border border-emerald-200 rounded-2xl space-y-2.5">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-emerald-950">✅ Kode Lisensi Siap Kirim:</span>
+              <span id="genExpPreview" class="text-[11px] font-bold text-emerald-700"></span>
+            </div>
+            <input type="text" id="generatedLicenseOutput" readonly
+              class="w-full px-3 py-2.5 bg-white border border-emerald-300 rounded-xl text-xs font-mono font-black text-emerald-900 text-center tracking-wider">
+            <div class="grid grid-cols-2 gap-2 pt-1">
+              <button onclick="copyGeneratedLicense()" class="py-2 bg-white hover:bg-slate-100 text-slate-800 border border-slate-300 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5">
+                <i data-lucide="copy" class="w-3.5 h-3.5"></i> Salin Kode
+              </button>
+              <button onclick="sendGeneratedLicenseToClientWa()" class="py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm">
+                <i data-lucide="send" class="w-3.5 h-3.5"></i> Kirim ke WA Klien
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- MODAL: BAGIKAN LINK TOKO SINGKAT               -->
+  <!-- ============================================== -->
+  <div id="shareModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+    <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl overflow-hidden flex flex-col">
+      <div class="p-5 border-b border-slate-100 flex items-center justify-between bg-emerald-50/50">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-lg bg-emerald-600 text-white flex items-center justify-center">
+            <i data-lucide="share-2" class="w-4 h-4"></i>
+          </div>
+          <h3 class="font-bold text-slate-900 text-base">Bagikan Link Toko ke Pembeli</h3>
+        </div>
+        <button onclick="closeShareModal()" class="w-8 h-8 rounded-full hover:bg-slate-200 text-slate-500 flex items-center justify-center">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <div class="p-5 space-y-4">
+        <div class="p-4 bg-emerald-50/70 border border-emerald-200 rounded-2xl space-y-2.5">
+          <span class="text-xs font-bold text-emerald-950 flex items-center gap-1.5">
+            <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-600"></i> Link Singkat Siap Kirim ke Pembeli / CS:
+          </span>
+          <div class="flex gap-2">
+            <input type="text" id="shortUrlDisplay" readonly value="Menyiapkan link singkat..."
+              class="w-full px-3.5 py-2.5 bg-white border border-emerald-300 rounded-xl text-xs font-bold text-emerald-900 focus:outline-none">
+            <button onclick="copyGeneratedShortLink()" id="btnCopyShortUrl"
+              class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold flex-shrink-0 shadow-sm flex items-center gap-1.5">
+              <i data-lucide="copy" class="w-4 h-4"></i> Salin Link
+            </button>
+          </div>
+          <p class="text-[11px] text-emerald-800 leading-relaxed">
+            ✅ Link ini otomatis sudah pendek dan rapi.<br>
+            ✅ Saat pembeli klik, mereka <b>langsung masuk ke toko</b> dan <b>tidak melihat kode panjang</b> di layar mereka!
+          </p>
+        </div>
+
+        <button onclick="shareDirectToWa()" class="w-full py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl flex items-center justify-center gap-2 shadow">
+          <i data-lucide="send" class="w-4 h-4"></i> Kirim Link Ini Langsung ke WhatsApp
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- FLOATING WA CART DRAWER / BUTTON               -->
+  <!-- ============================================== -->
+  <div id="floatingCartContainer" class="hidden fixed bottom-6 right-6 z-50">
+    <button onclick="openCartModal()" class="flex items-center gap-3 px-5 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold rounded-2xl shadow-xl shadow-emerald-600/40 transform hover:scale-105 active:scale-95 transition-all">
+      <div class="relative">
+        <i data-lucide="shopping-cart" class="w-6 h-6"></i>
+        <span id="cartBadgeCount" class="absolute -top-2 -right-2 bg-amber-400 text-emerald-950 font-black text-xs w-5 h-5 rounded-full flex items-center justify-center">0</span>
+      </div>
+      <div class="text-left">
+        <div class="text-[10px] text-emerald-100 uppercase tracking-wider font-bold">Keranjang Belanja</div>
+        <div id="cartBadgeTotal" class="text-sm font-extrabold">Rp 0</div>
+      </div>
+    </button>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- CART & CHECKOUT MODAL                          -->
+  <!-- ============================================== -->
+  <div id="cartModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+    <div class="bg-white w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+      
+      <!-- MODAL HEADER -->
+      <div class="p-5 border-b border-slate-100 flex items-center justify-between bg-emerald-50/50">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-lg bg-emerald-600 text-white flex items-center justify-center">
+            <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+          </div>
+          <h3 class="font-bold text-slate-900 text-base">Rincian Pesanan</h3>
+        </div>
+        <button onclick="closeCartModal()" class="w-8 h-8 rounded-full hover:bg-slate-200 text-slate-500 flex items-center justify-center transition-colors">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- MODAL BODY: ITEMS -->
+      <div class="p-5 overflow-y-auto flex-1 space-y-4" id="cartItemsList"></div>
+
+      <!-- CUSTOMER FORM & CHECKOUT -->
+      <div class="p-5 border-t border-slate-100 bg-slate-50 space-y-4">
+        
+        <div class="space-y-2">
+          <label class="block text-xs font-bold text-slate-700">Informasi Pemesan:</label>
+          <input type="text" id="customerName" placeholder="Nama Lengkap Kamu" 
+            class="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-xl text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+          <textarea id="customerAddress" rows="2" placeholder="Alamat Pengiriman / No. Meja / Catatan khusus"
+            class="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-xl text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"></textarea>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1.5">Pilih Cara Pembayaran:</label>
+          <div id="checkoutPaymentOptions" class="grid grid-cols-3 gap-2"></div>
+        </div>
+
+        <div class="flex items-center justify-between pt-2 border-t border-slate-200">
+          <span class="text-sm font-semibold text-slate-600">Total Tagihan:</span>
+          <span id="cartModalTotalPrice" class="text-xl font-black text-emerald-700">Rp 0</span>
+        </div>
+
+        <button onclick="sendOrderToWhatsApp()" id="btnSendWaOrder"
+          class="w-full py-3.5 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white font-extrabold text-sm md:text-base rounded-2xl shadow-lg shadow-emerald-600/30 flex items-center justify-center gap-2 transform active:scale-[0.98] transition-all">
+          <i data-lucide="message-circle" class="w-5 h-5 fill-current"></i>
+          <span>KIRIM PESANAN KE WHATSAPP TOKO</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    // State
+    let currentStore = null;
+    let cart = {};
+    let isEditMode = false;
+    let isOwner = false;
+
+    // Helper: Create clean URL slug from store name (e.g., "JBGold Makassar" -> "jbgold-makassar")
+    function makeSlug(name) {
+      return (name || 'toko')
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/(^-|-$)/g, '');
+    }
+
+    // Database Niche
+    const nicheDatabase = {
+      fashion: {
+        keywords: ['daster', 'gamis', 'hijab', 'baju', 'kaos', 'dress', 'pakaian', 'tunik', 'piyama', 'batik', 'rok', 'celana', 'butik', 'distro', 'fashion', 'kain', 'jilbab', 'pashmina'],
+        theme: { bannerGrad: 'from-rose-950 via-purple-950 to-slate-900', avatar: '👗' },
+        defaultProducts: [
+          { name: 'Daster Rayon Santung Motif Bunga (Adem)', price: 35000, desc: 'Bahan rayon super adem, menyerap keringat, tidak luntur, sangat nyaman untuk harian di rumah.', img: '' },
+          { name: 'Daster Kancing Depan Busui Friendly', price: 42000, desc: 'Ada resleting/kancing depan aktif, potongan longgar leluasa dan jahitan kuat rapi.', img: '' },
+          { name: 'Daster Midi Kerut Kekinian', price: 39000, desc: 'Model modis dengan kerut dada fleksibel, motif estetik cantik dipakai santai.', img: '' },
+          { name: 'Setelan Piyama Rayon Daily Wear', price: 55000, desc: 'Satu set atasan dan celana panjang bahan katun rayon premium jatuh dan lembut.', img: '' }
+        ],
+        fallbackPrice: 38000
+      },
+      emas: {
+        keywords: ['emas', 'logam mulia', 'antam', 'perhiasan', 'cincin', 'gelang', 'kalung', 'diamond', 'perak', 'gold'],
+        theme: { bannerGrad: 'from-amber-950 via-yellow-950 to-stone-900', avatar: '🪙' },
+        defaultProducts: [
+          { name: 'Logam Mulia Antam 1 Gram (Certicard Asli)', price: 1480000, desc: 'Emas murni 99.99% certicard resmi, cocok untuk tabungan dan investasi masa depan.', img: '' },
+          { name: 'Logam Mulia Antam 5 Gram', price: 7250000, desc: 'Emas batangan murni 5 gram bergaransi resmi, lindungi kekayaan dari inflasi.', img: '' },
+          { name: 'Cincin Emas Solitaire Elegan 18K', price: 3200000, desc: 'Kadar 750 (18 Karat) dengan kilau kristal grade AAA yang anggun menawan.', img: '' },
+          { name: 'Gelang Emas Rantai Sisik Naga 3 Gram', price: 4150000, desc: 'Model timeless anggun untuk pesta dan harian, lengkap dengan surat toko resmi.', img: '' }
+        ],
+        fallbackPrice: 1500000
+      },
+      kue: {
+        keywords: ['kue', 'cake', 'brownies', 'bolu', 'roti', 'tart', 'pastry', 'risol', 'pastel', 'snack box'],
+        theme: { bannerGrad: 'from-amber-900 via-orange-950 to-stone-900', avatar: '🍰' },
+        defaultProducts: [
+          { name: 'Fudgy Shiny Crust Brownies Cokelat', price: 55000, desc: 'Cokelat lumer di mulut dengan topping almond slice & chocochip melimpah.', img: '' },
+          { name: 'Bolu Gulung Keju Lembut Premium', price: 48000, desc: 'Tekstur super empuk berselimut buttercream dan taburan keju cheddar tebal.', img: '' },
+          { name: 'Risoles Mayo Smoked Beef (Isi 5)', price: 30000, desc: 'Kulit krispi gurih dengan isian telur rebus, mayones spesial, dan smoked beef.', img: '' }
+        ],
+        fallbackPrice: 35000
+      },
+      kuliner: {
+        keywords: ['ayam', 'geprek', 'nasi', 'bebek', 'mie', 'bakso', 'soto', 'sambal', 'lele', 'ikan', 'makanan', 'kuliner', 'warung', 'catering', 'dapur'],
+        theme: { bannerGrad: 'from-emerald-800 via-teal-900 to-emerald-950', avatar: '🍗' },
+        defaultProducts: [
+          { name: 'Paket Ayam Geprek Paha Sambal Bawang', price: 22000, desc: 'Ayam renyah krispi digeprek dengan sambal bawang segar + nasi hangat melimpah.', img: '' },
+          { name: 'Ayam Geprek Dada Mozzarella Lumer', price: 28000, desc: 'Perpaduan pedas mantap dengan lelehan keju mozzarella premium yang dibakar wangi.', img: '' },
+          { name: 'Tahu & Tempe Goreng Crispy', price: 8000, desc: 'Pelengkap nikmat gurih garing dengan cocolan sambal kecap pedas.', img: '' }
+        ],
+        fallbackPrice: 20000
+      }
+    };
+
+    function matchOrGenerateNiche(combinedText) {
+      const lower = combinedText.toLowerCase();
+      for (const [key, niche] of Object.entries(nicheDatabase)) {
+        for (const kw of niche.keywords) {
+          if (lower.includes(kw)) return { key, niche };
+        }
+      }
+
+      const words = combinedText.split(/\s+/).filter(w => w.length > 2);
+      const cleanSubject = words.slice(0, 3).map(capitalizeWords).join(' ') || 'Usaha Anda';
+
+      return {
+        key: 'custom',
+        niche: {
+          theme: { bannerGrad: 'from-emerald-950 via-teal-950 to-slate-900', avatar: '🛍️' },
+          defaultProducts: [
+            { name: `${cleanSubject} Pilihan Terlaris`, price: 45000, desc: `Produk terfavorit pelanggan untuk ${cleanSubject} berkualitas tinggi.`, img: '' },
+            { name: `${cleanSubject} Varian Spesial`, price: 75000, desc: `Varian unggulan untuk kepuasan maksimal Anda, sangat direkomendasikan.`, img: '' },
+            { name: `${cleanSubject} Paket Hemat`, price: 30000, desc: `Solusi praktis dan ekonomis, mutu terjamin dan ramah di kantong.`, img: '' }
+          ],
+          fallbackPrice: 40000
+        }
+      };
+    }
+
+    function formatRupiah(num) {
+      return 'Rp ' + Number(num).toLocaleString('id-ID');
+    }
+
+    function capitalizeWords(str) {
+      return str.replace(/\b\w/g, l => l.toUpperCase());
+    }
+
+    // ============================================================================
+    // SISTEM LISENSI SEWA BULANAN (ANTI BAGI-BAGI & AUTO-EXPIRED TANPA DATABASE)
+    // ============================================================================
+    const SUPER_ADMIN_PHONE = '6282299777924';
+    const SUPER_ADMIN_PASSWORD = '@Adiba05';
+    const MASTER_ADMIN_PIN = '@Adiba05'; // Password Super Admin untuk Generator Lisensi
+    const ADMIN_WA_NUMBER = '6282299777924';
+    const LICENSE_SECRET_SALT = 'TOKOKILAT_SAAS_2026_HALAL_BERKAH';
+
+    function normalizeWaPhone(raw) {
+      let p = String(raw || '').replace(/\D/g, '');
+      if (!p) return '';
+      if (p.startsWith('0')) p = '62' + p.substring(1);
+      else if (!p.startsWith('62')) p = '62' + p;
+      return p;
+    }
+
+    function getTodayYmd() {
+      const now = new Date();
+      const y = now.getFullYear();
+      const m = String(now.getMonth() + 1).padStart(2, '0');
+      const d = String(now.getDate()).padStart(2, '0');
+      return `${y}${m}${d}`;
+    }
+
+    function addDaysToYmd(days) {
+      const d = new Date();
+      d.setDate(d.getDate() + Number(days));
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${y}${m}${day}`;
+    }
+
+    function formatYmdIndonesian(ymd) {
+      if (!ymd || String(ymd).length !== 8) return '-';
+      const s = String(ymd);
+      if (s === '20991231') return 'Selamanya (Lifetime)';
+      const y = s.substring(0, 4);
+      const m = parseInt(s.substring(4, 6), 10) - 1;
+      const d = parseInt(s.substring(6, 8), 10);
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+      return `${d} ${months[m] || ''} ${y}`;
+    }
+
+    // Buat 6 karakter kode enkripsi dari Nomor WA + Tanggal Expired
+    function generateLicenseSignature(phone, expYmd) {
+      const cleanPhone = normalizeWaPhone(phone);
+      const raw = `${LICENSE_SECRET_SALT}|${cleanPhone}|${expYmd}`;
+      let h1 = 0xdeadbeef ^ raw.length;
+      let h2 = 0x41c6ce57 ^ raw.length;
+      for (let i = 0; i < raw.length; i++) {
+        const ch = raw.charCodeAt(i);
+        h1 = Math.imul(h1 ^ ch, 2654435761);
+        h2 = Math.imul(h2 ^ ch, 1597334677);
+      }
+      h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+      h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+      const combined = (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(36).toUpperCase();
+      return combined.padStart(6, '8').substring(0, 6);
+    }
+
+    function buildLicenseKey(phone, expYmd) {
+      const cleanPhone = normalizeWaPhone(phone);
+      const sig = generateLicenseSignature(cleanPhone, expYmd);
+      return `TK-${cleanPhone}-${expYmd}-${sig}`;
+    }
+
+    function parseAndVerifyLicense(rawKey) {
+      const clean = String(rawKey || '').trim().toUpperCase();
+      const parts = clean.split('-');
+      if (parts.length !== 4 || parts[0] !== 'TK') {
+        return { valid: false, reason: 'Format kode tidak sesuai' };
+      }
+      const phone = normalizeWaPhone(parts[1]);
+      const expYmd = parts[2];
+      const sig = parts[3];
+
+      if (!phone || phone.length < 9 || !/^\d{8}$/.test(expYmd)) {
+        return { valid: false, reason: 'Data nomor atau tanggal tidak valid' };
+      }
+
+      const expectedSig = generateLicenseSignature(phone, expYmd);
+      if (sig !== expectedSig) {
+        return { valid: false, reason: 'Kode lisensi palsu atau salah ketik' };
+      }
+
+      const today = getTodayYmd();
+      const expired = today > expYmd;
+      return {
+        valid: !expired,
+        expired: expired,
+        phone: phone,
+        expYmd: expYmd,
+        sig: sig,
+        formattedExp: formatYmdIndonesian(expYmd)
+      };
+    }
+
+    function isStoreLicenseExpired(store) {
+      if (!store) return false;
+      const slug = makeSlug(store.name);
+      if (builtInStores[slug] && !store.exp) return false;
+      const exp = store.exp || '20991231';
+      const expectedSig = generateLicenseSignature(store.phone, exp);
+      if (store.sig && store.sig !== expectedSig) return true;
+      return getTodayYmd() > String(exp);
+    }
+
+    function handleLicenseInput(e) {
+      const val = e.target.value.trim();
+      const badge = document.getElementById('licenseStatusBadge');
+      const info = document.getElementById('licenseInfoText');
+      const phoneInput = document.getElementById('inputPhone');
+
+      if (!val) {
+        badge.className = "text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800";
+        badge.innerText = "Khusus Member Aktif";
+        info.className = "text-xs text-slate-600";
+        info.innerText = "Belum punya Kode Lisensi? Sewa akses toko online bulanan via Admin.";
+        phoneInput.value = '';
+        return;
+      }
+
+      const check = parseAndVerifyLicense(val);
+      if (check.valid) {
+        badge.className = "text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-600 text-white";
+        badge.innerText = `✓ Aktif s/d ${check.formattedExp}`;
+        info.className = "text-xs font-bold text-emerald-700";
+        info.innerText = `✅ Lisensi Valid! Nomor WA Order otomatis dikunci ke +${check.phone}.`;
+        phoneInput.value = check.phone.replace(/^62/, '');
+      } else if (check.expired) {
+        badge.className = "text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-rose-600 text-white";
+        badge.innerText = "Masa Sewa Habis";
+        info.className = "text-xs font-bold text-rose-600";
+        info.innerText = `❌ Kode Lisensi ini sudah berakhir pada ${check.formattedExp}. Silakan hubungi Admin untuk perpanjang.`;
+        phoneInput.value = '';
+      } else {
+        badge.className = "text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-700";
+        badge.innerText = "Kode Belum Valid";
+        info.className = "text-xs font-semibold text-rose-600";
+        info.innerText = "❌ Kode Lisensi tidak dikenali. Pastikan menyalin kode lengkap dari Admin.";
+        phoneInput.value = '';
+      }
+    }
+
+    // Data bawaan untuk toko JBGold & JBAntam (Milik Owner sendiri -> Aktif Selamanya)
+    const builtInStores = {
+      'jbgold': {
+        name: 'JBGold',
+        phone: '6282299777924',
+        location: 'Makassar',
+        pin: '@Adiba05',
+        exp: '20991231',
+        sig: generateLicenseSignature('6282299777924', '20991231'),
+        payments: ['QRIS', 'Transfer Bank', 'Tunai / COD'],
+        nicheKey: 'emas',
+        nicheInfo: {
+          theme: { bannerGrad: 'from-amber-950 via-yellow-950 to-stone-900', avatar: '🪙' }
+        },
+        products: [
+          { id: 'prod_1', name: 'Logam Mulia Antam 1 Gram (Certicard Asli)', price: 2600000, image: '', desc: 'Emas murni 99.99% certicard resmi, cocok untuk tabungan dan investasi masa depan.' },
+          { id: 'prod_2', name: 'Logam Mulia Antam 5 Gram', price: 7250000, image: '', desc: 'Emas batangan murni 5 gram bergaransi resmi, lindungi kekayaan dari inflasi.' },
+          { id: 'prod_3', name: 'Cincin Emas Solitaire Elegan 18K', price: 3200000, image: '', desc: 'Kadar 750 (18 Karat) dengan kilau kristal grade AAA yang anggun menawan.' },
+          { id: 'prod_4', name: 'Gelang Emas Rantai Sisik Naga 3 Gram', price: 4150000, image: '', desc: 'Model timeless anggun untuk pesta dan harian, lengkap dengan surat toko resmi.' }
+        ]
+      },
+      'jbantam': {
+        name: 'JBAntam',
+        phone: '6282299777924',
+        location: 'Makassar',
+        pin: '@Adiba05',
+        exp: '20991231',
+        sig: generateLicenseSignature('6282299777924', '20991231'),
+        payments: ['QRIS', 'Transfer Bank', 'Tunai / COD'],
+        nicheKey: 'emas',
+        nicheInfo: {
+          theme: { bannerGrad: 'from-amber-950 via-yellow-950 to-stone-900', avatar: '🪙' }
+        },
+        products: [
+          { id: 'prod_1', name: 'Logam Mulia Antam 1 Gram (Certicard Asli)', price: 2600000, image: '', desc: 'Emas murni 99.99% certicard resmi, cocok untuk tabungan dan investasi masa depan.' },
+          { id: 'prod_2', name: 'Logam Mulia Antam 5 Gram', price: 7250000, image: '', desc: 'Emas batangan murni 5 gram bergaransi resmi, lindungi kekayaan dari inflasi.' },
+          { id: 'prod_3', name: 'Cincin Emas Solitaire Elegan 18K', price: 3200000, image: '', desc: 'Kadar 750 (18 Karat) dengan kilau kristal grade AAA yang anggun menawan.' },
+          { id: 'prod_4', name: 'Gelang Emas Rantai Sisik Naga 3 Gram', price: 4150000, image: '', desc: 'Model timeless anggun untuk pesta dan harian, lengkap dengan surat toko resmi.' }
+        ]
+      }
+    };
+
+    // Google Firebase Realtime Database Endpoint Resmi
+    const FIREBASE_DB_URL = 'https://tokokilatumkm-default-rtdb.asia-southeast1.firebasedatabase.app';
+
+    // Simpan data toko langsung ke Google Firebase (Cloud Realtime)
+    async function saveToFirebase(slug, storeData) {
+      if (!slug || !storeData) return false;
+      try {
+        const res = await fetch(`${FIREBASE_DB_URL}/stores/${encodeURIComponent(slug)}.json`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(storeData)
+        });
+        return res.ok;
+      } catch (err) {
+        console.warn('Firebase save warning:', err);
+        return false;
+      }
+    }
+
+    // Ambil data toko dari Google Firebase
+    async function loadFromFirebase(slug) {
+      if (!slug) return null;
+      try {
+        const res = await fetch(`${FIREBASE_DB_URL}/stores/${encodeURIComponent(slug)}.json?t=${Date.now()}`);
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.name) return data;
+        }
+      } catch (err) {
+        console.warn('Firebase load warning:', err);
+      }
+      return null;
+    }
+
+    // Build Shareable URL: MURNI HANYA NAMA TOKO SAJA (Contoh: https://tokokilatumkm.netlify.app/?toko=jbgold)
+    function buildFullShareUrl() {
+      if (!currentStore) return window.location.origin + window.location.pathname;
+      const slug = makeSlug(currentStore.name);
+      const baseUrl = window.location.origin + window.location.pathname;
+      return `${baseUrl}?toko=${slug}`;
+    }
+
+    // Bersihkan address bar di browser pembeli agar yang terlihat HANYA ?toko=nama-toko
+    function cleanBrowserAddressBar() {
+      if (!currentStore) return;
+      const slug = makeSlug(currentStore.name);
+      try {
+        const cleanUrl = `${window.location.pathname}?toko=${slug}`;
+        window.history.replaceState({}, currentStore.name, cleanUrl);
+      } catch (e) {}
+    }
+
+    // Simpan ke LocalStorage perangkat & Google Firebase Realtime Database
+    function persistStoreData() {
+      if (!currentStore) return;
+      const slug = makeSlug(currentStore.name);
+      try {
+        localStorage.setItem('tokokilat_active_store', JSON.stringify(currentStore));
+        localStorage.setItem('tokokilat_store_' + slug, JSON.stringify(currentStore));
+        localStorage.setItem('tokokilat_owner_' + slug, 'true');
+      } catch (e) {}
+      cleanBrowserAddressBar();
+      saveToFirebase(slug, currentStore);
+    }
+
+    // Validasi Password Toko: Min 8 Karakter, ada Huruf Besar, Huruf Kecil, dan Angka
+    function checkPasswordRules(pwd) {
+      const p = String(pwd || '');
+      const hasLen = p.length >= 8;
+      const hasUpper = /[A-Z]/.test(p);
+      const hasLower = /[a-z]/.test(p);
+      const hasNumber = /[0-9]/.test(p);
+      return {
+        hasLen,
+        hasCase: hasUpper && hasLower,
+        hasNumber,
+        isValid: hasLen && hasUpper && hasLower && hasNumber
+      };
+    }
+
+    function validatePasswordStrength(pwd) {
+      const rules = checkPasswordRules(pwd);
+      const elLen = document.getElementById('pwdLen');
+      const elCase = document.getElementById('pwdCase');
+      const elNum = document.getElementById('pwdNum');
+
+      if (elLen) {
+        elLen.className = rules.hasLen ? 'flex items-center gap-1 text-emerald-600 font-bold' : 'flex items-center gap-1 text-slate-400';
+        elLen.innerText = rules.hasLen ? '✓ Min. 8 Karakter' : '❌ Min. 8 Karakter';
+      }
+      if (elCase) {
+        elCase.className = rules.hasCase ? 'flex items-center gap-1 text-emerald-600 font-bold' : 'flex items-center gap-1 text-slate-400';
+        elCase.innerText = rules.hasCase ? '✓ Huruf Besar & Kecil' : '❌ Huruf Besar & Kecil';
+      }
+      if (elNum) {
+        elNum.className = rules.hasNumber ? 'flex items-center gap-1 text-emerald-600 font-bold' : 'flex items-center gap-1 text-slate-400';
+        elNum.innerText = rules.hasNumber ? '✓ Ada Angka' : '❌ Ada Angka';
+      }
+      validatePasswordMatch();
+    }
+
+    function validatePasswordMatch() {
+      const pwd = document.getElementById('inputStorePassword')?.value || '';
+      const confirmPwd = document.getElementById('inputStorePasswordConfirm')?.value || '';
+      const matchText = document.getElementById('passwordMatchText');
+      if (!matchText) return;
+
+      if (!confirmPwd) {
+        matchText.innerText = '';
+        return;
+      }
+      if (pwd === confirmPwd) {
+        matchText.className = 'text-[11px] font-bold text-emerald-600';
+        matchText.innerText = '✓ Konfirmasi password cocok!';
+      } else {
+        matchText.className = 'text-[11px] font-bold text-rose-500';
+        matchText.innerText = '❌ Konfirmasi password belum sama!';
+      }
+    }
+
+    // Generate Store logic (Wajib lolos verifikasi Kode Lisensi Member!)
+    function generateStore(e) {
+      e.preventDefault();
+      const rawLicenseKey = document.getElementById('inputLicenseKey').value.trim();
+      const licenseCheck = parseAndVerifyLicense(rawLicenseKey);
+
+      if (!licenseCheck.valid) {
+        if (licenseCheck.expired) {
+          alert(`❌ Masa aktif Kode Lisensi ini sudah habis pada ${licenseCheck.formattedExp}.\n\nSilakan hubungi Admin untuk memperpanjang sewa bulanan.`);
+        } else {
+          alert('❌ Kode Lisensi Member tidak valid!\n\nHalaman pembuatan toko ini khusus untuk Member Resmi. Silakan klik tombol "Beli Kode Lisensi (Chat Admin)" untuk menyewa.');
+        }
+        return;
+      }
+
+      // Validasi Password Baru & Konfirmasi
+      const password = document.getElementById('inputStorePassword').value;
+      const confirmPassword = document.getElementById('inputStorePasswordConfirm').value;
+      const pwdCheck = checkPasswordRules(password);
+
+      if (!pwdCheck.isValid) {
+        alert('❌ Password belum memenuhi syarat keamanan!\n\nSyarat password:\n• Minimal 8 karakter\n• Memiliki huruf besar (A-Z)\n• Memiliki huruf kecil (a-z)\n• Memiliki angka (0-9)');
+        document.getElementById('inputStorePassword').focus();
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        alert('❌ Konfirmasi Password tidak cocok!\n\nPastikan kedua kolom password diisi dengan karakter yang persis sama.');
+        document.getElementById('inputStorePasswordConfirm').focus();
+        return;
+      }
+
+      const storeName = document.getElementById('inputStoreName').value.trim();
+      const rawProducts = document.getElementById('inputProducts').value.trim();
+      const phone = licenseCheck.phone; // Dikunci langsung ke nomor WA di dalam Kode Lisensi!
+      const location = document.getElementById('inputLocation').value.trim() || 'Indonesia';
+
+      const payments = [];
+      if (document.getElementById('payQris').checked) payments.push('QRIS');
+      if (document.getElementById('payTransfer').checked) payments.push('Transfer Bank');
+      if (document.getElementById('payCash').checked) payments.push('Tunai / COD');
+      if (payments.length === 0) payments.push('Transfer Bank');
+
+      document.getElementById('generatorView').classList.add('hidden');
+      document.getElementById('loadingView').classList.remove('hidden');
+
+      const { key, niche } = matchOrGenerateNiche(storeName + ' ' + rawProducts);
+
+      let items = rawProducts.split(/[,;\n]| dan /i).map(s => s.trim()).filter(s => s.length > 0);
+      let finalProducts = [];
+
+      if (items.length <= 1 && (items.length === 0 || items[0].length < 22)) {
+        finalProducts = niche.defaultProducts.map((p, idx) => ({
+          id: 'prod_' + (idx + 1),
+          name: p.name,
+          price: p.price,
+          image: p.img || '',
+          desc: p.desc
+        }));
+      } else {
+        finalProducts = items.map((itemName, index) => ({
+          id: 'prod_' + (index + 1),
+          name: capitalizeWords(itemName),
+          price: niche.fallbackPrice || 25000,
+          image: '',
+          desc: `Produk unggulan pilihan ${storeName}, dijamin terbaik dan terpercaya.`
+        }));
+      }
+
+      currentStore = {
+        name: storeName,
+        phone: phone,
+        location: location,
+        pin: password,
+        exp: licenseCheck.expYmd,
+        sig: licenseCheck.sig,
+        payments: payments,
+        nicheKey: key,
+        nicheInfo: niche,
+        products: finalProducts
+      };
+
+      isOwner = true;
+      persistStoreData();
+
+      setTimeout(() => {
+        renderStore();
+        document.getElementById('loadingView').classList.add('hidden');
+        document.getElementById('storeView').classList.remove('hidden');
+        lucide.createIcons();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 600);
+    }
+
+    // Render Store Front (Mengecek Masa Aktif Sewa Bulanan otomatis)
+    function renderStore() {
+      if (!currentStore) return;
+
+      const expired = isStoreLicenseExpired(currentStore);
+      const lockBox = document.getElementById('expiredStoreLockBox');
+      const mainCard = document.getElementById('storefrontMainCard');
+      const expBadge = document.getElementById('ownerExpiryBadge');
+
+      if (expBadge) {
+        const expText = formatYmdIndonesian(currentStore.exp || '20991231');
+        expBadge.innerText = expired ? `⚠️ Expired (${expText})` : `⏳ Aktif s/d: ${expText}`;
+      }
+
+      const adminBar = document.getElementById('adminActionBar');
+      const resetBtn = document.getElementById('btnReset');
+      if (isOwner) {
+        if (adminBar) adminBar.classList.remove('hidden');
+        if (resetBtn) resetBtn.classList.remove('hidden');
+      } else {
+        if (adminBar) adminBar.classList.add('hidden');
+        if (resetBtn) resetBtn.classList.add('hidden');
+        document.getElementById('adminAddProductBar').classList.add('hidden');
+        isEditMode = false;
+      }
+
+      // Jika masa sewa bulanan sudah habis, kunci katalog dan tampilkan pesan perpanjangan!
+      if (expired) {
+        if (lockBox) lockBox.classList.remove('hidden');
+        if (mainCard) mainCard.classList.add('hidden');
+        document.getElementById('floatingCartContainer').classList.add('hidden');
+        document.getElementById('expiredDateText').innerText = formatYmdIndonesian(currentStore.exp);
+        document.getElementById('expiredStoreTitle').innerText = `Toko "${currentStore.name}" Nonaktif Sementara`;
+        document.getElementById('btnWaAdminRenew').href = `https://wa.me/${ADMIN_WA_NUMBER}?text=${encodeURIComponent(`Halo Admin, saya mau perpanjang masa sewa bulanan untuk toko *${currentStore.name}* (WA: +${currentStore.phone})`)}`;
+        lucide.createIcons();
+        return;
+      } else {
+        if (lockBox) lockBox.classList.add('hidden');
+        if (mainCard) mainCard.classList.remove('hidden');
+      }
+
+      document.title = `${currentStore.name} - Katalog Resmi Order WA`;
+      document.getElementById('displayStoreName').innerText = currentStore.name;
+      document.getElementById('displayLocation').innerText = currentStore.location;
+      document.getElementById('btnDirectWa').href = `https://wa.me/${currentStore.phone}?text=Halo%20${encodeURIComponent(currentStore.name)},%20saya%20mau%20tanya%20produk%20nih`;
+      
+      if (currentStore.nicheInfo && currentStore.nicheInfo.theme) {
+        document.getElementById('storeAvatar').innerText = currentStore.nicheInfo.theme.avatar || '🏪';
+        const banner = document.getElementById('storeBanner');
+        banner.className = `relative bg-gradient-to-r ${currentStore.nicheInfo.theme.bannerGrad} text-white p-6 md:p-8 transition-colors duration-500`;
+      }
+
+      const badgeBox = document.getElementById('displayPaymentBadges');
+      badgeBox.innerHTML = '';
+      (currentStore.payments || ['Transfer Bank']).forEach(pay => {
+        const b = document.createElement('span');
+        b.className = "inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-semibold bg-white/20 border border-white/30 text-white";
+        b.innerText = `✓ Terima ${pay}`;
+        badgeBox.appendChild(b);
+      });
+
+      renderProductGrid(currentStore.products);
+      updateCartDisplay();
+    }
+
+    function renderProductGrid(productsToRender) {
+      const grid = document.getElementById('productsGrid');
+      grid.innerHTML = '';
+      document.getElementById('productCountText').innerText = `Menampilkan ${productsToRender.length} produk`;
+
+      productsToRender.forEach(p => {
+        const qtyInCart = cart[p.id] || 0;
+        const hasImage = p.image && p.image.trim() !== '';
+        const card = document.createElement('div');
+        card.className = "bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col group relative";
+        
+        let imageSectionHtml = '';
+        if (hasImage) {
+          imageSectionHtml = `
+            <div class="relative h-44 overflow-hidden bg-slate-100 ${isEditMode ? 'cursor-pointer' : ''}" ${isEditMode ? `onclick="openProductModal('${p.id}')"` : ''}>
+              <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+              <span class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-2.5 py-1 rounded-full text-[11px] font-bold text-slate-700 shadow-sm">
+                Tersedia
+              </span>
+            </div>
+          `;
+        } else {
+          imageSectionHtml = `
+            <div class="relative h-36 bg-gradient-to-br from-slate-50 to-slate-100 border-b border-dashed border-slate-200 flex flex-col items-center justify-center p-4 text-center ${isEditMode ? 'cursor-pointer hover:bg-emerald-50/50 transition-colors' : ''}" ${isEditMode ? `onclick="openProductModal('${p.id}')"` : ''}>
+              <div class="w-10 h-10 rounded-full bg-white shadow-sm border border-slate-200 flex items-center justify-center text-slate-400 mb-1.5 group-hover:scale-110 transition-transform">
+                <i data-lucide="camera" class="w-5 h-5 text-slate-400"></i>
+              </div>
+              ${isEditMode ? `
+                <span class="text-xs font-bold text-emerald-700 bg-emerald-100/70 px-2.5 py-0.5 rounded-full">
+                  + Pasang Foto Produk
+                </span>
+              ` : `
+                <span class="text-[11px] font-semibold text-slate-400">
+                  Foto produk
+                </span>
+              `}
+              <span class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-2 py-0.5 rounded-full text-[10px] font-bold text-slate-500 shadow-xs">
+                Tersedia
+              </span>
+            </div>
+          `;
+        }
+
+        card.innerHTML = `
+          ${imageSectionHtml}
+          ${isEditMode ? `
+            <div class="absolute top-2 right-2 flex gap-1 z-10">
+              <button onclick="event.stopPropagation(); openProductModal('${p.id}')" title="Edit Produk & Harga" class="p-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg shadow text-xs flex items-center gap-1 font-bold">
+                <i data-lucide="edit" class="w-3.5 h-3.5"></i> Edit
+              </button>
+              <button onclick="event.stopPropagation(); deleteProduct('${p.id}')" title="Hapus Produk" class="p-1.5 bg-rose-500 hover:bg-rose-600 text-white rounded-lg shadow text-xs">
+                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+          ` : ''}
+          <div class="p-4 flex-1 flex flex-col justify-between">
+            <div>
+              <h4 class="font-bold text-slate-900 text-base group-hover:text-emerald-700 transition-colors line-clamp-1">${p.name}</h4>
+              <p class="text-xs text-slate-500 mt-1 line-clamp-2">${p.desc}</p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+              <div>
+                <span class="text-[10px] uppercase font-bold text-slate-400">Harga</span>
+                <div class="text-base font-extrabold text-emerald-700">${formatRupiah(p.price)}</div>
+              </div>
+              <div>
+                ${qtyInCart > 0 ? `
+                  <div class="flex items-center gap-2 bg-emerald-50 border border-emerald-200 rounded-xl px-2 py-1">
+                    <button onclick="removeFromCart('${p.id}')" class="w-6 h-6 rounded-lg bg-white text-emerald-800 font-bold hover:bg-emerald-100 flex items-center justify-center">-</button>
+                    <span class="text-xs font-bold text-emerald-900">${qtyInCart}</span>
+                    <button onclick="addToCart('${p.id}')" class="w-6 h-6 rounded-lg bg-emerald-600 text-white font-bold hover:bg-emerald-700 flex items-center justify-center">+</button>
+                  </div>
+                ` : `
+                  <button onclick="addToCart('${p.id}')" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-sm flex items-center gap-1.5 transition-all active:scale-95">
+                    <i data-lucide="plus" class="w-3.5 h-3.5"></i> Pesan
+                  </button>
+                `}
+              </div>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+      lucide.createIcons();
+    }
+
+    function filterProducts() {
+      const q = document.getElementById('searchProductInput').value.toLowerCase();
+      const filtered = currentStore.products.filter(p => p.name.toLowerCase().includes(q) || p.desc.toLowerCase().includes(q));
+      renderProductGrid(filtered);
+    }
+
+    // Modal Product Create / Edit
+    let editingProductId = null;
+
+    // Format angka ribuan dengan titik otomatis saat mengetik harga (Contoh: 2.600.000)
+    function formatPriceInput(inputEl) {
+      const rawDigits = String(inputEl.value || '').replace(/\D/g, '');
+      if (!rawDigits) {
+        inputEl.value = '';
+        return;
+      }
+      inputEl.value = Number(rawDigits).toLocaleString('id-ID');
+    }
+
+    function openProductModal(productId = null) {
+      editingProductId = productId;
+      const modal = document.getElementById('productModal');
+      const title = document.getElementById('productModalTitle');
+      const nameInp = document.getElementById('modalProductName');
+      const priceInp = document.getElementById('modalProductPrice');
+      const descInp = document.getElementById('modalProductDesc');
+      const preview = document.getElementById('modalImagePreview');
+      const placeholderIcon = document.getElementById('modalImagePlaceholderIcon');
+      const urlInp = document.getElementById('modalImageUrl');
+      const fileInp = document.getElementById('modalFileInput');
+
+      fileInp.value = '';
+
+      if (productId) {
+        const p = currentStore.products.find(item => String(item.id) === String(productId));
+        if (p) {
+          title.innerText = 'Edit Produk & Harga';
+          nameInp.value = p.name;
+          priceInp.value = p.price ? Number(p.price).toLocaleString('id-ID') : '';
+          descInp.value = p.desc;
+          if (p.image && p.image.trim() !== '') {
+            preview.src = p.image;
+            preview.classList.remove('hidden');
+            placeholderIcon.classList.add('hidden');
+          } else {
+            preview.src = '';
+            preview.classList.add('hidden');
+            placeholderIcon.classList.remove('hidden');
+          }
+          urlInp.value = (p.image && !p.image.startsWith('data:')) ? p.image : '';
+        }
+      } else {
+        title.innerText = 'Tambah Produk Baru';
+        nameInp.value = '';
+        priceInp.value = '';
+        descInp.value = '';
+        preview.src = '';
+        preview.classList.add('hidden');
+        placeholderIcon.classList.remove('hidden');
+        urlInp.value = '';
+      }
+
+      modal.classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function closeProductModal() {
+      document.getElementById('productModal').classList.add('hidden');
+    }
+
+    function handleModalFileUpload(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          // Kompres foto otomatis agar ringan disimpan ke Cloud Database
+          const imgObj = new Image();
+          imgObj.onload = function() {
+            const canvas = document.createElement('canvas');
+            const MAX_SIZE = 600;
+            let width = imgObj.width;
+            let height = imgObj.height;
+            if (width > height) {
+              if (width > MAX_SIZE) { height *= MAX_SIZE / width; width = MAX_SIZE; }
+            } else {
+              if (height > MAX_SIZE) { width *= MAX_SIZE / height; height = MAX_SIZE; }
+            }
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(imgObj, 0, 0, width, height);
+            const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.75);
+
+            const preview = document.getElementById('modalImagePreview');
+            preview.src = compressedDataUrl;
+            preview.classList.remove('hidden');
+            document.getElementById('modalImagePlaceholderIcon').classList.add('hidden');
+            document.getElementById('modalImageUrl').value = '';
+          };
+          imgObj.src = evt.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function handleModalUrlInput(e) {
+      const url = e.target.value.trim();
+      const preview = document.getElementById('modalImagePreview');
+      const placeholderIcon = document.getElementById('modalImagePlaceholderIcon');
+      if (url) {
+        preview.src = url;
+        preview.classList.remove('hidden');
+        placeholderIcon.classList.add('hidden');
+      } else {
+        preview.src = '';
+        preview.classList.add('hidden');
+        placeholderIcon.classList.remove('hidden');
+      }
+    }
+
+    function saveProductModal() {
+      const name = document.getElementById('modalProductName').value.trim();
+      const rawPrice = String(document.getElementById('modalProductPrice').value || '').replace(/\D/g, '');
+      const price = parseInt(rawPrice, 10) || 0;
+      const desc = document.getElementById('modalProductDesc').value.trim() || 'Produk pilihan terbaik.';
+      const preview = document.getElementById('modalImagePreview');
+      const img = preview.classList.contains('hidden') ? '' : preview.src;
+
+      if (!name) {
+        alert('Mohon isi nama produk!');
+        return;
+      }
+
+      if (editingProductId) {
+        const p = currentStore.products.find(item => String(item.id) === String(editingProductId));
+        if (p) {
+          p.name = capitalizeWords(name);
+          p.price = price;
+          p.desc = desc;
+          p.image = img;
+        }
+      } else {
+        const newProd = {
+          id: 'prod_' + Date.now(),
+          name: capitalizeWords(name),
+          price: price,
+          image: img,
+          desc: desc
+        };
+        currentStore.products.unshift(newProd);
+      }
+
+      persistStoreData();
+      closeProductModal();
+      renderProductGrid(currentStore.products);
+      updateCartDisplay();
+    }
+
+    // ============================================================================
+    // MODAL LOGIN PENJUAL (MASUK DENGAN NOMOR WA + PASSWORD TOKO)
+    // ============================================================================
+    function openLoginModal() {
+      document.getElementById('loginPhone').value = '';
+      document.getElementById('loginPassword').value = '';
+      document.getElementById('loginModal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function closeLoginModal() {
+      document.getElementById('loginModal').classList.add('hidden');
+    }
+
+    async function handleSellerLogin(e) {
+      e.preventDefault();
+      const rawPhone = document.getElementById('loginPhone').value.trim();
+      const password = document.getElementById('loginPassword').value.trim();
+      const cleanPhone = normalizeWaPhone(rawPhone);
+
+      // JALUR KHUSUS SUPER ADMIN: Langsung buka panel Admin Pusat & Toko Utama
+      if (cleanPhone === SUPER_ADMIN_PHONE && password === SUPER_ADMIN_PASSWORD) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalText;
+        closeLoginModal();
+
+        // Muat toko utama JBGold sebagai owner
+        currentStore = builtInStores['jbgold'];
+        isOwner = true;
+        try {
+          localStorage.setItem('tokokilat_owner_jbgold', 'true');
+          localStorage.setItem('tokokilat_store_jbgold', JSON.stringify(currentStore));
+          localStorage.setItem('tokokilat_active_store', JSON.stringify(currentStore));
+        } catch (err) {}
+
+        document.getElementById('generatorView').classList.add('hidden');
+        renderStore();
+        document.getElementById('storeView').classList.remove('hidden');
+        document.getElementById('floatingCartContainer').classList.remove('hidden');
+        cleanBrowserAddressBar();
+        lucide.createIcons();
+
+        // Buka langsung jendela Generator Lisensi Super Admin
+        document.getElementById('genClientPhone').value = '';
+        document.getElementById('generatedLicenseResultBox').classList.add('hidden');
+        document.getElementById('adminLicenseModal').classList.remove('hidden');
+        lucide.createIcons();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        alert('👑 Selamat Datang, Super Admin!\n\nAnda berhasil login dengan hak akses penuh. Jendela Pembuat Kode Lisensi Klien sudah siap digunakan.');
+        return;
+      }
+
+      if (!cleanPhone || cleanPhone.length < 9) {
+        alert('Mohon masukkan Nomor WhatsApp yang valid!');
+        return;
+      }
+
+      const submitBtn = document.getElementById('btnLoginSubmit');
+      const originalText = submitBtn.innerHTML;
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = `<span>Mengecek data toko...</span>`;
+
+      try {
+        // Ambil semua daftar toko dari Firebase Realtime Database
+        const res = await fetch(`${FIREBASE_DB_URL}/stores.json?t=${Date.now()}`);
+        if (!res.ok) throw new Error('Gagal terhubung ke database');
+        const allStores = await res.json();
+
+        let matchedSlug = null;
+        let matchedStore = null;
+
+        if (allStores) {
+          for (const [slug, store] of Object.entries(allStores)) {
+            if (store && normalizeWaPhone(store.phone) === cleanPhone) {
+              matchedSlug = slug;
+              matchedStore = store;
+              break;
+            }
+          }
+        }
+
+        // Jika belum ada di Firebase, cek juga di toko bawaan (jbgold & jbantam)
+        if (!matchedStore) {
+          for (const [slug, store] of Object.entries(builtInStores)) {
+            if (normalizeWaPhone(store.phone) === cleanPhone) {
+              matchedSlug = slug;
+              matchedStore = store;
+              break;
+            }
+          }
+        }
+
+        if (!matchedStore) {
+          alert('❌ Toko dengan nomor WhatsApp tersebut belum terdaftar di sistem kami.');
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalText;
+          return;
+        }
+
+        // Cek kecocokan password / PIN toko
+        const expectedPassword = String(matchedStore.pin || '1234');
+        if (password !== expectedPassword) {
+          alert('❌ Password/PIN Toko salah! Silakan periksa kembali atau hubungi Admin jika lupa password.');
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalText;
+          return;
+        }
+
+        // Berhasil login! Masuk ke Mode Pemilik Toko (Admin)
+        currentStore = matchedStore;
+        isOwner = true;
+        try {
+          localStorage.setItem('tokokilat_owner_' + matchedSlug, 'true');
+          localStorage.setItem('tokokilat_store_' + matchedSlug, JSON.stringify(matchedStore));
+          localStorage.setItem('tokokilat_active_store', JSON.stringify(matchedStore));
+        } catch (err) {}
+
+        closeLoginModal();
+        document.getElementById('generatorView').classList.add('hidden');
+        renderStore();
+        document.getElementById('storeView').classList.remove('hidden');
+        document.getElementById('floatingCartContainer').classList.remove('hidden');
+        cleanBrowserAddressBar();
+        lucide.createIcons();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        alert(`✅ Login Berhasil!\n\nSelamat datang di Panel Pengelolaan Toko "${currentStore.name}". Kamu sekarang bisa mengedit harga, mengganti foto, dan menambah produk.`);
+      } catch (err) {
+        console.error(err);
+        alert('Terjadi kendala saat memeriksa data. Pastikan koneksi internet stabil.');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalText;
+      }
+    }
+
+    // Modal Store Settings & Change PIN
+    function openStoreSettingsModal() {
+      if (!currentStore) return;
+      document.getElementById('settingsStoreName').value = currentStore.name || '';
+      document.getElementById('settingsStorePhone').value = currentStore.phone || '';
+      document.getElementById('settingsStoreLocation').value = currentStore.location || '';
+      document.getElementById('settingsStorePin').value = '';
+      if (document.getElementById('settingsStorePinConfirm')) {
+        document.getElementById('settingsStorePinConfirm').value = '';
+      }
+      document.getElementById('storeSettingsModal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function closeStoreSettingsModal() {
+      document.getElementById('storeSettingsModal').classList.add('hidden');
+    }
+
+    function saveStoreSettings() {
+      if (!currentStore) return;
+      const newName = document.getElementById('settingsStoreName').value.trim();
+      const newLoc = document.getElementById('settingsStoreLocation').value.trim();
+      const newPassword = document.getElementById('settingsStorePin').value;
+      const confirmPassword = document.getElementById('settingsStorePinConfirm')?.value || '';
+
+      if (!newName) {
+        alert('Nama toko wajib diisi!');
+        return;
+      }
+
+      // Jika penjual mengisi password baru, validasi syarat keamanannya
+      if (newPassword) {
+        const check = checkPasswordRules(newPassword);
+        if (!check.isValid) {
+          alert('❌ Password baru belum memenuhi syarat!\n\n• Minimal 8 karakter\n• Memiliki huruf besar (A-Z)\n• Memiliki huruf kecil (a-z)\n• Memiliki angka (0-9)');
+          return;
+        }
+        if (newPassword !== confirmPassword) {
+          alert('❌ Konfirmasi password baru tidak cocok!');
+          return;
+        }
+        currentStore.pin = newPassword;
+      }
+
+      currentStore.name = newName;
+      currentStore.location = newLoc;
+
+      persistStoreData();
+      closeStoreSettingsModal();
+      renderStore();
+      alert('✅ Pengaturan Toko berhasil disimpan!');
+    }
+
+    // ============================================================================
+    // MODAL PERPANJANGAN LISENSI SEWA BULANAN (UNTUK KLIEN)
+    // ============================================================================
+    function openRenewLicenseModal() {
+      if (!currentStore) return;
+      document.getElementById('renewModalStoreName').innerText = currentStore.name || '-';
+      document.getElementById('renewModalStorePhone').innerText = '+' + (currentStore.phone || '-');
+      document.getElementById('renewModalCurrentExp').innerText = formatYmdIndonesian(currentStore.exp || '20991231');
+      document.getElementById('inputRenewLicenseKey').value = '';
+      document.getElementById('renewLicenseModal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function closeRenewLicenseModal() {
+      document.getElementById('renewLicenseModal').classList.add('hidden');
+    }
+
+    function applyRenewalLicenseKey() {
+      if (!currentStore) return;
+      const rawKey = document.getElementById('inputRenewLicenseKey').value.trim();
+      const check = parseAndVerifyLicense(rawKey);
+
+      if (!check.valid) {
+        if (check.expired) {
+          alert(`❌ Kode Lisensi tersebut sudah berakhir pada ${check.formattedExp}. Mohon minta kode baru ke Admin.`);
+        } else {
+          alert('❌ Kode Lisensi Perpanjangan tidak valid! Pastikan kode sesuai dari Admin.');
+        }
+        return;
+      }
+
+      if (normalizeWaPhone(check.phone) !== normalizeWaPhone(currentStore.phone)) {
+        alert(`❌ Kode Lisensi ini terdaftar untuk nomor WA +${check.phone}, sedangkan toko ini terdaftar untuk +${currentStore.phone}.\n\nKode lisensi tidak dapat dipakai lintas toko.`);
+        return;
+      }
+
+      currentStore.exp = check.expYmd;
+      currentStore.sig = check.sig;
+      isOwner = true;
+      persistStoreData();
+      closeRenewLicenseModal();
+      renderStore();
+      alert(`✅ Selamat! Masa sewa toko "${currentStore.name}" berhasil diperpanjang hingga ${check.formattedExp}.\n\nJangan lupa klik "Bagikan Link Toko" untuk menyalin link toko terbaru Anda.`);
+    }
+
+    // ============================================================================
+    // PANEL RAHASIA ADMIN PUSAT: GENERATOR KODE LISENSI SEWA BULANAN
+    // ============================================================================
+    let lastGeneratedLicense = { key: '', phone: '', expFormatted: '', days: 30 };
+
+    // ============================================================================
+    // PANEL RAHASIA SUPER ADMIN: DASHBOARD PUSAT & LIST SEMUA MEMBER
+    // ============================================================================
+    let lastGeneratedLicense = { key: '', phone: '', expFormatted: '', days: 30 };
+    let superAdminAllStoresCache = {};
+
+    function switchSuperAdminTab(tab) {
+      const btnStores = document.getElementById('tabBtnStores');
+      const btnGen = document.getElementById('tabBtnGenerate');
+      const tabStores = document.getElementById('superAdminStoresTab');
+      const tabGen = document.getElementById('superAdminGenerateTab');
+
+      if (tab === 'stores') {
+        btnStores.className = "px-4 py-2 text-xs md:text-sm font-extrabold rounded-t-xl border-b-2 border-emerald-600 text-emerald-800 bg-white shadow-sm flex items-center gap-1.5 transition-all";
+        btnGen.className = "px-4 py-2 text-xs md:text-sm font-bold rounded-t-xl text-slate-600 hover:text-slate-900 flex items-center gap-1.5 transition-all";
+        tabStores.classList.remove('hidden');
+        tabGen.classList.add('hidden');
+        loadAllStoresForSuperAdmin();
+      } else {
+        btnGen.className = "px-4 py-2 text-xs md:text-sm font-extrabold rounded-t-xl border-b-2 border-emerald-600 text-emerald-800 bg-white shadow-sm flex items-center gap-1.5 transition-all";
+        btnStores.className = "px-4 py-2 text-xs md:text-sm font-bold rounded-t-xl text-slate-600 hover:text-slate-900 flex items-center gap-1.5 transition-all";
+        tabGen.classList.remove('hidden');
+        tabStores.classList.add('hidden');
+      }
+      lucide.createIcons();
+    }
+
+    async function loadAllStoresForSuperAdmin() {
+      const listContainer = document.getElementById('superAdminStoresList');
+      const badge = document.getElementById('countStoresBadge');
+      if (!listContainer) return;
+
+      listContainer.innerHTML = `
+        <div class="p-8 text-center text-slate-400 text-xs flex items-center justify-center gap-2">
+          <div class="w-4 h-4 rounded-full border-2 border-emerald-600 border-t-transparent animate-spin"></div>
+          <span>Menghubungi Firebase Realtime Database...</span>
+        </div>
+      `;
+
+      try {
+        const res = await fetch(`${FIREBASE_DB_URL}/stores.json?t=${Date.now()}`);
+        if (!res.ok) throw new Error('Gagal mengambil data toko');
+        const stores = await res.json() || {};
+
+        // Gabungkan juga toko bawaan jika belum ada di Firebase
+        for (const [slug, item] of Object.entries(builtInStores)) {
+          if (!stores[slug]) stores[slug] = item;
+        }
+
+        superAdminAllStoresCache = stores;
+        const storeEntries = Object.entries(stores);
+        if (badge) badge.innerText = storeEntries.length;
+
+        if (storeEntries.length === 0) {
+          listContainer.innerHTML = `<div class="p-8 text-center bg-slate-50 border border-dashed border-slate-200 rounded-2xl text-xs text-slate-400">Belum ada toko yang terdaftar di database.</div>`;
+          return;
+        }
+
+        listContainer.innerHTML = '';
+        storeEntries.forEach(([slug, store]) => {
+          const isExpired = isStoreLicenseExpired(store);
+          const expText = formatYmdIndonesian(store.exp || '20991231');
+          const productCount = (store.products || []).length;
+          const storeUrl = `${window.location.origin}${window.location.pathname}?toko=${slug}`;
+
+          const card = document.createElement('div');
+          card.className = "p-4 bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3";
+          card.innerHTML = `
+            <div class="flex items-start gap-3">
+              <div class="w-11 h-11 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-xl flex-shrink-0">
+                ${store.nicheInfo?.theme?.avatar || '🏪'}
+              </div>
+              <div>
+                <div class="flex items-center gap-2 flex-wrap">
+                  <h5 class="font-extrabold text-slate-900 text-sm md:text-base">${store.name || slug}</h5>
+                  <span class="px-2 py-0.5 rounded-full text-[10px] font-black ${isExpired ? 'bg-rose-100 text-rose-700' : 'bg-emerald-100 text-emerald-800'}">
+                    ${isExpired ? '⚠️ Expired' : '✓ Aktif'}
+                  </span>
+                  <span class="text-[11px] text-slate-400 font-semibold">• ${store.location || 'Indonesia'}</span>
+                </div>
+                <div class="flex items-center gap-3 text-xs text-slate-500 mt-1 flex-wrap">
+                  <span>📱 WA: <b class="text-slate-800">+${store.phone || '-'}</b></span>
+                  <span>📦 <b>${productCount}</b> Produk</span>
+                  <span>⏳ S/d: <b class="${isExpired ? 'text-rose-600' : 'text-slate-700'}">${expText}</b></span>
+                  <span>🔑 Password: <code class="bg-slate-100 px-1 py-0.5 rounded text-slate-700 font-bold">${store.pin || '1234'}</code></span>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-1.5 self-end sm:self-center flex-shrink-0">
+              <button onclick="superAdminEnterStore('${slug}')" title="Masuk Edit Toko Ini" class="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold flex items-center gap-1 shadow-sm">
+                <i data-lucide="wrench" class="w-3.5 h-3.5"></i> Masuk Admin
+              </button>
+              <button onclick="superAdminQuickExtend('${slug}', 30)" title="Tambah 30 Hari Sewa" class="px-2.5 py-1.5 bg-amber-500 hover:bg-amber-600 text-slate-950 rounded-xl text-xs font-extrabold flex items-center gap-1 shadow-sm">
+                <i data-lucide="plus" class="w-3 h-3"></i> +30 Hari
+              </button>
+              <a href="${storeUrl}" target="_blank" title="Lihat Tampilan Pembeli" class="p-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl">
+                <i data-lucide="external-link" class="w-4 h-4"></i>
+              </a>
+            </div>
+          `;
+          listContainer.appendChild(card);
+        });
+
+        lucide.createIcons();
+      } catch (err) {
+        console.error(err);
+        listContainer.innerHTML = `<div class="p-6 text-center bg-rose-50 border border-rose-200 rounded-2xl text-xs text-rose-700">Gagal memuat data dari Firebase: ${err.message}. Pastikan koneksi stabil.</div>`;
+      }
+    }
+
+    // Akses Spesial Super Admin: Masuk ke toko mana saja sebagai Pemilik Toko
+    function superAdminEnterStore(slug) {
+      const store = superAdminAllStoresCache[slug];
+      if (!store) {
+        alert('Data toko tidak ditemukan!');
+        return;
+      }
+      currentStore = store;
+      isOwner = true;
+      try {
+        localStorage.setItem('tokokilat_owner_' + slug, 'true');
+        localStorage.setItem('tokokilat_store_' + slug, JSON.stringify(store));
+        localStorage.setItem('tokokilat_active_store', JSON.stringify(store));
+      } catch (err) {}
+
+      closeMasterAdminGenerator();
+      document.getElementById('generatorView').classList.add('hidden');
+      renderStore();
+      document.getElementById('storeView').classList.remove('hidden');
+      document.getElementById('floatingCartContainer').classList.remove('hidden');
+      cleanBrowserAddressBar();
+      lucide.createIcons();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      alert(`👑 Akses Super Admin!\n\nAnda sekarang mengelola toko "${store.name}" dengan hak akses penuh.`);
+    }
+
+    // Akses Spesial Super Admin: Perpanjang masa sewa toko langsung 1-klik tanpa repot
+    async function superAdminQuickExtend(slug, days = 30) {
+      const store = superAdminAllStoresCache[slug];
+      if (!store) return;
+      if (!confirm(`Perpanjang sewa toko "${store.name}" sebanyak ${days} hari?`)) return;
+
+      const newExp = addDaysToYmd(days);
+      const newSig = generateLicenseSignature(store.phone, newExp);
+
+      store.exp = newExp;
+      store.sig = newSig;
+
+      await saveToFirebase(slug, store);
+      try { localStorage.setItem('tokokilat_store_' + slug, JSON.stringify(store)); } catch (e) {}
+
+      alert(`✅ Berhasil! Masa sewa toko "${store.name}" diperpanjang hingga ${formatYmdIndonesian(newExp)}.`);
+      loadAllStoresForSuperAdmin();
+    }
+
+    function openMasterAdminGenerator() {
+      const pin = prompt('👑 KHUSUS SUPER ADMIN\nMasukkan Password Super Admin untuk membuka Dashboard Pusat:');
+      if (pin === null) return;
+      if (pin !== MASTER_ADMIN_PIN) {
+        alert('❌ Password Super Admin salah! Akses ditolak.');
+        return;
+      }
+      document.getElementById('genClientPhone').value = '';
+      document.getElementById('generatedLicenseResultBox').classList.add('hidden');
+      document.getElementById('adminLicenseModal').classList.remove('hidden');
+      switchSuperAdminTab('stores');
+    }
+
+    function closeMasterAdminGenerator() {
+      document.getElementById('adminLicenseModal').classList.add('hidden');
+    }
+
+    function createMemberLicenseKey() {
+      const rawPhone = document.getElementById('genClientPhone').value.trim();
+      const cleanPhone = normalizeWaPhone(rawPhone);
+      const days = parseInt(document.getElementById('genDurationDays').value, 10) || 30;
+
+      if (!cleanPhone || cleanPhone.length < 9) {
+        alert('Mohon masukkan Nomor WhatsApp Klien yang valid!');
+        return;
+      }
+
+      const expYmd = addDaysToYmd(days);
+      const key = buildLicenseKey(cleanPhone, expYmd);
+      const expFormatted = formatYmdIndonesian(expYmd);
+
+      lastGeneratedLicense = { key, phone: cleanPhone, expFormatted, days };
+
+      document.getElementById('generatedLicenseOutput').value = key;
+      document.getElementById('genExpPreview').innerText = `Aktif s/d: ${expFormatted}`;
+      document.getElementById('generatedLicenseResultBox').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function copyGeneratedLicense() {
+      if (!lastGeneratedLicense.key) return;
+      navigator.clipboard.writeText(lastGeneratedLicense.key).then(() => {
+        alert(`✅ Kode Lisensi berhasil disalin:\n${lastGeneratedLicense.key}`);
+      }).catch(() => {
+        prompt('Salin Kode Lisensi ini:', lastGeneratedLicense.key);
+      });
+    }
+
+    function sendGeneratedLicenseToClientWa() {
+      if (!lastGeneratedLicense.key) return;
+      const baseUrl = window.location.origin + window.location.pathname;
+      const msg = 
+`Halo Kak! Terima kasih sudah berlangganan *TokoKilat WA* 🙏
+
+Berikut adalah *Kode Lisensi Member Resmi* Anda:
+🔑 *${lastGeneratedLicense.key}*
+
+📌 *Detail Lisensi:*
+• Nomor WA Toko: +${lastGeneratedLicense.phone}
+• Paket Sewa: ${lastGeneratedLicense.days} Hari
+• Masa Aktif s/d: *${lastGeneratedLicense.expFormatted}*
+
+🚀 *Cara Membuat / Perpanjang Toko Anda:*
+1. Buka web: ${baseUrl}
+2. Tempel Kode Lisensi di atas pada kolom pertama.
+3. Isi Nama Toko & Produk, lalu klik *Sulap Jadi Toko Online*.`;
+
+      window.open(`https://api.whatsapp.com/send?phone=${lastGeneratedLicense.phone}&text=${encodeURIComponent(msg)}`, '_blank');
+    }
+
+    // Modal Share Link Toko (MURNI HANYA NAMA TOKO TANPA KODE PANJANG & TANPA DA.GD!)
+    let currentShortUrl = '';
+    async function openShareModal() {
+      const modal = document.getElementById('shareModal');
+      const display = document.getElementById('shortUrlDisplay');
+      modal.classList.remove('hidden');
+      lucide.createIcons();
+
+      const fullShareUrl = buildFullShareUrl();
+      currentShortUrl = fullShareUrl;
+      display.value = fullShareUrl;
+
+      // Pastikan data toko terbaru tersimpan ke Google Firebase Realtime Database
+      if (currentStore) {
+        const slug = makeSlug(currentStore.name);
+        saveToFirebase(slug, currentStore);
+      }
+    }
+
+    function closeShareModal() {
+      document.getElementById('shareModal').classList.add('hidden');
+    }
+
+    function copyGeneratedShortLink() {
+      if (!currentShortUrl) return;
+      navigator.clipboard.writeText(currentShortUrl).then(() => {
+        alert('✅ Link singkat toko berhasil disalin!\n\nSilakan bagikan ke pembeli atau CS Anda.');
+      }).catch(() => {
+        prompt('Salin link ini:', currentShortUrl);
+      });
+    }
+
+    function shareDirectToWa() {
+      if (!currentShortUrl || !currentStore) return;
+      const text = `Halo! Ini katalog online resmi *${currentStore.name}*. Silakan pilih barang & pesan langsung lewat link ini ya:\n👉 ${currentShortUrl}`;
+      window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
+    }
+
+    // Login Pemilik Toko via PIN (TANPA MEMUNCULKAN KODE DI ADDRESS BAR!)
+    function toggleOwnerModeFromFooter() {
+      if (isOwner) {
+        alert('Anda sudah berada dalam Mode Pemilik Toko (Admin).');
+        return;
+      }
+      const expectedPin = (currentStore && currentStore.pin) ? String(currentStore.pin) : '1234';
+      const pin = prompt('Masukkan PIN Rahasia Pemilik Toko:');
+      if (pin === expectedPin) {
+        isOwner = true;
+        isEditMode = true; // Langsung aktifkan mode edit begitu login PIN benar!
+        document.getElementById('adminAddProductBar').classList.remove('hidden');
+        document.getElementById('textEditMode').innerText = 'Selesai Edit';
+        renderStore();
+        cleanBrowserAddressBar();
+        lucide.createIcons();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (pin !== null) {
+        alert('❌ PIN salah! Akses ditolak.');
+      }
+    }
+
+    function deleteProduct(id) {
+      if (confirm('Yakin ingin menghapus produk ini?')) {
+        currentStore.products = currentStore.products.filter(item => String(item.id) !== String(id));
+        delete cart[id];
+        persistStoreData();
+        renderProductGrid(currentStore.products);
+        updateCartDisplay();
+      }
+    }
+
+    // Cart Management
+    function addToCart(productId) {
+      cart[productId] = (cart[productId] || 0) + 1;
+      updateCartDisplay();
+      renderProductGrid(currentStore.products);
+    }
+
+    function removeFromCart(productId) {
+      if (!cart[productId]) return;
+      cart[productId]--;
+      if (cart[productId] <= 0) {
+        delete cart[productId];
+      }
+      updateCartDisplay();
+      renderProductGrid(currentStore.products);
+      if (Object.keys(cart).length === 0) {
+        closeCartModal();
+      } else {
+        renderCartModalItems();
+      }
+    }
+
+    function updateCartDisplay() {
+      let totalQty = 0;
+      let totalPrice = 0;
+
+      for (const [id, qty] of Object.entries(cart)) {
+        const prod = currentStore.products.find(p => String(p.id) === String(id));
+        if (prod) {
+          totalQty += qty;
+          totalPrice += (prod.price * qty);
+        }
+      }
+
+      document.getElementById('cartBadgeCount').innerText = totalQty;
+      document.getElementById('cartBadgeTotal').innerText = formatRupiah(totalPrice);
+      document.getElementById('cartModalTotalPrice').innerText = formatRupiah(totalPrice);
+
+      const floatBtn = document.getElementById('floatingCartContainer');
+      if (totalQty > 0) {
+        floatBtn.classList.remove('hidden');
+      } else {
+        floatBtn.classList.add('hidden');
+      }
+    }
+
+    function openCartModal() {
+      renderCartModalItems();
+      renderCheckoutPaymentOptions();
+      document.getElementById('cartModal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function closeCartModal() {
+      document.getElementById('cartModal').classList.add('hidden');
+    }
+
+    function renderCheckoutPaymentOptions() {
+      const container = document.getElementById('checkoutPaymentOptions');
+      container.innerHTML = '';
+      if (!currentStore || !currentStore.payments) return;
+
+      currentStore.payments.forEach((pay, idx) => {
+        const label = document.createElement('label');
+        label.className = "flex items-center gap-1.5 p-2 bg-white border border-slate-200 rounded-xl cursor-pointer text-xs font-semibold hover:border-emerald-500 transition-colors";
+        label.innerHTML = `
+          <input type="radio" name="checkoutPayment" value="${pay}" ${idx === 0 ? 'checked' : ''} class="w-3.5 h-3.5 text-emerald-600 focus:ring-emerald-500">
+          <span>${pay}</span>
+        `;
+        container.appendChild(label);
+      });
+    }
+
+    function renderCartModalItems() {
+      const container = document.getElementById('cartItemsList');
+      container.innerHTML = '';
+
+      const items = Object.entries(cart);
+      if (items.length === 0) {
+        container.innerHTML = `<div class="text-center py-8 text-slate-400 text-sm">Keranjang belanja masih kosong</div>`;
+        return;
+      }
+
+      items.forEach(([id, qty]) => {
+        const p = currentStore.products.find(prod => String(prod.id) === String(id));
+        if (!p) return;
+        const subtotal = p.price * qty;
+
+        const imgThumb = (p.image && p.image.trim() !== '') 
+          ? `<img src="${p.image}" class="w-12 h-12 rounded-xl object-cover">`
+          : `<div class="w-12 h-12 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-400 font-bold text-xs"><i data-lucide="package" class="w-5 h-5"></i></div>`;
+
+        const row = document.createElement('div');
+        row.className = "flex items-center justify-between gap-3 p-3 bg-slate-50 rounded-2xl border border-slate-100";
+        row.innerHTML = `
+          ${imgThumb}
+          <div class="flex-1">
+            <h5 class="font-bold text-slate-900 text-xs md:text-sm line-clamp-1">${p.name}</h5>
+            <span class="text-xs text-emerald-700 font-semibold">${formatRupiah(p.price)} x ${qty} = <b>${formatRupiah(subtotal)}</b></span>
+          </div>
+          <div class="flex items-center gap-1.5 bg-white border border-slate-200 rounded-xl px-2 py-1">
+            <button onclick="removeFromCart('${p.id}')" class="w-5 h-5 rounded text-slate-600 font-bold hover:bg-slate-100 text-xs">-</button>
+            <span class="text-xs font-bold px-1">${qty}</span>
+            <button onclick="addToCart('${p.id}')" class="w-5 h-5 rounded bg-emerald-600 text-white font-bold hover:bg-emerald-700 text-xs">+</button>
+          </div>
+        `;
+        container.appendChild(row);
+      });
+      lucide.createIcons();
+    }
+
+    function sendOrderToWhatsApp() {
+      const custName = document.getElementById('customerName').value.trim() || 'Pelanggan';
+      const custAddress = document.getElementById('customerAddress').value.trim() || '-';
+      
+      const payRadio = document.querySelector('input[name="checkoutPayment"]:checked');
+      const selectedPayment = payRadio ? payRadio.value : 'Transfer Bank';
+
+      let itemsText = '';
+      let grandTotal = 0;
+      let counter = 1;
+
+      for (const [id, qty] of Object.entries(cart)) {
+        const p = currentStore.products.find(prod => String(prod.id) === String(id));
+        if (p) {
+          const sub = p.price * qty;
+          grandTotal += sub;
+          itemsText += `${counter}. ${p.name} (${qty}x) = ${formatRupiah(sub)}\n`;
+          counter++;
+        }
+      }
+
+      if (itemsText === '') {
+        alert('Keranjang belanja kosong!');
+        return;
+      }
+
+      const message = 
+`Halo *${currentStore.name}*, saya mau pesan nih! 🛒
+
+*Rincian Pesanan:*
+${itemsText}
+💰 *Total Tagihan:* *${formatRupiah(grandTotal)}*
+💳 *Metode Bayar:* *${selectedPayment}*
+
+----------------------------
+👤 *Nama Pemesan:* ${custName}
+📍 *Alamat / Catatan:* ${custAddress}
+
+Mohon info ketersediaan barang dan petunjuk pembayarannya ya, terima kasih! 🙏`;
+
+      const waUrl = `https://api.whatsapp.com/send?phone=${currentStore.phone}&text=${encodeURIComponent(message)}`;
+      window.open(waUrl, '_blank');
+    }
+
+    function toggleEditMode() {
+      isEditMode = !isEditMode;
+      const bar = document.getElementById('adminAddProductBar');
+      const text = document.getElementById('textEditMode');
+      const btn = document.getElementById('btnEditMode');
+
+      if (isEditMode) {
+        bar.classList.remove('hidden');
+        text.innerText = 'Selesai Edit';
+        btn.classList.add('bg-amber-600', 'hover:bg-amber-700');
+      } else {
+        bar.classList.add('hidden');
+        text.innerText = 'Edit Barang & Foto';
+        btn.classList.remove('bg-amber-600', 'hover:bg-amber-700');
+      }
+      renderProductGrid(currentStore.products);
+    }
+
+    function resetToGenerator() {
+      if (confirm('Bikin toko baru?')) {
+        cart = {};
+        currentStore = null;
+        isOwner = false;
+        try { window.history.replaceState({}, document.title, window.location.pathname); } catch (e) {}
+        document.getElementById('storeView').classList.add('hidden');
+        document.getElementById('btnReset').classList.add('hidden');
+        document.getElementById('floatingCartContainer').classList.add('hidden');
+        document.getElementById('generatorView').classList.remove('hidden');
+        lucide.createIcons();
+      }
+    }
+
+    // AUTO-LOAD PADA SAAT HALAMAN DIBUKA
+    window.addEventListener('DOMContentLoaded', async () => {
+      lucide.createIcons();
+      const params = new URLSearchParams(window.location.search);
+      const encodedData = params.get('d');
+      let tokoSlug = params.get('toko');
+
+      // Dukung juga bila orang mengetik #jbgold di belakang URL
+      if (!tokoSlug && window.location.hash && !window.location.hash.startsWith('#toko=')) {
+        const cleanHash = window.location.hash.substring(1).trim();
+        if (cleanHash && cleanHash.length < 40) {
+          tokoSlug = makeSlug(cleanHash);
+        }
+      }
+
+      // 1. Jika dibuka dari link lama yang membawa parameter ?d=...
+      if (encodedData) {
+        try {
+          const raw = JSON.parse(decodeURIComponent(escape(atob(encodedData))));
+          currentStore = {
+            name: raw.n,
+            phone: raw.p,
+            location: raw.l,
+            pin: raw.pin || '1234',
+            exp: raw.exp || '20991231',
+            sig: raw.sig || '',
+            payments: raw.pay || ['Transfer Bank'],
+            nicheInfo: {
+              theme: { avatar: raw.av || '🏪', bannerGrad: raw.bg || 'from-emerald-800 to-teal-900' }
+            },
+            products: (raw.items || []).map(x => ({
+              id: x.i,
+              name: x.t,
+              price: x.pr,
+              desc: x.d,
+              image: x.im || ''
+            }))
+          };
+          isOwner = false;
+          persistStoreData();
+        } catch (err) {
+          console.warn('Error decoding store parameter', err);
+        }
+      }
+
+      // 2. Jika dibuka dengan link nama toko resmi: ?toko=namatoko atau #namatoko
+      if (!currentStore && tokoSlug) {
+        const cleanSlug = makeSlug(tokoSlug);
+
+        // A. Cek apakah perangkat ini adalah pemilik toko (pembuat toko)
+        const isOwnerDevice = localStorage.getItem('tokokilat_owner_' + cleanSlug) === 'true';
+
+        // B. Tampilkan loading sebentar selagi menarik data dari Google Firebase
+        document.getElementById('generatorView').classList.add('hidden');
+        document.getElementById('loadingView').classList.remove('hidden');
+
+        // Tarik data toko terbaru dari Google Firebase Realtime Database
+        const firebaseStore = await loadFromFirebase(cleanSlug);
+        if (firebaseStore && firebaseStore.name) {
+          currentStore = firebaseStore;
+          try { localStorage.setItem('tokokilat_store_' + cleanSlug, JSON.stringify(currentStore)); } catch (e) {}
+        }
+
+        // C. Fallback ke LocalStorage jika offline
+        if (!currentStore) {
+          try {
+            const savedBySlug = localStorage.getItem('tokokilat_store_' + cleanSlug);
+            if (savedBySlug) currentStore = JSON.parse(savedBySlug);
+          } catch (e) {}
+        }
+
+        // D. Fallback ke Toko Bawaan (jbgold & jbantam)
+        if (!currentStore && builtInStores[cleanSlug]) {
+          currentStore = builtInStores[cleanSlug];
+          saveToFirebase(cleanSlug, currentStore);
+        }
+
+        document.getElementById('loadingView').classList.add('hidden');
+
+        if (currentStore) {
+          isOwner = isOwnerDevice;
+          cleanBrowserAddressBar();
+        } else {
+          // Jika toko belum ada di server, otomatis buatkan katalog display
+          const displayName = capitalizeWords(tokoSlug.replace(/-/g, ' '));
+          const { key, niche } = matchOrGenerateNiche(displayName);
+          currentStore = {
+            name: displayName,
+            phone: '6282299777924',
+            location: 'Indonesia',
+            pin: '1234',
+            exp: '20991231',
+            sig: generateLicenseSignature('6282299777924', '20991231'),
+            payments: ['QRIS', 'Transfer Bank', 'Tunai / COD'],
+            nicheKey: key,
+            nicheInfo: niche,
+            products: niche.defaultProducts.map((p, idx) => ({
+              id: 'prod_' + (idx + 1),
+              name: p.name,
+              price: p.price,
+              image: p.img || '',
+              desc: p.desc
+            }))
+          };
+          isOwner = false;
+          cleanBrowserAddressBar();
+          saveToFirebase(cleanSlug, currentStore);
+        }
+      }
+
+      // Pastikan toko bawaan jbgold & jbantam otomatis tersimpan di Firebase
+      if (builtInStores['jbgold']) {
+        loadFromFirebase('jbgold').then(data => {
+          if (!data) saveToFirebase('jbgold', builtInStores['jbgold']);
+        });
+      }
+      if (builtInStores['jbantam']) {
+        loadFromFirebase('jbantam').then(data => {
+          if (!data) saveToFirebase('jbantam', builtInStores['jbantam']);
+        });
+      }
+
+      // Tampilkan Katalog Toko
+      if (currentStore && currentStore.name) {
+        document.getElementById('generatorView').classList.add('hidden');
+        renderStore();
+        document.getElementById('storeView').classList.remove('hidden');
+        document.getElementById('floatingCartContainer').classList.remove('hidden');
+        lucide.createIcons();
+      } else {
+        lucide.createIcons();
+      }
+    });
+  </script>
+</body>
+</html>
