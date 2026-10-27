@@ -63,30 +63,19 @@
       <div class="bg-white rounded-3xl shadow-xl shadow-slate-200/60 border border-slate-200 p-6 md:p-8">
         <form id="storeForm" onsubmit="generateStore(event)" class="space-y-5">
 
-          <!-- KODE LISENSI MEMBER (PENGUNCI SEWA BULANAN) -->
-          <div class="p-4 rounded-2xl bg-gradient-to-br from-amber-50 to-emerald-50 border-2 border-emerald-300/80 space-y-2.5">
-            <div class="flex items-center justify-between">
-              <label class="block text-sm font-extrabold text-slate-900 flex items-center gap-1.5">
-                <i data-lucide="key-round" class="w-4 h-4 text-emerald-600"></i>
-                Kode Lisensi Member (Wajib)
-              </label>
-              <span id="licenseStatusBadge" class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800">
-                Khusus Member Aktif
-              </span>
-            </div>
-            <div class="relative">
-              <input type="text" id="inputLicenseKey" required oninput="handleLicenseInput(event)"
-                placeholder="Tempel Kode Lisensi dari Admin (Contoh: TK-62812...-20261126-XXXX)"
-                class="w-full px-4 py-3 bg-white border border-emerald-300 rounded-xl text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-600 text-xs md:text-sm font-mono font-bold uppercase tracking-wider transition-all">
-            </div>
-            <div id="licenseHelperBox" class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-1">
-              <p id="licenseInfoText" class="text-xs text-slate-600">
-                Belum punya Kode Lisensi? Sewa akses toko online bulanan via Admin.
-              </p>
-              <a id="btnOrderLicenseWa" href="https://wa.me/6282299777924?text=Halo%20Admin%20TokoKilat,%20saya%20mau%20sewa%20bulanan%20dan%20beli%20Kode%20Lisensi%20Toko%20Online%20WA" target="_blank"
-                class="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-sm transition-all flex-shrink-0">
-                <i data-lucide="message-circle" class="w-3.5 h-3.5"></i> Beli Kode Lisensi (Chat Admin)
-              </a>
+          <!-- BANNER TRIAL GRATIS 7 HARI OTOMATIS -->
+          <div class="p-4 rounded-2xl bg-gradient-to-r from-emerald-50 via-teal-50 to-amber-50 border border-emerald-200 flex items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-sm flex-shrink-0">
+                <i data-lucide="gift" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <div class="flex items-center gap-2 flex-wrap">
+                  <span class="text-xs md:text-sm font-extrabold text-slate-900">Gratis Uji Coba 7 Hari!</span>
+                  <span class="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-emerald-600 text-white">Langsung Aktif</span>
+                </div>
+                <p class="text-[11px] text-slate-600 mt-0.5">Buat toko sekarang tanpa kode lisensi. Berlaku 1x untuk setiap Email & Nomor WhatsApp.</p>
+              </div>
             </div>
           </div>
           
@@ -121,33 +110,47 @@
             </p>
           </div>
 
-          <!-- NOMOR WA & KOTA GRID -->
+          <!-- EMAIL & NOMOR WA GRID -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- ALAMAT EMAIL -->
+            <div>
+              <label class="block text-sm font-bold text-slate-800 mb-1.5">
+                3. Alamat Email Aktif
+              </label>
+              <div class="relative">
+                <i data-lucide="mail" class="w-5 h-5 text-slate-400 absolute left-3.5 top-3.5"></i>
+                <input type="email" id="inputEmail" required
+                  placeholder="nama@email.com"
+                  class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-sm md:text-base font-medium transition-all">
+              </div>
+              <p class="text-[11px] text-slate-400 mt-1">🔒 1 Email hanya untuk 1 toko.</p>
+            </div>
+
             <!-- NOMOR WA -->
             <div>
               <label class="block text-sm font-bold text-slate-800 mb-1.5">
-                3. Nomor WhatsApp Penerima Order
+                4. Nomor WhatsApp Toko
               </label>
               <div class="relative">
                 <span class="absolute left-3.5 top-3.5 text-slate-500 font-bold text-sm">+62</span>
-                <input type="tel" id="inputPhone" required readonly
-                  placeholder="Otomatis terisi dari Kode Lisensi"
-                  class="w-full pl-14 pr-4 py-3 bg-slate-100 border border-slate-300 rounded-xl text-slate-700 cursor-not-allowed text-sm md:text-base font-bold transition-all">
+                <input type="tel" id="inputPhone" required
+                  placeholder="81234567890"
+                  class="w-full pl-14 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-sm md:text-base font-bold transition-all">
               </div>
-              <p class="text-[11px] text-slate-400 mt-1">🔒 Terkunci otomatis sesuai nomor WA yang terdaftar pada Lisensi Member.</p>
+              <p class="text-[11px] text-slate-400 mt-1">🔒 1 Nomor WA hanya untuk 1 toko.</p>
             </div>
+          </div>
 
-            <!-- KOTA -->
-            <div>
-              <label class="block text-sm font-bold text-slate-800 mb-1.5">
-                4. Kota / Lokasi Toko
-              </label>
-              <div class="relative">
-                <i data-lucide="map-pin" class="w-5 h-5 text-slate-400 absolute left-3.5 top-3.5"></i>
-                <input type="text" id="inputLocation"
-                  placeholder="Contoh: Makassar, Jakarta, Bandung"
-                  class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-sm md:text-base font-medium transition-all">
-              </div>
+          <!-- KOTA -->
+          <div>
+            <label class="block text-sm font-bold text-slate-800 mb-1.5">
+              5. Kota / Lokasi Toko
+            </label>
+            <div class="relative">
+              <i data-lucide="map-pin" class="w-5 h-5 text-slate-400 absolute left-3.5 top-3.5"></i>
+              <input type="text" id="inputLocation" required
+                placeholder="Contoh: Makassar, Jakarta, Bandung"
+                class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-sm md:text-base font-medium transition-all">
             </div>
           </div>
 
@@ -156,7 +159,7 @@
             <div class="flex items-center justify-between">
               <label class="block text-sm font-bold text-slate-900 flex items-center gap-1.5">
                 <i data-lucide="lock" class="w-4 h-4 text-emerald-600"></i>
-                5. Buat Password Toko (Untuk Login Penjual)
+                6. Buat Password Toko (Untuk Login Penjual)
               </label>
               <span class="text-[11px] font-bold text-slate-500">Min. 8 Karakter</span>
             </div>
@@ -510,17 +513,28 @@
           <label class="block text-xs font-bold text-slate-700 mb-1">Nama Toko:</label>
           <input type="text" id="settingsStoreName" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500">
         </div>
-        <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">Nomor WhatsApp Penerima Order (Terkunci Lisensi):</label>
-          <input type="text" id="settingsStorePhone" readonly class="w-full px-3.5 py-2.5 bg-slate-100 border border-slate-200 rounded-xl text-sm font-bold text-slate-500 cursor-not-allowed">
-          <p class="text-[11px] text-slate-400 mt-1">🔒 Nomor WA terikat pada Kode Lisensi Member dan tidak dapat dipindahtangankan.</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Email Terdaftar (Terkunci):</label>
+            <input type="text" id="settingsStoreEmail" readonly class="w-full px-3.5 py-2.5 bg-slate-100 border border-slate-200 rounded-xl text-xs font-bold text-slate-500 cursor-not-allowed">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Nomor WA Toko (Terkunci):</label>
+            <input type="text" id="settingsStorePhone" readonly class="w-full px-3.5 py-2.5 bg-slate-100 border border-slate-200 rounded-xl text-xs font-bold text-slate-500 cursor-not-allowed">
+          </div>
         </div>
+        <p class="text-[11px] text-slate-400 -mt-2">🔒 Email & Nomor WA terikat permanen pada akun toko dan tidak dapat diubah.</p>
         <div>
           <label class="block text-xs font-bold text-slate-700 mb-1">Kota / Lokasi:</label>
           <input type="text" id="settingsStoreLocation" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500">
         </div>
         <div class="pt-2 border-t border-slate-100 space-y-2">
-          <label class="block text-xs font-bold text-slate-700">Ganti Password Toko (Untuk Login Penjual):</label>
+          <!-- Banner khusus saat Mode Reset Password (Lupa Password) aktif -->
+          <div id="resetPasswordAlertBanner" class="hidden p-3 bg-amber-50 border border-amber-300 rounded-xl text-xs text-amber-900 font-bold flex items-start gap-2">
+            <i data-lucide="key-round" class="w-4 h-4 text-amber-600 flex-shrink-0 mt-0.5"></i>
+            <span>Mode Buat Password Baru Aktif! Silakan buat Password Baru Anda di bawah ini lalu klik Simpan Pengaturan.</span>
+          </div>
+          <label class="block text-xs font-bold text-slate-700">Ganti / Buat Password Toko (Untuk Login Penjual):</label>
           <div class="relative">
             <input type="password" id="settingsStorePin" placeholder="Password baru (Min. 8 karakter, huruf besar, kecil, angka)" class="w-full pl-3.5 pr-11 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500">
             <button type="button" onclick="togglePasswordVisibility('settingsStorePin', 'eyeIconSettings1')" class="absolute right-3 top-2.5 text-slate-400 hover:text-slate-700 p-0.5">
@@ -533,7 +547,7 @@
               <i id="eyeIconSettings2" data-lucide="eye" class="w-4 h-4"></i>
             </button>
           </div>
-          <p class="text-[11px] text-slate-400">Kosongkan jika tidak ingin mengubah password saat ini.</p>
+          <p id="settingsPasswordHintText" class="text-[11px] text-slate-400">Kosongkan jika tidak ingin mengubah password saat ini.</p>
         </div>
       </div>
       <div class="p-4 border-t border-slate-100 bg-slate-50 flex gap-2">
@@ -565,25 +579,31 @@
 
       <form onsubmit="handleSellerLogin(event)" class="p-5 space-y-4">
         <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1.5">Nomor WhatsApp Toko:</label>
+          <label class="block text-xs font-bold text-slate-700 mb-1.5">Nomor WhatsApp / Email Toko:</label>
           <div class="relative">
-            <span class="absolute left-3.5 top-3 text-slate-500 font-bold text-sm">+62</span>
-            <input type="tel" id="loginPhone" required placeholder="81234567890"
-              class="w-full pl-14 pr-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 text-sm font-bold focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
+            <i data-lucide="user-check" class="w-4 h-4 text-slate-400 absolute left-3.5 top-3"></i>
+            <input type="text" id="loginPhone" required placeholder="Contoh: 081234567890 atau email@toko.com"
+              class="w-full pl-10 pr-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 text-sm font-bold focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
           </div>
-          <p class="text-[11px] text-slate-400 mt-1">Nomor WA yang terdaftar saat membuat toko.</p>
+          <p class="text-[11px] text-slate-400 mt-1">Masukkan Nomor WA atau Email yang terdaftar saat membuat toko.</p>
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1.5">Password / PIN Toko:</label>
+          <div class="flex items-center justify-between mb-1.5">
+            <label class="block text-xs font-bold text-slate-700">Password Toko:</label>
+            <button type="button" onclick="handleForgotPasswordClick()" class="text-[11px] font-bold text-emerald-700 hover:underline">
+              Lupa Password?
+            </button>
+          </div>
           <div class="relative">
             <i data-lucide="lock" class="w-4 h-4 text-slate-400 absolute left-3.5 top-3"></i>
-            <input type="password" id="loginPassword" required placeholder="Masukkan PIN/Password Tokomu"
+            <input type="password" id="loginPassword" placeholder="Masukkan Password Tokomu"
               class="w-full pl-10 pr-11 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 text-sm font-bold tracking-wider focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
             <button type="button" onclick="togglePasswordVisibility('loginPassword', 'eyeIconLogin')" class="absolute right-3 top-2.5 text-slate-400 hover:text-slate-700 p-0.5">
               <i id="eyeIconLogin" data-lucide="eye" class="w-4 h-4"></i>
             </button>
           </div>
+          <p class="text-[11px] text-slate-400 mt-1">Jika sudah dibukakan akses reset oleh Admin, cukup isi Nomor WA/Email lalu klik Masuk.</p>
         </div>
 
         <button type="submit" id="btnLoginSubmit"
@@ -594,8 +614,7 @@
 
         <div class="pt-2 border-t border-slate-100 text-center">
           <p class="text-xs text-slate-500">
-            Lupa password atau belum punya toko? <br>
-            <a href="https://wa.me/6282299777924?text=Halo%20Admin%20TokoKilat,%20saya%20butuh%20bantuan%20login%20toko%20saya" target="_blank" class="font-bold text-emerald-700 hover:underline">Chat Bantuan Admin di WhatsApp</a>
+            Lupa password? Klik <button type="button" onclick="handleForgotPasswordClick()" class="font-bold text-emerald-700 hover:underline">Lupa Password / Hubungi Admin</button>
           </p>
         </div>
       </form>
@@ -741,6 +760,57 @@
           </div>
         </div>
 
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- MODAL SUPER ADMIN: KELOLA KONTAK & RESET KLIEN -->
+  <!-- ============================================== -->
+  <div id="superAdminClientModal" class="hidden fixed inset-0 z-[60] flex items-center justify-center p-4 bg-slate-950/75 backdrop-blur-sm">
+    <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl overflow-hidden flex flex-col">
+      <div class="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-900 text-white">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-xl bg-amber-400 text-slate-950 flex items-center justify-center font-bold">
+            <i data-lucide="key-round" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <h3 class="font-extrabold text-sm">Reset Password & Kontak Klien</h3>
+            <p id="saClientStoreTitle" class="text-[11px] text-amber-300 font-bold">-</p>
+          </div>
+        </div>
+        <button onclick="closeSuperAdminClientModal()" class="w-8 h-8 rounded-full hover:bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+      <div class="p-5 space-y-3.5">
+        <input type="hidden" id="saClientSlug">
+        <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-[11px] text-emerald-900 leading-relaxed">
+          💡 <b>Cara Kerja Simpel:</b> Sesuaikan Nomor HP / Email klien di bawah jika perlu, lalu klik <b>"Buka Akses Buat Password Baru"</b>. Klien bisa langsung masuk ke Pengaturan Tokonya untuk membuat password baru sendiri tanpa perlu Admin tahu passwordnya.
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Nomor WhatsApp Klien Terdaftar:</label>
+          <input type="tel" id="saClientPhone" placeholder="Contoh: 6281234567890"
+            class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-bold text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Alamat Email Klien Terdaftar:</label>
+          <input type="email" id="saClientEmail" placeholder="Contoh: klien@email.com"
+            class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-bold text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
+        </div>
+        <div class="pt-2 space-y-2">
+          <button onclick="saveAndEnableClientPasswordReset(true)" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs rounded-xl shadow-md flex items-center justify-center gap-2">
+            <i data-lucide="unlock" class="w-4 h-4"></i> Buka Akses Buat Password & Arahkan via WA
+          </button>
+          <div class="flex gap-2">
+            <button onclick="saveAndEnableClientPasswordReset(false)" class="flex-1 py-2.5 bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs rounded-xl">
+              Simpan Kontak Saja
+            </button>
+            <button onclick="closeSuperAdminClientModal()" class="py-2.5 px-4 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-xs rounded-xl">
+              Batal
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -1362,18 +1432,27 @@
       }
     }
 
-    // Generate Store logic (Wajib lolos verifikasi Kode Lisensi Member & 1 Nomor WA = 1 Toko!)
+    // Generate Store logic (Otomatis Gratis Trial 7 Hari & Kunci 1 Email + 1 Nomor WA = 1 Toko!)
     async function generateStore(e) {
       e.preventDefault();
-      const rawLicenseKey = document.getElementById('inputLicenseKey').value.trim();
-      const licenseCheck = parseAndVerifyLicense(rawLicenseKey);
 
-      if (!licenseCheck.valid) {
-        if (licenseCheck.expired) {
-          alert(`❌ Masa aktif Kode Lisensi ini sudah habis pada ${licenseCheck.formattedExp}.\n\nSilakan hubungi Admin untuk memperpanjang sewa bulanan.`);
-        } else {
-          alert('❌ Kode Lisensi Member tidak valid!\n\nHalaman pembuatan toko ini khusus untuk Member Resmi. Silakan klik tombol "Beli Kode Lisensi (Chat Admin)" untuk menyewa.');
-        }
+      const storeName = document.getElementById('inputStoreName').value.trim();
+      const rawProducts = document.getElementById('inputProducts').value.trim();
+      const email = (document.getElementById('inputEmail')?.value || '').trim().toLowerCase();
+      const rawPhone = document.getElementById('inputPhone').value.trim();
+      const phone = normalizeWaPhone(rawPhone);
+      const location = document.getElementById('inputLocation').value.trim() || 'Indonesia';
+      const newSlug = makeSlug(storeName);
+
+      if (!email || !email.includes('@') || !email.includes('.')) {
+        alert('Mohon masukkan alamat Email aktif yang valid!');
+        document.getElementById('inputEmail')?.focus();
+        return;
+      }
+
+      if (!phone || phone.length < 9) {
+        alert('Mohon masukkan Nomor WhatsApp yang valid!');
+        document.getElementById('inputPhone').focus();
         return;
       }
 
@@ -1394,17 +1473,11 @@
         return;
       }
 
-      const storeName = document.getElementById('inputStoreName').value.trim();
-      const rawProducts = document.getElementById('inputProducts').value.trim();
-      const phone = licenseCheck.phone; // Dikunci langsung ke nomor WA di dalam Kode Lisensi!
-      const location = document.getElementById('inputLocation').value.trim() || 'Indonesia';
-      const newSlug = makeSlug(storeName);
-
-      // Cek ke Firebase: Pastikan 1 Nomor WA hanya memiliki 1 Toko & Nama Toko belum dipakai orang lain
+      // Cek ke Firebase: Pastikan Email & Nomor WA belum pernah dipakai untuk buat toko (Anti Buat Toko Ganda)
       const submitBtn = document.getElementById('btnSubmitGenerate');
       const originalBtnText = submitBtn.innerHTML;
       submitBtn.disabled = true;
-      submitBtn.innerHTML = `<span>Memeriksa ketersediaan toko...</span>`;
+      submitBtn.innerHTML = `<span>Memeriksa data pendaftaran...</span>`;
 
       try {
         const res = await fetch(`${FIREBASE_DB_URL}/stores.json?t=${Date.now()}`);
@@ -1412,17 +1485,42 @@
           const allStores = await res.json() || {};
           for (const [slug, existingStore] of Object.entries(allStores)) {
             if (!existingStore) continue;
-            // 1. Cek apakah nomor WA ini sudah punya toko (1 Nomor WA = 1 Toko)
-            if (normalizeWaPhone(existingStore.phone) === normalizeWaPhone(phone)) {
+            const existingPhone = normalizeWaPhone(existingStore.phone);
+            const existingEmail = String(existingStore.email || '').trim().toLowerCase();
+            const isExistingExpired = isStoreLicenseExpired(existingStore);
+
+            // 1. Cek apakah Nomor WA ini sudah pernah terdaftar
+            if (existingPhone === phone) {
               submitBtn.disabled = false;
               submitBtn.innerHTML = originalBtnText;
-              alert(`⚠️ Nomor WhatsApp +${phone} sudah memiliki toko terdaftar dengan nama "${existingStore.name}".\n\nSesuai aturan 1 Nomor WA = 1 Toko, silakan klik tombol "Masuk Toko" di pojok kanan atas untuk mengelola toko Anda.\n\n💡 Tips: Jika ingin mengganti nama usaha/toko, Anda bisa mengubahnya kapan saja di menu "⚙️ Pengaturan" di dalam toko Anda!`);
+              if (isExistingExpired) {
+                alert(`⚠️ Nomor WhatsApp +${phone} sudah pernah digunakan untuk toko "${existingStore.name}" dan masa aktifnya telah berakhir.\n\nAnda tidak dapat membuat toko baru dengan nomor yang sama. Silakan login ke toko Anda lalu perpanjang masa aktif sewa.`);
+              } else {
+                alert(`⚠️ Nomor WhatsApp +${phone} sudah terdaftar untuk toko "${existingStore.name}".\n\nSilakan masuk ke toko Anda. Jika ingin mengganti nama toko, Anda bisa mengubahnya di menu Pengaturan.`);
+              }
               openLoginModal();
               document.getElementById('loginPhone').value = phone.replace(/^62/, '');
               return;
             }
-            // 2. Cek apakah nama toko (slug) sudah dipakai nomor WA lain
-            if (slug === newSlug && normalizeWaPhone(existingStore.phone) !== normalizeWaPhone(phone)) {
+
+            // 2. Cek apakah Email ini sudah pernah terdaftar
+            if (existingEmail && existingEmail === email) {
+              submitBtn.disabled = false;
+              submitBtn.innerHTML = originalBtnText;
+              if (isExistingExpired) {
+                alert(`⚠️ Alamat Email "${email}" sudah pernah digunakan untuk toko "${existingStore.name}" dan masa aktifnya telah berakhir.\n\nSilakan masuk ke toko Anda dan lakukan perpanjangan masa aktif.`);
+              } else {
+                alert(`⚠️ Alamat Email "${email}" sudah terdaftar untuk toko "${existingStore.name}".\n\nSatu alamat email hanya berlaku untuk satu toko. Silakan klik "Masuk Toko" untuk mengelola toko Anda.`);
+              }
+              openLoginModal();
+              if (existingStore.phone) {
+                document.getElementById('loginPhone').value = normalizeWaPhone(existingStore.phone).replace(/^62/, '');
+              }
+              return;
+            }
+
+            // 3. Cek apakah Nama Toko (slug) sudah dipakai orang lain
+            if (slug === newSlug) {
               submitBtn.disabled = false;
               submitBtn.innerHTML = originalBtnText;
               alert(`⚠️ Nama toko "${storeName}" sudah digunakan oleh penjual lain.\n\nSilakan tambahkan nama kota atau kata unik (contoh: "${storeName} ${location}").`);
@@ -1437,6 +1535,10 @@
         submitBtn.disabled = false;
         submitBtn.innerHTML = originalBtnText;
       }
+
+      // Berikan Otomatis Masa Aktif Trial Gratis 7 Hari!
+      const trialExpYmd = addDaysToYmd(7);
+      const trialSig = generateLicenseSignature(phone, trialExpYmd);
 
       document.getElementById('generatorView').classList.add('hidden');
       document.getElementById('loadingView').classList.remove('hidden');
@@ -1466,11 +1568,12 @@
 
       currentStore = {
         name: storeName,
+        email: email,
         phone: phone,
         location: location,
         pin: password,
-        exp: licenseCheck.expYmd,
-        sig: licenseCheck.sig,
+        exp: trialExpYmd,
+        sig: trialSig,
         nicheKey: key,
         nicheInfo: niche,
         products: finalProducts
@@ -1907,23 +2010,74 @@
       document.getElementById('loginModal').classList.add('hidden');
     }
 
+    async function handleForgotPasswordClick() {
+      const rawInput = document.getElementById('loginPhone').value.trim();
+      const isEmailInput = rawInput.includes('@');
+      const cleanPhone = isEmailInput ? '' : normalizeWaPhone(rawInput);
+      const cleanEmail = isEmailInput ? rawInput.toLowerCase() : '';
+
+      // Jika sudah diisi nomor WA / Email, cek apakah Admin sudah membuka akses Reset Password (resetMode)
+      if (cleanPhone.length >= 9 || cleanEmail.length >= 5) {
+        try {
+          const res = await fetch(`${FIREBASE_DB_URL}/stores.json?t=${Date.now()}`);
+          if (res.ok) {
+            const allStores = await res.json();
+            if (allStores) {
+              for (const [slug, store] of Object.entries(allStores)) {
+                if (!store) continue;
+                const phoneMatch = cleanPhone && normalizeWaPhone(store.phone) === cleanPhone;
+                const emailMatch = cleanEmail && String(store.email || '').trim().toLowerCase() === cleanEmail;
+                if ((phoneMatch || emailMatch) && store.resetMode === true) {
+                  // Akses reset sudah dibuka Admin! Langsung arahkan masuk ke Pengaturan untuk buat password baru
+                  currentStore = store;
+                  isOwner = true;
+                  isSuperAdmin = false;
+                  try {
+                    localStorage.removeItem('tokokilat_superadmin');
+                    localStorage.setItem('tokokilat_owner_' + slug, 'true');
+                    localStorage.setItem('tokokilat_store_' + slug, JSON.stringify(store));
+                    localStorage.setItem('tokokilat_active_store', JSON.stringify(store));
+                  } catch (err) {}
+                  updateSuperAdminButtons();
+                  closeLoginModal();
+                  document.getElementById('generatorView').classList.add('hidden');
+                  renderStore();
+                  document.getElementById('storeView').classList.remove('hidden');
+                  document.getElementById('floatingCartContainer').classList.remove('hidden');
+                  cleanBrowserAddressBar();
+                  openStoreSettingsModal(true);
+                  return;
+                }
+              }
+            }
+          }
+        } catch (e) {}
+      }
+
+      const infoText = rawInput ? ` (Kontak Terdaftar: ${rawInput})` : '';
+      const waMsg = `Halo Admin TokoKilat, saya lupa password toko saya${infoText}. Mohon dibantu buka akses Pengaturan untuk buat password baru.`;
+      window.open(`https://api.whatsapp.com/send?phone=${SUPER_ADMIN_PHONE}&text=${encodeURIComponent(waMsg)}`, '_blank');
+    }
+
     async function handleSellerLogin(e) {
       e.preventDefault();
-      const rawPhone = document.getElementById('loginPhone').value.trim();
+      const rawInput = document.getElementById('loginPhone').value.trim();
       const password = document.getElementById('loginPassword').value.trim();
-      const cleanPhone = normalizeWaPhone(rawPhone);
+      const isEmailInput = rawInput.includes('@');
+      const cleanPhone = isEmailInput ? '' : normalizeWaPhone(rawInput);
+      const cleanEmail = isEmailInput ? rawInput.toLowerCase() : '';
       const submitBtn = document.getElementById('btnLoginSubmit');
       const originalText = submitBtn.innerHTML;
       submitBtn.disabled = true;
       submitBtn.innerHTML = `<span>Mengecek data toko...</span>`;
 
-      // JALUR KHUSUS SUPER ADMIN: Langsung buka panel Admin Pusat & Toko Utama
+      // JALUR KHUSUS SUPER ADMIN: Masuk ke Toko Utama tanpa langsung memunculkan jendela Dashboard Super Admin
       if (cleanPhone === SUPER_ADMIN_PHONE && password === SUPER_ADMIN_PASSWORD) {
         submitBtn.disabled = false;
         submitBtn.innerHTML = originalText;
         closeLoginModal();
 
-        // Muat toko utama JBGold sebagai owner & Super Admin permanen
+        // Muat toko utama JBGold sebagai owner & Super Admin (Dashboard Super Admin baru muncul jika dipilih di menu ☰)
         currentStore = builtInStores['jbgold'];
         isOwner = true;
         isSuperAdmin = true;
@@ -1933,6 +2087,7 @@
           localStorage.setItem('tokokilat_store_jbgold', JSON.stringify(currentStore));
           localStorage.setItem('tokokilat_active_store', JSON.stringify(currentStore));
         } catch (err) {}
+        updateSuperAdminButtons();
 
         document.getElementById('generatorView').classList.add('hidden');
         renderStore();
@@ -1940,17 +2095,14 @@
         document.getElementById('floatingCartContainer').classList.remove('hidden');
         cleanBrowserAddressBar();
         lucide.createIcons();
-
-        // Buka langsung jendela Dashboard Super Admin tanpa pop-up bertele-tele
-        openSuperAdminDashboardDirect();
         window.scrollTo({ top: 0, behavior: 'smooth' });
         return;
       }
 
-      if (!cleanPhone || cleanPhone.length < 9) {
+      if (!isEmailInput && (!cleanPhone || cleanPhone.length < 9)) {
         submitBtn.disabled = false;
         submitBtn.innerHTML = originalText;
-        alert('Mohon masukkan Nomor WhatsApp yang valid!');
+        alert('Mohon masukkan Nomor WhatsApp atau Alamat Email yang valid!');
         return;
       }
 
@@ -1964,28 +2116,20 @@
         let matchedStore = null;
 
         if (allStores) {
-          // Cari toko yang nomor WA DAN passwordnya cocok (agar jika 1 nomor WA punya beberapa toko dengan password beda, langsung masuk ke toko yang tepat)
           for (const [slug, store] of Object.entries(allStores)) {
-            if (store && normalizeWaPhone(store.phone) === cleanPhone && String(store.pin || '1234') === password) {
+            if (!store) continue;
+            const phoneMatch = cleanPhone && normalizeWaPhone(store.phone) === cleanPhone;
+            const emailMatch = cleanEmail && String(store.email || '').trim().toLowerCase() === cleanEmail;
+            if (phoneMatch || emailMatch) {
               matchedSlug = slug;
               matchedStore = store;
               break;
             }
           }
-          // Jika belum ketemu yang passwordnya cocok, cari berdasarkan nomor WA saja untuk memberi pesan password salah
-          if (!matchedStore) {
-            for (const [slug, store] of Object.entries(allStores)) {
-              if (store && normalizeWaPhone(store.phone) === cleanPhone) {
-                matchedSlug = slug;
-                matchedStore = store;
-                break;
-              }
-            }
-          }
         }
 
         // Jika belum ada di Firebase, cek juga di toko bawaan (jbgold & jbantam)
-        if (!matchedStore) {
+        if (!matchedStore && cleanPhone) {
           for (const [slug, store] of Object.entries(builtInStores)) {
             if (normalizeWaPhone(store.phone) === cleanPhone) {
               matchedSlug = slug;
@@ -1996,16 +2140,41 @@
         }
 
         if (!matchedStore) {
-          alert('❌ Toko dengan nomor WhatsApp tersebut belum terdaftar di sistem kami.');
+          alert('❌ Toko dengan Nomor WhatsApp / Email tersebut belum terdaftar di sistem kami.');
           submitBtn.disabled = false;
           submitBtn.innerHTML = originalText;
           return;
         }
 
-        // Cek kecocokan password / PIN toko
+        // JIKA ADMIN SUDAH MEMBUKAKAN AKSES LUPA PASSWORD (resetMode === true):
+        // Langsung arahkan klien masuk ke Pengaturan Toko untuk membuat password baru tanpa perlu password lama!
+        if (matchedStore.resetMode === true) {
+          currentStore = matchedStore;
+          isOwner = true;
+          isSuperAdmin = false;
+          try {
+            localStorage.removeItem('tokokilat_superadmin');
+            localStorage.setItem('tokokilat_owner_' + matchedSlug, 'true');
+            localStorage.setItem('tokokilat_store_' + matchedSlug, JSON.stringify(matchedStore));
+            localStorage.setItem('tokokilat_active_store', JSON.stringify(matchedStore));
+          } catch (err) {}
+          updateSuperAdminButtons();
+
+          closeLoginModal();
+          document.getElementById('generatorView').classList.add('hidden');
+          renderStore();
+          document.getElementById('storeView').classList.remove('hidden');
+          document.getElementById('floatingCartContainer').classList.remove('hidden');
+          cleanBrowserAddressBar();
+          lucide.createIcons();
+          openStoreSettingsModal(true);
+          return;
+        }
+
+        // Cek kecocokan password toko normal
         const expectedPassword = String(matchedStore.pin || '1234');
-        if (password !== expectedPassword) {
-          alert('❌ Password/PIN Toko salah! Silakan periksa kembali atau hubungi Admin jika lupa password.');
+        if (!password || password !== expectedPassword) {
+          alert('❌ Password Toko salah! Silakan periksa kembali atau klik "Lupa Password?" untuk menghubungi Admin.');
           submitBtn.disabled = false;
           submitBtn.innerHTML = originalText;
           return;
@@ -2043,14 +2212,27 @@
     // Modal Store Settings, Upload Logo & Change PIN
     let pendingStoreLogo = null;
 
-    function openStoreSettingsModal() {
+    function openStoreSettingsModal(forceResetHighlight = false) {
       if (!currentStore) return;
       document.getElementById('settingsStoreName').value = currentStore.name || '';
+      if (document.getElementById('settingsStoreEmail')) {
+        document.getElementById('settingsStoreEmail').value = currentStore.email || '-';
+      }
       document.getElementById('settingsStorePhone').value = currentStore.phone || '';
       document.getElementById('settingsStoreLocation').value = currentStore.location || '';
       document.getElementById('settingsStorePin').value = '';
       if (document.getElementById('settingsStorePinConfirm')) {
         document.getElementById('settingsStorePinConfirm').value = '';
+      }
+
+      const resetBanner = document.getElementById('resetPasswordAlertBanner');
+      const hintText = document.getElementById('settingsPasswordHintText');
+      if (currentStore.resetMode === true || forceResetHighlight) {
+        if (resetBanner) resetBanner.classList.remove('hidden');
+        if (hintText) hintText.innerText = 'Wajib diisi untuk mengaktifkan password baru toko Anda.';
+      } else {
+        if (resetBanner) resetBanner.classList.add('hidden');
+        if (hintText) hintText.innerText = 'Kosongkan jika tidak ingin mengubah password saat ini.';
       }
 
       pendingStoreLogo = currentStore.logo || '';
@@ -2075,6 +2257,12 @@
 
       document.getElementById('storeSettingsModal').classList.remove('hidden');
       lucide.createIcons();
+
+      if (currentStore.resetMode === true || forceResetHighlight) {
+        setTimeout(() => {
+          document.getElementById('settingsStorePin')?.focus();
+        }, 150);
+      }
     }
 
     function handleStoreLogoUpload(e) {
@@ -2147,6 +2335,13 @@
         return;
       }
 
+      // Jika sedang dalam Mode Buat Password Baru (Lupa Password), wajib mengisi password baru
+      if (currentStore.resetMode === true && !newPassword && !isSuperAdmin) {
+        alert('⚠️ Silakan isi Password Baru Anda terlebih dahulu pada kolom Password Baru.');
+        document.getElementById('settingsStorePin')?.focus();
+        return;
+      }
+
       // Jika penjual mengisi password baru, validasi syarat keamanannya
       if (newPassword) {
         const check = checkPasswordRules(newPassword);
@@ -2159,6 +2354,7 @@
           return;
         }
         currentStore.pin = newPassword;
+        currentStore.resetMode = false; // Matikan mode reset setelah password baru berhasil dibuat
       }
 
       // Jika penjual mengganti nama toko, pastikan nama baru belum dipakai orang lain & hapus slug lama agar tetap 1 nomor = 1 toko
@@ -2185,7 +2381,7 @@
       persistStoreData();
       closeStoreSettingsModal();
       renderStore();
-      alert('✅ Pengaturan Toko berhasil disimpan! Link & nama toko Anda telah diperbarui.');
+      alert('✅ Pengaturan & Password Toko berhasil disimpan!');
     }
 
     // ============================================================================
@@ -2318,18 +2514,22 @@
                   <span class="px-2 py-0.5 rounded-full text-[10px] font-black ${isExpired ? 'bg-rose-100 text-rose-700' : 'bg-emerald-100 text-emerald-800'}">
                     ${isExpired ? '⚠️ Expired' : '✓ Aktif'}
                   </span>
+                  ${store.resetMode === true ? `<span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-amber-100 text-amber-800">🔓 Mode Reset Aktif</span>` : ''}
                   <span class="text-[11px] text-slate-400 font-semibold">• ${store.location || 'Indonesia'}</span>
                 </div>
                 <div class="flex items-center gap-3 text-xs text-slate-500 mt-1 flex-wrap">
                   <span>📱 WA: <b class="text-slate-800">+${store.phone || '-'}</b></span>
+                  ${store.email ? `<span>✉️ Email: <b class="text-slate-800">${store.email}</b></span>` : ''}
                   <span>📦 <b>${productCount}</b> Produk</span>
                   <span>⏳ S/d: <b class="${isExpired ? 'text-rose-600' : 'text-slate-700'}">${expText}</b></span>
-                  <span>🔑 Password: <code class="bg-slate-100 px-1 py-0.5 rounded text-slate-700 font-bold">${store.pin || '1234'}</code></span>
                 </div>
               </div>
             </div>
 
-            <div class="flex items-center gap-1.5 self-end sm:self-center flex-shrink-0">
+            <div class="flex items-center gap-1.5 self-end sm:self-center flex-shrink-0 flex-wrap">
+              <button onclick="openSuperAdminClientModal('${slug}')" title="Sesuaikan Nomor HP/Email & Buka Reset Password" class="px-2.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold flex items-center gap-1 shadow-sm">
+                <i data-lucide="key-round" class="w-3.5 h-3.5"></i> Reset / Kontak
+              </button>
               <button onclick="superAdminEnterStore('${slug}')" title="Masuk Edit Toko Ini" class="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold flex items-center gap-1 shadow-sm">
                 <i data-lucide="wrench" class="w-3.5 h-3.5"></i> Masuk Admin
               </button>
@@ -2351,6 +2551,68 @@
       } catch (err) {
         console.error(err);
         listContainer.innerHTML = `<div class="p-6 text-center bg-rose-50 border border-rose-200 rounded-2xl text-xs text-rose-700">Gagal memuat data dari Firebase: ${err.message}. Pastikan koneksi stabil.</div>`;
+      }
+    }
+
+    // Modal Super Admin untuk Menyesuaikan Nomor HP/Email Klien & Membuka Akses Buat Password Baru
+    function openSuperAdminClientModal(slug) {
+      const store = superAdminAllStoresCache[slug];
+      if (!store) return;
+      document.getElementById('saClientSlug').value = slug;
+      document.getElementById('saClientStoreTitle').innerText = `Toko: ${store.name || slug}`;
+      document.getElementById('saClientPhone').value = store.phone || '';
+      document.getElementById('saClientEmail').value = store.email || '';
+      document.getElementById('superAdminClientModal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function closeSuperAdminClientModal() {
+      document.getElementById('superAdminClientModal').classList.add('hidden');
+    }
+
+    async function saveAndEnableClientPasswordReset(enableResetAndSendWa = false) {
+      const slug = document.getElementById('saClientSlug').value;
+      const store = superAdminAllStoresCache[slug];
+      if (!store) return;
+
+      const rawPhone = document.getElementById('saClientPhone').value.trim();
+      const cleanPhone = normalizeWaPhone(rawPhone);
+      const cleanEmail = document.getElementById('saClientEmail').value.trim().toLowerCase();
+
+      if (!cleanPhone || cleanPhone.length < 9) {
+        alert('Mohon isi Nomor WhatsApp klien yang valid!');
+        return;
+      }
+
+      store.phone = cleanPhone;
+      store.email = cleanEmail;
+      store.sig = generateLicenseSignature(cleanPhone, store.exp || '20991231');
+
+      if (enableResetAndSendWa) {
+        store.resetMode = true;
+      }
+
+      await saveToFirebase(slug, store);
+      try { localStorage.setItem('tokokilat_store_' + slug, JSON.stringify(store)); } catch (e) {}
+
+      closeSuperAdminClientModal();
+      loadAllStoresForSuperAdmin();
+
+      if (enableResetAndSendWa) {
+        const directResetUrl = `${window.location.origin}${window.location.pathname}?toko=${slug}&reset=1`;
+        const msg =
+`Halo Kak! Akses pengaturan untuk membuat *Password Baru* pada toko *${store.name}* sudah kami aktifkan 🙏
+
+📌 *Data Akun Terdaftar:*
+• Nomor WA: +${cleanPhone}${cleanEmail ? `\n• Email: ${cleanEmail}` : ''}
+
+🚀 *Silakan klik link di bawah ini untuk langsung masuk ke Pengaturan Toko & membuat Password Baru:*
+${directResetUrl}
+
+*(Atau bisa juga klik menu "Masuk Toko", isi Nomor WA / Email di atas lalu klik Masuk)*`;
+        window.open(`https://api.whatsapp.com/send?phone=${cleanPhone}&text=${encodeURIComponent(msg)}`, '_blank');
+      } else {
+        alert(`✅ Kontak untuk toko "${store.name}" berhasil diperbarui!`);
       }
     }
 
@@ -2764,6 +3026,7 @@ Mohon info ketersediaan barang dan petunjuk pembayarannya ya, terima kasih! 🙏
       lucide.createIcons();
       const params = new URLSearchParams(window.location.search);
       const encodedData = params.get('d');
+      const isResetParam = params.get('reset') === '1';
       let tokoSlug = params.get('toko');
 
       // Dukung juga bila orang mengetik #jbgold di belakang URL
@@ -2839,7 +3102,12 @@ Mohon info ketersediaan barang dan petunjuk pembayarannya ya, terima kasih! 🙏
         document.getElementById('loadingView').classList.add('hidden');
 
         if (currentStore) {
-          isOwner = isOwnerDevice;
+          if (isResetParam && currentStore.resetMode === true) {
+            isOwner = true;
+            try { localStorage.setItem('tokokilat_owner_' + cleanSlug, 'true'); } catch (e) {}
+          } else {
+            isOwner = isOwnerDevice;
+          }
           cleanBrowserAddressBar();
         } else {
           // Jika toko belum ada di server, otomatis buatkan katalog display
@@ -2888,6 +3156,9 @@ Mohon info ketersediaan barang dan petunjuk pembayarannya ya, terima kasih! 🙏
         document.getElementById('storeView').classList.remove('hidden');
         document.getElementById('floatingCartContainer').classList.remove('hidden');
         lucide.createIcons();
+        if (isResetParam && currentStore.resetMode === true) {
+          openStoreSettingsModal(true);
+        }
       } else {
         lucide.createIcons();
       }
