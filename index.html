@@ -443,13 +443,40 @@
             class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 font-semibold">
         </div>
 
-        <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">Harga (Rupiah):</label>
-          <div class="relative">
-            <span class="absolute left-3.5 top-2.5 text-slate-500 font-bold text-sm">Rp</span>
-            <input type="text" inputmode="numeric" id="modalProductPrice" oninput="formatPriceInput(this)" placeholder="Contoh: 1.480.000"
-              class="w-full pl-10 pr-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 font-extrabold text-emerald-800 tracking-wide">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Harga Normal (Rupiah):</label>
+            <div class="relative">
+              <span class="absolute left-3.5 top-2.5 text-slate-500 font-bold text-sm">Rp</span>
+              <input type="text" inputmode="numeric" id="modalProductPrice" oninput="formatPriceInput(this); updateDiscountPreview();" placeholder="Contoh: 1.480.000"
+                class="w-full pl-10 pr-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 font-extrabold text-emerald-800 tracking-wide">
+            </div>
           </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Diskon (%) <span class="text-slate-400 font-normal">(Opsional)</span>:</label>
+            <div class="relative">
+              <input type="number" min="0" max="99" id="modalProductDiscount" oninput="updateDiscountPreview()" placeholder="0"
+                class="w-full pl-3.5 pr-9 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-rose-500 font-extrabold text-rose-600">
+              <span class="absolute right-3.5 top-2.5 text-slate-400 font-bold text-sm">%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- PREVIEW HARGA SETELAH DISKON -->
+        <div id="modalDiscountPreviewBox" class="hidden p-3 bg-rose-50 border border-rose-200 rounded-xl flex items-center justify-between text-xs">
+          <span class="font-bold text-rose-800">🏷️ Harga Jual Setelah Diskon:</span>
+          <span id="modalDiscountFinalPrice" class="font-black text-sm text-rose-600">Rp 0</span>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Jumlah Stok Barang:</label>
+          <div class="relative">
+            <i data-lucide="package" class="w-4 h-4 text-slate-400 absolute left-3.5 top-3"></i>
+            <input type="number" min="0" id="modalProductStock" placeholder="Kosongkan jika stok selalu tersedia (Unlimited)"
+              class="w-full pl-10 pr-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 font-bold text-slate-800">
+          </div>
+          <p class="text-[11px] text-slate-400 mt-1">💡 Isi angka `0` jika barang sedang Habis (Sold Out), atau kosongkan jika stok banyak.</p>
         </div>
 
         <div>
@@ -853,8 +880,8 @@
       } else {
         if (btnPanel) btnPanel.classList.add('hidden');
       }
-      // Jika sudah masuk sebagai Pemilik Toko, sembunyikan tombol Masuk Toko di atas agar rapi di HP
-      if (isOwner) {
+      // Jika sedang berada di dalam Katalog Toko (baik sebagai Pembeli maupun Pemilik Toko), sembunyikan tombol Masuk Toko di atas
+      if (isOwner || currentStore) {
         if (btnLogin) btnLogin.classList.add('hidden');
       } else {
         if (btnLogin) btnLogin.classList.remove('hidden');
@@ -914,7 +941,6 @@
       document.getElementById('generatorView').classList.remove('hidden');
       lucide.createIcons();
       window.scrollTo({ top: 0, behavior: 'smooth' });
-      alert('✅ Anda telah berhasil keluar dari sesi Toko / Super Admin.');
     }
 
     function openSuperAdminDashboardDirect() {
@@ -1547,6 +1573,17 @@
       updateCartDisplay();
     }
 
+    // Hitung harga akhir setelah diskon (%)
+    function getEffectivePrice(p) {
+      if (!p) return 0;
+      const basePrice = Number(p.price) || 0;
+      const disc = Number(p.discount) || 0;
+      if (disc > 0 && disc < 100) {
+        return Math.round(basePrice * (100 - disc) / 100);
+      }
+      return basePrice;
+    }
+
     function renderProductGrid(productsToRender) {
       const grid = document.getElementById('productsGrid');
       grid.innerHTML = '';
@@ -1555,6 +1592,30 @@
       productsToRender.forEach(p => {
         const qtyInCart = cart[p.id] || 0;
         const hasImage = p.image && p.image.trim() !== '';
+        const disc = Number(p.discount) || 0;
+        const finalPrice = getEffectivePrice(p);
+        const hasStockLimit = p.stock !== undefined && p.stock !== null && String(p.stock).trim() !== '';
+        const stockCount = hasStockLimit ? parseInt(p.stock, 10) : null;
+        const isOutOfStock = hasStockLimit && stockCount <= 0;
+
+        let stockBadgeText = 'Tersedia';
+        let stockBadgeClass = 'bg-white/90 text-slate-700';
+        if (hasStockLimit) {
+          if (stockCount <= 0) {
+            stockBadgeText = 'Stok Habis';
+            stockBadgeClass = 'bg-rose-600 text-white';
+          } else {
+            stockBadgeText = `Stok: ${stockCount}`;
+            stockBadgeClass = stockCount <= 5 ? 'bg-amber-500 text-slate-950' : 'bg-white/90 text-emerald-800';
+          }
+        }
+
+        const discountBadgeHtml = (disc > 0) ? `
+          <span class="bg-rose-600 text-white px-2.5 py-0.5 rounded-full text-[11px] font-extrabold shadow-sm">
+            Hemat ${disc}%
+          </span>
+        ` : '';
+
         const card = document.createElement('div');
         card.className = "bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col group relative";
         
@@ -1562,10 +1623,13 @@
         if (hasImage) {
           imageSectionHtml = `
             <div class="relative h-44 overflow-hidden bg-slate-100 ${isEditMode ? 'cursor-pointer' : ''}" ${isEditMode ? `onclick="openProductModal('${p.id}')"` : ''}>
-              <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-              <span class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-2.5 py-1 rounded-full text-[11px] font-bold text-slate-700 shadow-sm">
-                Tersedia
-              </span>
+              <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 ${isOutOfStock ? 'opacity-60 grayscale' : ''}">
+              <div class="absolute top-3 left-3 flex flex-wrap items-center gap-1.5">
+                <span class="${stockBadgeClass} backdrop-blur-sm px-2.5 py-0.5 rounded-full text-[11px] font-bold shadow-sm">
+                  ${stockBadgeText}
+                </span>
+                ${discountBadgeHtml}
+              </div>
             </div>
           `;
         } else {
@@ -1583,10 +1647,51 @@
                   Foto produk
                 </span>
               `}
-              <span class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-2 py-0.5 rounded-full text-[10px] font-bold text-slate-500 shadow-xs">
-                Tersedia
-              </span>
+              <div class="absolute top-3 left-3 flex flex-wrap items-center gap-1.5">
+                <span class="${stockBadgeClass} backdrop-blur-sm px-2 py-0.5 rounded-full text-[10px] font-bold shadow-xs">
+                  ${stockBadgeText}
+                </span>
+                ${discountBadgeHtml}
+              </div>
             </div>
+          `;
+        }
+
+        const priceSectionHtml = (disc > 0) ? `
+          <div>
+            <div class="flex items-center gap-1.5">
+              <span class="text-[11px] text-slate-400 line-through font-semibold">${formatRupiah(p.price)}</span>
+              <span class="text-[10px] font-extrabold text-rose-600 bg-rose-50 px-1.5 py-0.5 rounded">-${disc}%</span>
+            </div>
+            <div class="text-base font-extrabold text-emerald-700">${formatRupiah(finalPrice)}</div>
+          </div>
+        ` : `
+          <div>
+            <span class="text-[10px] uppercase font-bold text-slate-400">Harga</span>
+            <div class="text-base font-extrabold text-emerald-700">${formatRupiah(finalPrice)}</div>
+          </div>
+        `;
+
+        let actionButtonHtml = '';
+        if (isOutOfStock) {
+          actionButtonHtml = `
+            <button disabled class="px-3.5 py-2 bg-slate-200 text-slate-500 text-xs font-bold rounded-xl cursor-not-allowed">
+              Habis
+            </button>
+          `;
+        } else if (qtyInCart > 0) {
+          actionButtonHtml = `
+            <div class="flex items-center gap-2 bg-emerald-50 border border-emerald-200 rounded-xl px-2 py-1">
+              <button onclick="removeFromCart('${p.id}')" class="w-6 h-6 rounded-lg bg-white text-emerald-800 font-bold hover:bg-emerald-100 flex items-center justify-center">-</button>
+              <span class="text-xs font-bold text-emerald-900">${qtyInCart}</span>
+              <button onclick="addToCart('${p.id}')" class="w-6 h-6 rounded-lg bg-emerald-600 text-white font-bold hover:bg-emerald-700 flex items-center justify-center">+</button>
+            </div>
+          `;
+        } else {
+          actionButtonHtml = `
+            <button onclick="addToCart('${p.id}')" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-sm flex items-center gap-1.5 transition-all active:scale-95">
+              <i data-lucide="plus" class="w-3.5 h-3.5"></i> Pesan
+            </button>
           `;
         }
 
@@ -1608,22 +1713,9 @@
               <p class="text-xs text-slate-500 mt-1 line-clamp-2">${p.desc}</p>
             </div>
             <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+              ${priceSectionHtml}
               <div>
-                <span class="text-[10px] uppercase font-bold text-slate-400">Harga</span>
-                <div class="text-base font-extrabold text-emerald-700">${formatRupiah(p.price)}</div>
-              </div>
-              <div>
-                ${qtyInCart > 0 ? `
-                  <div class="flex items-center gap-2 bg-emerald-50 border border-emerald-200 rounded-xl px-2 py-1">
-                    <button onclick="removeFromCart('${p.id}')" class="w-6 h-6 rounded-lg bg-white text-emerald-800 font-bold hover:bg-emerald-100 flex items-center justify-center">-</button>
-                    <span class="text-xs font-bold text-emerald-900">${qtyInCart}</span>
-                    <button onclick="addToCart('${p.id}')" class="w-6 h-6 rounded-lg bg-emerald-600 text-white font-bold hover:bg-emerald-700 flex items-center justify-center">+</button>
-                  </div>
-                ` : `
-                  <button onclick="addToCart('${p.id}')" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-sm flex items-center gap-1.5 transition-all active:scale-95">
-                    <i data-lucide="plus" class="w-3.5 h-3.5"></i> Pesan
-                  </button>
-                `}
+                ${actionButtonHtml}
               </div>
             </div>
           </div>
@@ -1652,12 +1744,31 @@
       inputEl.value = Number(rawDigits).toLocaleString('id-ID');
     }
 
+    function updateDiscountPreview() {
+      const rawPrice = String(document.getElementById('modalProductPrice')?.value || '').replace(/\D/g, '');
+      const basePrice = parseInt(rawPrice, 10) || 0;
+      const disc = parseInt(document.getElementById('modalProductDiscount')?.value, 10) || 0;
+      const previewBox = document.getElementById('modalDiscountPreviewBox');
+      const finalPriceEl = document.getElementById('modalDiscountFinalPrice');
+      if (!previewBox || !finalPriceEl) return;
+
+      if (basePrice > 0 && disc > 0 && disc < 100) {
+        const finalPrice = Math.round(basePrice * (100 - disc) / 100);
+        finalPriceEl.innerText = formatRupiah(finalPrice);
+        previewBox.classList.remove('hidden');
+      } else {
+        previewBox.classList.add('hidden');
+      }
+    }
+
     function openProductModal(productId = null) {
       editingProductId = productId;
       const modal = document.getElementById('productModal');
       const title = document.getElementById('productModalTitle');
       const nameInp = document.getElementById('modalProductName');
       const priceInp = document.getElementById('modalProductPrice');
+      const discInp = document.getElementById('modalProductDiscount');
+      const stockInp = document.getElementById('modalProductStock');
       const descInp = document.getElementById('modalProductDesc');
       const preview = document.getElementById('modalImagePreview');
       const placeholderIcon = document.getElementById('modalImagePlaceholderIcon');
@@ -1669,9 +1780,11 @@
       if (productId) {
         const p = currentStore.products.find(item => String(item.id) === String(productId));
         if (p) {
-          title.innerText = 'Edit Produk & Harga';
+          title.innerText = 'Edit Produk, Diskon & Stok';
           nameInp.value = p.name;
           priceInp.value = p.price ? Number(p.price).toLocaleString('id-ID') : '';
+          if (discInp) discInp.value = p.discount ? p.discount : '';
+          if (stockInp) stockInp.value = (p.stock !== undefined && p.stock !== null && String(p.stock).trim() !== '') ? p.stock : '';
           descInp.value = p.desc;
           if (p.image && p.image.trim() !== '') {
             preview.src = p.image;
@@ -1688,6 +1801,8 @@
         title.innerText = 'Tambah Produk Baru';
         nameInp.value = '';
         priceInp.value = '';
+        if (discInp) discInp.value = '';
+        if (stockInp) stockInp.value = '';
         descInp.value = '';
         preview.src = '';
         preview.classList.add('hidden');
@@ -1695,6 +1810,7 @@
         urlInp.value = '';
       }
 
+      updateDiscountPreview();
       modal.classList.remove('hidden');
       lucide.createIcons();
     }
@@ -1757,6 +1873,10 @@
       const name = document.getElementById('modalProductName').value.trim();
       const rawPrice = String(document.getElementById('modalProductPrice').value || '').replace(/\D/g, '');
       const price = parseInt(rawPrice, 10) || 0;
+      const rawDisc = parseInt(document.getElementById('modalProductDiscount')?.value, 10) || 0;
+      const discount = Math.min(Math.max(rawDisc, 0), 99);
+      const rawStockStr = String(document.getElementById('modalProductStock')?.value || '').trim();
+      const stock = rawStockStr !== '' ? Math.max(parseInt(rawStockStr, 10) || 0, 0) : '';
       const desc = document.getElementById('modalProductDesc').value.trim() || 'Produk pilihan terbaik.';
       const preview = document.getElementById('modalImagePreview');
       const img = preview.classList.contains('hidden') ? '' : preview.src;
@@ -1771,6 +1891,8 @@
         if (p) {
           p.name = capitalizeWords(name);
           p.price = price;
+          p.discount = discount;
+          p.stock = stock;
           p.desc = desc;
           p.image = img;
         }
@@ -1779,6 +1901,8 @@
           id: 'prod_' + Date.now(),
           name: capitalizeWords(name),
           price: price,
+          discount: discount,
+          stock: stock,
           image: img,
           desc: desc
         };
@@ -1839,11 +1963,9 @@
         cleanBrowserAddressBar();
         lucide.createIcons();
 
-        // Buka langsung jendela Dashboard Super Admin
+        // Buka langsung jendela Dashboard Super Admin tanpa pop-up bertele-tele
         openSuperAdminDashboardDirect();
         window.scrollTo({ top: 0, behavior: 'smooth' });
-
-        alert('👑 Selamat Datang, Super Admin!\n\nAnda berhasil login dengan hak akses penuh. Tombol "👑 Super Admin" kini tersimpan permanen di bagian atas halaman.');
         return;
       }
 
@@ -1931,8 +2053,6 @@
         cleanBrowserAddressBar();
         lucide.createIcons();
         window.scrollTo({ top: 0, behavior: 'smooth' });
-
-        alert(`✅ Login Berhasil!\n\nSelamat datang di Panel Pengelolaan Toko "${currentStore.name}". Kamu sekarang bisa mengedit harga, mengganti foto, dan menambah produk.`);
       } catch (err) {
         console.error(err);
         alert('Terjadi kendala saat memeriksa data. Pastikan koneksi internet stabil.');
@@ -2199,8 +2319,6 @@
       cleanBrowserAddressBar();
       lucide.createIcons();
       window.scrollTo({ top: 0, behavior: 'smooth' });
-
-      alert(`👑 Akses Super Admin!\n\nAnda sekarang mengelola toko "${store.name}" dengan hak akses penuh.`);
     }
 
     // Akses Spesial Super Admin: Perpanjang masa sewa toko langsung 1-klik tanpa repot
@@ -2386,9 +2504,29 @@ Berikut adalah *Kode Lisensi Member Resmi* Anda:
 
     // Cart Management
     function addToCart(productId) {
-      cart[productId] = (cart[productId] || 0) + 1;
+      const prod = currentStore?.products?.find(p => String(p.id) === String(productId));
+      if (!prod) return;
+      const hasStockLimit = prod.stock !== undefined && prod.stock !== null && String(prod.stock).trim() !== '';
+      const maxStock = hasStockLimit ? parseInt(prod.stock, 10) : null;
+      const currentQty = cart[productId] || 0;
+
+      if (hasStockLimit) {
+        if (maxStock <= 0) {
+          alert('Maaf, stok produk ini sedang habis.');
+          return;
+        }
+        if (currentQty >= maxStock) {
+          alert(`Maksimal pembelian untuk produk ini adalah ${maxStock} sesuai sisa stok.`);
+          return;
+        }
+      }
+
+      cart[productId] = currentQty + 1;
       updateCartDisplay();
       renderProductGrid(currentStore.products);
+      if (!document.getElementById('cartModal').classList.contains('hidden')) {
+        renderCartModalItems();
+      }
     }
 
     function removeFromCart(productId) {
@@ -2414,7 +2552,7 @@ Berikut adalah *Kode Lisensi Member Resmi* Anda:
         const prod = currentStore.products.find(p => String(p.id) === String(id));
         if (prod) {
           totalQty += qty;
-          totalPrice += (prod.price * qty);
+          totalPrice += (getEffectivePrice(prod) * qty);
         }
       }
 
@@ -2470,7 +2608,8 @@ Berikut adalah *Kode Lisensi Member Resmi* Anda:
       items.forEach(([id, qty]) => {
         const p = currentStore.products.find(prod => String(prod.id) === String(id));
         if (!p) return;
-        const subtotal = p.price * qty;
+        const unitPrice = getEffectivePrice(p);
+        const subtotal = unitPrice * qty;
 
         const imgThumb = (p.image && p.image.trim() !== '') 
           ? `<img src="${p.image}" class="w-12 h-12 rounded-xl object-cover">`
@@ -2482,7 +2621,7 @@ Berikut adalah *Kode Lisensi Member Resmi* Anda:
           ${imgThumb}
           <div class="flex-1">
             <h5 class="font-bold text-slate-900 text-xs md:text-sm line-clamp-1">${p.name}</h5>
-            <span class="text-xs text-emerald-700 font-semibold">${formatRupiah(p.price)} x ${qty} = <b>${formatRupiah(subtotal)}</b></span>
+            <span class="text-xs text-emerald-700 font-semibold">${formatRupiah(unitPrice)} x ${qty} = <b>${formatRupiah(subtotal)}</b></span>
           </div>
           <div class="flex items-center gap-1.5 bg-white border border-slate-200 rounded-xl px-2 py-1">
             <button onclick="removeFromCart('${p.id}')" class="w-5 h-5 rounded text-slate-600 font-bold hover:bg-slate-100 text-xs">-</button>
@@ -2509,9 +2648,11 @@ Berikut adalah *Kode Lisensi Member Resmi* Anda:
       for (const [id, qty] of Object.entries(cart)) {
         const p = currentStore.products.find(prod => String(prod.id) === String(id));
         if (p) {
-          const sub = p.price * qty;
+          const unitPrice = getEffectivePrice(p);
+          const sub = unitPrice * qty;
           grandTotal += sub;
-          itemsText += `${counter}. ${p.name} (${qty}x) = ${formatRupiah(sub)}\n`;
+          const discInfo = (p.discount && p.discount > 0) ? ` [Diskon ${p.discount}%]` : '';
+          itemsText += `${counter}. ${p.name}${discInfo} (${qty}x) = ${formatRupiah(sub)}\n`;
           counter++;
         }
       }
