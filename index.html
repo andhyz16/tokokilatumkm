@@ -168,9 +168,14 @@
             </div>
 
             <div>
-              <input type="password" id="inputStorePassword" required oninput="validatePasswordStrength(this.value)"
-                placeholder="Contoh: Tokoku123 (Huruf Besar, Kecil & Angka)"
-                class="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm font-semibold tracking-wide transition-all">
+              <div class="relative">
+                <input type="password" id="inputStorePassword" required oninput="validatePasswordStrength(this.value)"
+                  placeholder="Contoh: Tokoku123 (Huruf Besar, Kecil & Angka)"
+                  class="w-full pl-3.5 pr-11 py-2.5 bg-white border border-slate-300 rounded-xl text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm font-semibold tracking-wide transition-all">
+                <button type="button" onclick="togglePasswordVisibility('inputStorePassword', 'eyeIconCreate1')" class="absolute right-3 top-2.5 text-slate-400 hover:text-slate-700 p-0.5">
+                  <i id="eyeIconCreate1" data-lucide="eye" class="w-4 h-4"></i>
+                </button>
+              </div>
               
               <!-- INDIKATOR SYARAT PASSWORD -->
               <div class="grid grid-cols-3 gap-1.5 mt-2 text-[11px] font-semibold text-slate-500" id="passwordCheckList">
@@ -182,9 +187,14 @@
 
             <div>
               <label class="block text-xs font-bold text-slate-700 mb-1">Ulangi / Konfirmasi Password:</label>
-              <input type="password" id="inputStorePasswordConfirm" required oninput="validatePasswordMatch()"
-                placeholder="Ketik ulang password yang sama"
-                class="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm font-semibold tracking-wide transition-all">
+              <div class="relative">
+                <input type="password" id="inputStorePasswordConfirm" required oninput="validatePasswordMatch()"
+                  placeholder="Ketik ulang password yang sama"
+                  class="w-full pl-3.5 pr-11 py-2.5 bg-white border border-slate-300 rounded-xl text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm font-semibold tracking-wide transition-all">
+                <button type="button" onclick="togglePasswordVisibility('inputStorePasswordConfirm', 'eyeIconCreate2')" class="absolute right-3 top-2.5 text-slate-400 hover:text-slate-700 p-0.5">
+                  <i id="eyeIconCreate2" data-lucide="eye" class="w-4 h-4"></i>
+                </button>
+              </div>
               <p id="passwordMatchText" class="text-[11px] font-semibold text-slate-500 mt-1"></p>
             </div>
             <p class="text-[11px] text-slate-400">💡 Simpan password ini! Gunakan Nomor WA + Password ini untuk login mengedit toko dari HP/komputer mana pun.</p>
@@ -479,8 +489,18 @@
         </div>
         <div class="pt-2 border-t border-slate-100 space-y-2">
           <label class="block text-xs font-bold text-slate-700">Ganti Password Toko (Untuk Login Penjual):</label>
-          <input type="password" id="settingsStorePin" placeholder="Password baru (Min. 8 karakter, huruf besar, kecil, angka)" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500">
-          <input type="password" id="settingsStorePinConfirm" placeholder="Ketik ulang password baru" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500">
+          <div class="relative">
+            <input type="password" id="settingsStorePin" placeholder="Password baru (Min. 8 karakter, huruf besar, kecil, angka)" class="w-full pl-3.5 pr-11 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500">
+            <button type="button" onclick="togglePasswordVisibility('settingsStorePin', 'eyeIconSettings1')" class="absolute right-3 top-2.5 text-slate-400 hover:text-slate-700 p-0.5">
+              <i id="eyeIconSettings1" data-lucide="eye" class="w-4 h-4"></i>
+            </button>
+          </div>
+          <div class="relative">
+            <input type="password" id="settingsStorePinConfirm" placeholder="Ketik ulang password baru" class="w-full pl-3.5 pr-11 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500">
+            <button type="button" onclick="togglePasswordVisibility('settingsStorePinConfirm', 'eyeIconSettings2')" class="absolute right-3 top-2.5 text-slate-400 hover:text-slate-700 p-0.5">
+              <i id="eyeIconSettings2" data-lucide="eye" class="w-4 h-4"></i>
+            </button>
+          </div>
           <p class="text-[11px] text-slate-400">Kosongkan jika tidak ingin mengubah password saat ini.</p>
         </div>
       </div>
@@ -527,7 +547,10 @@
           <div class="relative">
             <i data-lucide="lock" class="w-4 h-4 text-slate-400 absolute left-3.5 top-3"></i>
             <input type="password" id="loginPassword" required placeholder="Masukkan PIN/Password Tokomu"
-              class="w-full pl-10 pr-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 text-sm font-bold tracking-wider focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
+              class="w-full pl-10 pr-11 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 text-sm font-bold tracking-wider focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
+            <button type="button" onclick="togglePasswordVisibility('loginPassword', 'eyeIconLogin')" class="absolute right-3 top-2.5 text-slate-400 hover:text-slate-700 p-0.5">
+              <i id="eyeIconLogin" data-lucide="eye" class="w-4 h-4"></i>
+            </button>
           </div>
         </div>
 
@@ -827,6 +850,21 @@
       document.getElementById('generatedLicenseResultBox').classList.add('hidden');
       document.getElementById('adminLicenseModal').classList.remove('hidden');
       switchSuperAdminTab('stores');
+    }
+
+    // Fungsi Tombol Mata (Lihat / Sembunyikan Password)
+    function togglePasswordVisibility(inputId, iconId) {
+      const inp = document.getElementById(inputId);
+      const icon = document.getElementById(iconId);
+      if (!inp) return;
+      if (inp.type === 'password') {
+        inp.type = 'text';
+        if (icon) icon.setAttribute('data-lucide', 'eye-off');
+      } else {
+        inp.type = 'password';
+        if (icon) icon.setAttribute('data-lucide', 'eye');
+      }
+      lucide.createIcons();
     }
 
     // Helper: Create clean URL slug from store name (e.g., "JBGold Makassar" -> "jbgold-makassar")
@@ -1138,6 +1176,20 @@
       return null;
     }
 
+    // Hapus data toko lama dari Google Firebase (Saat penjual ganti nama toko agar tetap 1 nomor = 1 toko)
+    async function deleteFromFirebase(slug) {
+      if (!slug) return false;
+      try {
+        const res = await fetch(`${FIREBASE_DB_URL}/stores/${encodeURIComponent(slug)}.json`, {
+          method: 'DELETE'
+        });
+        return res.ok;
+      } catch (err) {
+        console.warn('Firebase delete warning:', err);
+        return false;
+      }
+    }
+
     // Build Shareable URL: MURNI HANYA NAMA TOKO SAJA (Contoh: https://tokokilatumkm.netlify.app/?toko=jbgold)
     function buildFullShareUrl() {
       if (!currentStore) return window.location.origin + window.location.pathname;
@@ -1224,8 +1276,8 @@
       }
     }
 
-    // Generate Store logic (Wajib lolos verifikasi Kode Lisensi Member!)
-    function generateStore(e) {
+    // Generate Store logic (Wajib lolos verifikasi Kode Lisensi Member & 1 Nomor WA = 1 Toko!)
+    async function generateStore(e) {
       e.preventDefault();
       const rawLicenseKey = document.getElementById('inputLicenseKey').value.trim();
       const licenseCheck = parseAndVerifyLicense(rawLicenseKey);
@@ -1260,6 +1312,45 @@
       const rawProducts = document.getElementById('inputProducts').value.trim();
       const phone = licenseCheck.phone; // Dikunci langsung ke nomor WA di dalam Kode Lisensi!
       const location = document.getElementById('inputLocation').value.trim() || 'Indonesia';
+      const newSlug = makeSlug(storeName);
+
+      // Cek ke Firebase: Pastikan 1 Nomor WA hanya memiliki 1 Toko & Nama Toko belum dipakai orang lain
+      const submitBtn = document.getElementById('btnSubmitGenerate');
+      const originalBtnText = submitBtn.innerHTML;
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = `<span>Memeriksa ketersediaan toko...</span>`;
+
+      try {
+        const res = await fetch(`${FIREBASE_DB_URL}/stores.json?t=${Date.now()}`);
+        if (res.ok) {
+          const allStores = await res.json() || {};
+          for (const [slug, existingStore] of Object.entries(allStores)) {
+            if (!existingStore) continue;
+            // 1. Cek apakah nomor WA ini sudah punya toko (1 Nomor WA = 1 Toko)
+            if (normalizeWaPhone(existingStore.phone) === normalizeWaPhone(phone)) {
+              submitBtn.disabled = false;
+              submitBtn.innerHTML = originalBtnText;
+              alert(`⚠️ Nomor WhatsApp +${phone} sudah memiliki toko terdaftar dengan nama "${existingStore.name}".\n\nSesuai aturan 1 Nomor WA = 1 Toko, silakan klik tombol "Masuk Toko" di pojok kanan atas untuk mengelola toko Anda.\n\n💡 Tips: Jika ingin mengganti nama usaha/toko, Anda bisa mengubahnya kapan saja di menu "⚙️ Pengaturan" di dalam toko Anda!`);
+              openLoginModal();
+              document.getElementById('loginPhone').value = phone.replace(/^62/, '');
+              return;
+            }
+            // 2. Cek apakah nama toko (slug) sudah dipakai nomor WA lain
+            if (slug === newSlug && normalizeWaPhone(existingStore.phone) !== normalizeWaPhone(phone)) {
+              submitBtn.disabled = false;
+              submitBtn.innerHTML = originalBtnText;
+              alert(`⚠️ Nama toko "${storeName}" sudah digunakan oleh penjual lain.\n\nSilakan tambahkan nama kota atau kata unik (contoh: "${storeName} ${location}").`);
+              document.getElementById('inputStoreName').focus();
+              return;
+            }
+          }
+        }
+      } catch (err) {
+        console.warn('Check existing store warning:', err);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnText;
+      }
 
       const payments = [];
       if (document.getElementById('payQris').checked) payments.push('QRIS');
@@ -1307,6 +1398,9 @@
       };
 
       isOwner = true;
+      isSuperAdmin = false; // Toko baru adalah akun Klien/Penjual biasa, BUKAN Super Admin
+      try { localStorage.removeItem('tokokilat_superadmin'); } catch (e) {}
+      updateSuperAdminButtons();
       persistStoreData();
 
       setTimeout(() => {
@@ -1701,11 +1795,22 @@
         let matchedStore = null;
 
         if (allStores) {
+          // Cari toko yang nomor WA DAN passwordnya cocok (agar jika 1 nomor WA punya beberapa toko dengan password beda, langsung masuk ke toko yang tepat)
           for (const [slug, store] of Object.entries(allStores)) {
-            if (store && normalizeWaPhone(store.phone) === cleanPhone) {
+            if (store && normalizeWaPhone(store.phone) === cleanPhone && String(store.pin || '1234') === password) {
               matchedSlug = slug;
               matchedStore = store;
               break;
+            }
+          }
+          // Jika belum ketemu yang passwordnya cocok, cari berdasarkan nomor WA saja untuk memberi pesan password salah
+          if (!matchedStore) {
+            for (const [slug, store] of Object.entries(allStores)) {
+              if (store && normalizeWaPhone(store.phone) === cleanPhone) {
+                matchedSlug = slug;
+                matchedStore = store;
+                break;
+              }
             }
           }
         }
@@ -1737,14 +1842,17 @@
           return;
         }
 
-        // Berhasil login! Masuk ke Mode Pemilik Toko (Admin)
+        // Berhasil login! Masuk ke Mode Pemilik Toko (Admin Klien Biasa)
         currentStore = matchedStore;
         isOwner = true;
+        isSuperAdmin = false;
         try {
+          localStorage.removeItem('tokokilat_superadmin');
           localStorage.setItem('tokokilat_owner_' + matchedSlug, 'true');
           localStorage.setItem('tokokilat_store_' + matchedSlug, JSON.stringify(matchedStore));
           localStorage.setItem('tokokilat_active_store', JSON.stringify(matchedStore));
         } catch (err) {}
+        updateSuperAdminButtons();
 
         closeLoginModal();
         document.getElementById('generatorView').classList.add('hidden');
@@ -1783,9 +1891,11 @@
       document.getElementById('storeSettingsModal').classList.add('hidden');
     }
 
-    function saveStoreSettings() {
+    async function saveStoreSettings() {
       if (!currentStore) return;
+      const oldSlug = makeSlug(currentStore.name);
       const newName = document.getElementById('settingsStoreName').value.trim();
+      const newSlug = makeSlug(newName);
       const newLoc = document.getElementById('settingsStoreLocation').value.trim();
       const newPassword = document.getElementById('settingsStorePin').value;
       const confirmPassword = document.getElementById('settingsStorePinConfirm')?.value || '';
@@ -1809,13 +1919,30 @@
         currentStore.pin = newPassword;
       }
 
+      // Jika penjual mengganti nama toko, pastikan nama baru belum dipakai orang lain & hapus slug lama agar tetap 1 nomor = 1 toko
+      if (newSlug !== oldSlug) {
+        const existingTarget = await loadFromFirebase(newSlug);
+        if (existingTarget && normalizeWaPhone(existingTarget.phone) !== normalizeWaPhone(currentStore.phone)) {
+          alert(`⚠️ Nama toko "${newName}" sudah digunakan oleh toko lain. Silakan pilih nama yang berbeda.`);
+          return;
+        }
+      }
+
       currentStore.name = newName;
       currentStore.location = newLoc;
+
+      if (newSlug !== oldSlug && !builtInStores[oldSlug]) {
+        await deleteFromFirebase(oldSlug);
+        try {
+          localStorage.removeItem('tokokilat_store_' + oldSlug);
+          localStorage.removeItem('tokokilat_owner_' + oldSlug);
+        } catch (e) {}
+      }
 
       persistStoreData();
       closeStoreSettingsModal();
       renderStore();
-      alert('✅ Pengaturan Toko berhasil disimpan!');
+      alert('✅ Pengaturan Toko berhasil disimpan! Link & nama toko Anda telah diperbarui.');
     }
 
     // ============================================================================
@@ -1857,6 +1984,9 @@
       currentStore.exp = check.expYmd;
       currentStore.sig = check.sig;
       isOwner = true;
+      isSuperAdmin = false; // Toko baru adalah akun Klien/Penjual biasa, BUKAN Super Admin
+      try { localStorage.removeItem('tokokilat_superadmin'); } catch (e) {}
+      updateSuperAdminButtons();
       persistStoreData();
       closeRenewLicenseModal();
       renderStore();
@@ -1962,6 +2092,9 @@
               <a href="${storeUrl}" target="_blank" title="Lihat Tampilan Pembeli" class="p-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl">
                 <i data-lucide="external-link" class="w-4 h-4"></i>
               </a>
+              <button onclick="superAdminDeleteStore('${slug}')" title="Hapus Toko Ini" class="p-1.5 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-xl border border-rose-200">
+                <i data-lucide="trash-2" class="w-4 h-4"></i>
+              </button>
             </div>
           `;
           listContainer.appendChild(card);
@@ -2017,6 +2150,26 @@
       try { localStorage.setItem('tokokilat_store_' + slug, JSON.stringify(store)); } catch (e) {}
 
       alert(`✅ Berhasil! Masa sewa toko "${store.name}" diperpanjang hingga ${formatYmdIndonesian(newExp)}.`);
+      loadAllStoresForSuperAdmin();
+    }
+
+    // Akses Spesial Super Admin: Hapus toko dari database Firebase
+    async function superAdminDeleteStore(slug) {
+      const store = superAdminAllStoresCache[slug];
+      if (!store) return;
+      if (builtInStores[slug]) {
+        alert('⚠️ Toko utama bawaan sistem tidak dapat dihapus, namun Anda bisa mengedit nama dan isinya.');
+        return;
+      }
+      if (!confirm(`🗑️ Yakin ingin MENGHAPUS PERMANEN toko "${store.name}" (WA: +${store.phone}) dari database?`)) return;
+
+      await deleteFromFirebase(slug);
+      try {
+        localStorage.removeItem('tokokilat_store_' + slug);
+        localStorage.removeItem('tokokilat_owner_' + slug);
+      } catch (e) {}
+
+      alert(`✅ Toko "${store.name}" berhasil dihapus dari sistem.`);
       loadAllStoresForSuperAdmin();
     }
 
