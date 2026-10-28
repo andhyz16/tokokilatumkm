@@ -120,16 +120,32 @@
             </div>
           </div>
 
-          <!-- KOTA -->
-          <div>
-            <label class="block text-sm font-bold text-slate-800 mb-1.5">
-              5. Kota / Lokasi Toko
-            </label>
-            <div class="relative">
-              <i data-lucide="map-pin" class="w-5 h-5 text-slate-400 absolute left-3.5 top-3.5"></i>
-              <input type="text" id="inputLocation" required
-                placeholder="Contoh: Makassar, Jakarta, Bandung"
-                class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-sm md:text-base font-medium transition-all">
+          <!-- KOTA & KODE REFERRAL GRID -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- KOTA -->
+            <div>
+              <label class="block text-sm font-bold text-slate-800 mb-1.5">
+                5. Kota / Lokasi Toko
+              </label>
+              <div class="relative">
+                <i data-lucide="map-pin" class="w-5 h-5 text-slate-400 absolute left-3.5 top-3.5"></i>
+                <input type="text" id="inputLocation" required
+                  placeholder="Contoh: Makassar, Jakarta"
+                  class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-sm md:text-base font-medium transition-all">
+              </div>
+            </div>
+
+            <!-- KODE REFERRAL (OPSIONAL) -->
+            <div>
+              <label class="block text-sm font-bold text-slate-800 mb-1.5">
+                Kode Referral <span class="text-xs font-normal text-slate-400">(Opsional)</span>
+              </label>
+              <div class="relative">
+                <i data-lucide="gift" class="w-5 h-5 text-emerald-600 absolute left-3.5 top-3.5"></i>
+                <input type="text" id="inputReferralCode"
+                  placeholder="Contoh: REF-JBGOLD"
+                  class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 uppercase focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-sm md:text-base font-bold transition-all">
+              </div>
             </div>
           </div>
 
@@ -242,14 +258,6 @@
           <button onclick="openSuperAdminDashboardDirect(); closeOwnerMenuDropdown();" id="btnSuperAdminPanel" class="hidden w-full px-4 py-3 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-slate-950 font-extrabold text-xs md:text-sm rounded-xl border border-amber-300 shadow-md flex items-center justify-between transition-all">
             <span class="flex items-center gap-2.5"><i data-lucide="crown" class="w-4 h-4"></i> Super Admin Dashboard</span>
             <i data-lucide="chevron-right" class="w-4 h-4"></i>
-          </button>
-          <button onclick="openProductModal(); closeOwnerMenuDropdown();" id="btnAddProductMenu" class="w-full px-4 py-3 bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs md:text-sm rounded-xl border border-slate-700 flex items-center justify-between transition-all">
-            <span class="flex items-center gap-2.5"><i data-lucide="plus-circle" class="w-4 h-4 text-emerald-400"></i> Tambah Barang Baru</span>
-            <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400"></i>
-          </button>
-          <button onclick="openBulkEditModal(); closeOwnerMenuDropdown();" class="w-full px-4 py-3 bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs md:text-sm rounded-xl border border-slate-700 flex items-center justify-between transition-all">
-            <span class="flex items-center gap-2.5"><i data-lucide="zap" class="w-4 h-4 text-amber-400"></i> Ubah Harga & Stok Cepat</span>
-            <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400"></i>
           </button>
           <button onclick="openOrdersAndStatsModal(); closeOwnerMenuDropdown();" class="w-full px-4 py-3 bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs md:text-sm rounded-xl border border-slate-700 flex items-center justify-between transition-all">
             <span class="flex items-center gap-2.5"><i data-lucide="clipboard-list" class="w-4 h-4 text-teal-400"></i> Pesanan, Statistik & Struk (<span id="ownerOrderCountBadge">0</span>)</span>
@@ -1100,10 +1108,25 @@
           <i data-lucide="send" class="w-4 h-4"></i> Kirim Link Toko Langsung ke WhatsApp
         </button>
 
-        <!-- PROGRAM REFERRAL AJAK TEMAN UMKM -->
-        <button onclick="shareReferralToFriend()" class="w-full py-2.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 font-bold text-xs rounded-xl flex items-center justify-center gap-2">
-          <i data-lucide="gift" class="w-4 h-4 text-emerald-600"></i> Ajak Teman UMKM (Bonus +7 Hari Aktif)
-        </button>
+        <!-- PROGRAM KODE REFERRAL AJAK TEMAN UMKM -->
+        <div class="p-3.5 bg-emerald-50/70 border border-emerald-200 rounded-2xl space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-extrabold text-emerald-950 flex items-center gap-1.5">
+              <i data-lucide="gift" class="w-4 h-4 text-emerald-600"></i> Kode Referral Toko Anda:
+            </span>
+            <span class="text-[10px] font-bold bg-emerald-600 text-white px-2 py-0.5 rounded-full">Bonus +7 Hari</span>
+          </div>
+          <div class="flex gap-2">
+            <input type="text" id="myReferralCodeDisplay" readonly value="REF-TOKO"
+              class="w-full px-3 py-2 bg-white border border-emerald-300 rounded-xl text-xs font-black text-emerald-900 tracking-wider text-center focus:outline-none">
+            <button onclick="copyMyReferralCode()" class="px-3.5 py-2 bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl text-xs font-bold flex-shrink-0 flex items-center gap-1">
+              <i data-lucide="copy" class="w-3.5 h-3.5"></i> Salin Kode
+            </button>
+            <button onclick="shareReferralToFriend()" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold flex-shrink-0 flex items-center gap-1">
+              <i data-lucide="share-2" class="w-3.5 h-3.5"></i> Bagikan
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -1848,7 +1871,9 @@
       const rawPhone = document.getElementById('inputPhone').value.trim();
       const phone = normalizeWaPhone(rawPhone);
       const location = document.getElementById('inputLocation').value.trim() || 'Indonesia';
+      const referredBy = (document.getElementById('inputReferralCode')?.value || '').trim().toUpperCase();
       const newSlug = makeSlug(storeName);
+      const referralCode = 'REF-' + newSlug.toUpperCase().replace(/[^A-Z0-9]/g, '').substring(0, 12);
 
       if (!email || !email.includes('@') || !email.includes('.')) {
         alert('Mohon masukkan alamat Email aktif yang valid!');
@@ -1977,6 +2002,8 @@
         email: email,
         phone: phone,
         location: location,
+        referralCode: referralCode,
+        referredBy: referredBy,
         pin: password,
         exp: trialExpYmd,
         sig: trialSig,
@@ -3399,6 +3426,7 @@ Mohon info rekening / cara pembayarannya ya Admin. Terima kasih!`;
               <div class="flex items-center gap-3 text-xs text-slate-500 mt-1 flex-wrap">
                 <span>📱 WA: <b class="text-slate-800">+${store.phone || '-'}</b></span>
                 ${store.email ? `<span>✉️ Email: <b class="text-slate-800">${store.email}</b></span>` : ''}
+                ${store.referredBy ? `<span class="px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-200 font-bold">🎁 Ref: ${store.referredBy}</span>` : ''}
                 <span>📦 <b>${productCount}</b> Produk</span>
                 <span>👁️ <b>${viewCount}</b>x Dilihat</span>
                 <span>🛒 <b>${orderCount}</b> Order</span>
@@ -3681,6 +3709,14 @@ Silakan buka kembali toko Anda di: ${baseUrl}`;
       if (qrImg) qrImg.src = qrUrl;
       if (qrBtn) qrBtn.href = qrUrl;
 
+      // #20: Tampilkan Kode Referral Unik Toko
+      const refInput = document.getElementById('myReferralCodeDisplay');
+      if (refInput && currentStore) {
+        const myRefCode = currentStore.referralCode || ('REF-' + makeSlug(currentStore.name).toUpperCase().replace(/[^A-Z0-9]/g, '').substring(0, 12));
+        currentStore.referralCode = myRefCode;
+        refInput.value = myRefCode;
+      }
+
       // Pastikan data toko terbaru tersimpan ke Google Firebase Realtime Database
       if (currentStore) {
         const slug = makeSlug(currentStore.name);
@@ -3739,17 +3775,28 @@ Terima kasih, ditunggu pesanannya ya! 🙏`;
       });
     }
 
-    // #20: Program Referral Antar UMKM
+    // #20: Program Kode Referral Antar UMKM
+    function copyMyReferralCode() {
+      const refCode = document.getElementById('myReferralCodeDisplay')?.value || '';
+      if (!refCode) return;
+      navigator.clipboard.writeText(refCode).then(() => {
+        alert(`✅ Kode Referral Anda berhasil disalin: ${refCode}\n\nBagikan kode ini ke teman UMKM saat mereka mendaftar toko baru.`);
+      }).catch(() => {
+        prompt('Salin Kode Referral Anda:', refCode);
+      });
+    }
+
     function shareReferralToFriend() {
       const baseUrl = window.location.origin + window.location.pathname;
       const myStoreName = currentStore?.name || 'Toko Saya';
+      const refCode = document.getElementById('myReferralCodeDisplay')?.value || ('REF-' + makeSlug(myStoreName).toUpperCase().replace(/[^A-Z0-9]/g, '').substring(0, 12));
       const text =
 `Halo! Saya pakai aplikasi *TokoKilat WA* untuk bikin katalog toko online *${myStoreName}* yang langsung nyambung ke WhatsApp. Praktis banget & lagi ada *Uji Coba Gratis 7 Hari*! 🚀
 
 Cobain bikin katalog tokomu di sini:
-👉 ${baseUrl}
+👉 ${baseUrl}?ref=${encodeURIComponent(refCode)}
 
-*(Info ke Admin kalau direkomendasikan oleh toko "${myStoreName}" ya!)*`;
+🎁 Masukkan Kode Referral: *${refCode}* saat mendaftar ya!`;
       window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
     }
 
@@ -4492,6 +4539,10 @@ Mohon info ketersediaan barang dan total pembayarannya ya, terima kasih! 🙏`;
       } catch (e) {}
       lucide.createIcons();
       const params = new URLSearchParams(window.location.search);
+      const refParam = params.get('ref');
+      if (refParam && document.getElementById('inputReferralCode')) {
+        document.getElementById('inputReferralCode').value = refParam.trim().toUpperCase();
+      }
       const encodedData = params.get('d');
       const isResetParam = params.get('reset') === '1';
       let tokoSlug = params.get('toko');
