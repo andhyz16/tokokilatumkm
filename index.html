@@ -1359,6 +1359,49 @@
     </div>
   </div>
 
+  <!-- MODAL PILIHAN FORMAT NOTA (JPG / PDF) -->
+  <div id="receiptFormatModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-sm">
+    <div class="bg-white w-full max-w-sm rounded-3xl shadow-2xl p-6 text-center space-y-4">
+      <div class="w-12 h-12 rounded-2xl bg-indigo-100 text-indigo-600 flex items-center justify-center mx-auto text-xl">
+        <i data-lucide="receipt" class="w-6 h-6"></i>
+      </div>
+      <div>
+        <h4 class="font-extrabold text-slate-900 text-base">Pilih Format Unduh Nota</h4>
+        <p class="text-xs text-slate-500 mt-1">Silakan pilih format file yang Anda butuhkan:</p>
+      </div>
+      <div class="space-y-2.5 pt-1">
+        <button onclick="executeDownloadReceipt('image')" class="w-full p-3.5 rounded-2xl border-2 border-indigo-100 hover:border-indigo-500 bg-indigo-50/50 hover:bg-indigo-50 flex items-center justify-between transition-all group text-left">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center shadow-sm">
+              <i data-lucide="image" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <div class="font-bold text-slate-900 text-xs md:text-sm group-hover:text-indigo-900">Format Gambar (JPG / PNG)</div>
+              <div class="text-[11px] text-slate-500">Pas untuk langsung dikirim ke WhatsApp pembeli</div>
+            </div>
+          </div>
+          <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400 group-hover:text-indigo-600"></i>
+        </button>
+
+        <button onclick="executeDownloadReceipt('pdf')" class="w-full p-3.5 rounded-2xl border-2 border-rose-100 hover:border-rose-500 bg-rose-50/50 hover:bg-rose-50 flex items-center justify-between transition-all group text-left">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-rose-600 text-white flex items-center justify-center shadow-sm">
+              <i data-lucide="file-text" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <div class="font-bold text-slate-900 text-xs md:text-sm group-hover:text-rose-900">Format Dokumen PDF</div>
+              <div class="text-[11px] text-slate-500">Bisa disimpan sebagai PDF atau dicetak ke printer</div>
+            </div>
+          </div>
+          <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400 group-hover:text-rose-600"></i>
+        </button>
+      </div>
+      <button onclick="closeReceiptFormatModal()" class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition-all">
+        Batal
+      </button>
+    </div>
+  </div>
+
   <!-- JAVASCRIPT LOGIC -->
   <script>
     // State
@@ -4033,11 +4076,8 @@ Cobain bikin katalog tokomu di sini:
                   <i data-lucide="package-check" class="w-3.5 h-3.5"></i> Potong Stok
                 </button>
               ` : ''}
-              <button onclick="downloadDigitalReceipt(${idx}, 'image')" class="px-2.5 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold flex items-center gap-1 shadow-xs">
-                <i data-lucide="image" class="w-3.5 h-3.5"></i> Unduh Gambar
-              </button>
-              <button onclick="downloadDigitalReceipt(${idx}, 'pdf')" class="px-2.5 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold flex items-center gap-1 shadow-xs">
-                <i data-lucide="file-text" class="w-3.5 h-3.5"></i> Unduh PDF / Cetak
+              <button onclick="openReceiptFormatModal(${idx})" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm">
+                <i data-lucide="printer" class="w-3.5 h-3.5"></i> Unduh Nota / Struk
               </button>
             </div>
           `;
@@ -4076,6 +4116,25 @@ Cobain bikin katalog tokomu di sini:
       alert('✅ Stok produk otomatis dikurangi sesuai pesanan ini!');
     }
 
+    let activeReceiptOrderIdx = null;
+
+    function openReceiptFormatModal(orderIdx) {
+      activeReceiptOrderIdx = orderIdx;
+      document.getElementById('receiptFormatModal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function closeReceiptFormatModal() {
+      document.getElementById('receiptFormatModal').classList.add('hidden');
+    }
+
+    function executeDownloadReceipt(format) {
+      if (activeReceiptOrderIdx === null) return;
+      const idx = activeReceiptOrderIdx;
+      closeReceiptFormatModal();
+      downloadDigitalReceipt(idx, format);
+    }
+
     function downloadDigitalReceipt(orderIdx, format = 'image') {
       if (!currentStore || !currentStore.orders || !currentStore.orders[orderIdx]) return;
       const ord = currentStore.orders[orderIdx];
@@ -4084,116 +4143,19 @@ Cobain bikin katalog tokomu di sini:
       const storePhone = currentStore.phone ? `+${currentStore.phone}` : '-';
       const storeLoc = currentStore.location || 'Indonesia';
 
-      // 1. Opsi Ekspor ke PDF / Print Resmi
-      if (format === 'pdf') {
-        const logoHtml = (currentStore.logo && currentStore.logo.trim() !== '')
-          ? `<img src="${currentStore.logo}" style="width:64px;height:64px;object-fit:cover;border-radius:12px;border:1px solid #e2e8f0;margin-bottom:8px;">`
-          : `<div style="font-size:36px;margin-bottom:6px;">🏪</div>`;
-
-        let itemRowsHtml = '';
-        items.forEach((it, i) => {
-          const title = `${it.name}${it.variant ? ` (${it.variant})` : ''}`;
-          const sub = (it.price || 0) * (it.qty || 1);
-          itemRowsHtml += `
-            <tr style="border-bottom:1px solid #f1f5f9;">
-              <td style="padding:10px 4px;font-size:13px;color:#1e293b;">
-                <b>${i + 1}. ${title}</b><br>
-                <span style="font-size:11px;color:#64748b;">${formatRupiah(it.price || 0)} x ${it.qty}</span>
-              </td>
-              <td style="padding:10px 4px;font-size:13px;font-weight:bold;color:#0f172a;text-align:right;">
-                ${formatRupiah(sub)}
-              </td>
-            </tr>
-          `;
-        });
-
-        const discRowHtml = (ord.discount > 0) ? `
-          <tr style="color:#e11d48;font-size:12px;">
-            <td style="padding:6px 4px;">Potongan Kupon (${ord.promoCode || 'PROMO'})</td>
-            <td style="padding:6px 4px;text-align:right;font-weight:bold;">-${formatRupiah(ord.discount)}</td>
-          </tr>
-        ` : '';
-
-        const printWin = window.open('', '_blank');
-        if (!printWin) {
-          alert('Mohon izinkan popup browser untuk mengunduh PDF / Nota!');
-          return;
-        }
-
-        printWin.document.write(`
-          <!DOCTYPE html>
-          <html>
-          <head>
-            <title>Nota-${makeSlug(storeName)}-${ord.id}</title>
-            <style>
-              body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background:#f8fafc; margin:0; padding:24px; display:flex; justify-content:center; }
-              .receipt-card { background:#ffffff; width:100%; max-width:440px; padding:28px; border-radius:20px; box-shadow:0 4px 20px rgba(0,0,0,0.06); border:1px solid #e2e8f0; }
-              @media print {
-                body { background:#ffffff; padding:0; }
-                .receipt-card { box-shadow:none; border:none; padding:12px; max-width:100%; }
-                .no-print { display:none !important; }
-              }
-            </style>
-          </head>
-          <body>
-            <div class="receipt-card">
-              <div style="text-align:center;border-bottom:2px dashed #e2e8f0;padding-bottom:18px;">
-                ${logoHtml}
-                <h2 style="margin:0;font-size:20px;color:#0f172a;font-weight:800;">${storeName}</h2>
-                <div style="font-size:12px;color:#64748b;margin-top:4px;">WA: ${storePhone} • ${storeLoc}</div>
-              </div>
-
-              <div style="padding:16px 0;border-bottom:1px solid #e2e8f0;font-size:12px;color:#475569;line-height:1.6;">
-                <div><b>No. Nota:</b> ${ord.id || '-'}</div>
-                <div><b>Pelanggan:</b> <span style="color:#0f172a;font-weight:bold;">${ord.customerName || 'Pelanggan'}</span></div>
-                <div><b>Tanggal:</b> ${ord.date || '-'}</div>
-                <div><b>Pengiriman:</b> ${ord.deliveryMethod || 'Diantar'}</div>
-                <div><b>Pembayaran:</b> ${ord.paymentMethod || 'Transfer / Tunai'}</div>
-              </div>
-
-              <table style="width:100%;border-collapse:collapse;margin:12px 0;">
-                ${itemRowsHtml}
-                ${discRowHtml}
-                <tr style="border-top:2px solid #0f172a;font-size:16px;">
-                  <td style="padding:14px 4px 6px;font-weight:800;color:#0f172a;">TOTAL BAYAR</td>
-                  <td style="padding:14px 4px 6px;text-align:right;font-weight:900;color:#047857;">${formatRupiah(ord.total || 0)}</td>
-                </tr>
-              </table>
-
-              <div style="text-align:center;font-size:11px;color:#94a3b8;margin-top:20px;border-top:1px dashed #e2e8f0;padding-top:14px;">
-                Terima kasih sudah berbelanja di <b>${storeName}</b> 🙏<br>
-                <span style="font-size:10px;">Dibuat otomatis via TokoKilat</span>
-              </div>
-
-              <div class="no-print" style="margin-top:24px;display:flex;gap:8px;">
-                <button onclick="window.print()" style="flex:1;background:#059669;color:#fff;border:none;padding:12px;border-radius:12px;font-weight:bold;cursor:pointer;">🖨️ Cetak / Simpan PDF</button>
-                <button onclick="window.close()" style="background:#e2e8f0;color:#475569;border:none;padding:12px 18px;border-radius:12px;font-weight:bold;cursor:pointer;">Tutup</button>
-              </div>
-            </div>
-            <scr` + `ipt>
-              setTimeout(() => { window.print(); }, 400);
-            </scr` + `ipt>
-          </body>
-          </html>
-        `);
-        printWin.document.close();
-        return;
-      }
-
-      // 2. Opsi Ekspor ke GAMBAR (PNG) dengan Logo Toko Otomatis
       const canvas = document.createElement('canvas');
       const width = 480;
-      const baseHeight = 330 + (items.length * 36);
+      const baseHeight = 340 + (items.length * 36);
       canvas.width = width;
       canvas.height = baseHeight;
       const ctx = canvas.getContext('2d');
 
       const renderCanvasContent = (loadedLogoImg = null) => {
-        // Background
+        // Background Putih Bersih
         ctx.fillStyle = '#ffffff';
         ctx.fillRect(0, 0, width, baseHeight);
 
-        // Header Banner
+        // Header Hijau Elegan
         ctx.fillStyle = '#065f46';
         ctx.fillRect(0, 0, width, 95);
 
@@ -4221,7 +4183,7 @@ Cobain bikin katalog tokomu di sini:
         ctx.fillStyle = '#a7f3d0';
         ctx.fillText(`WA: ${storePhone} • ${storeLoc}`, textLeft, 66);
 
-        // Info Pembeli
+        // Info Pembeli & Detail Pesanan
         ctx.fillStyle = '#0f172a';
         ctx.font = 'bold 13px sans-serif';
         ctx.fillText(`Pelanggan: ${ord.customerName || 'Pelanggan'}`, 24, 126);
@@ -4229,14 +4191,14 @@ Cobain bikin katalog tokomu di sini:
         ctx.fillStyle = '#475569';
         ctx.fillText(`Tanggal: ${ord.date || '-'} (${ord.deliveryMethod || 'Diantar'})`, 24, 146);
 
-        // Garis
+        // Garis Pemisah
         ctx.strokeStyle = '#cbd5e1';
         ctx.beginPath();
         ctx.moveTo(24, 162);
         ctx.lineTo(width - 24, 162);
         ctx.stroke();
 
-        // Daftar Item
+        // Daftar Item Produk
         let y = 190;
         items.forEach((it, i) => {
           ctx.fillStyle = '#1e293b';
@@ -4278,10 +4240,55 @@ Cobain bikin katalog tokomu di sini:
         ctx.font = 'italic 11px sans-serif';
         ctx.fillText('Terima kasih sudah berbelanja di toko kami! 🙏', 24, y);
 
-        const link = document.createElement('a');
-        link.download = `Nota-${makeSlug(storeName)}-${Date.now()}.png`;
-        link.href = canvas.toDataURL('image/png');
-        link.click();
+        const dataUrl = canvas.toDataURL('image/png');
+
+        // JIKA MEMILIH FORMAT PDF: Gunakan gambar canvas yang sama persis agar tampilannya 100% identik!
+        if (format === 'pdf') {
+          const printWin = window.open('', '_blank');
+          if (!printWin) {
+            alert('Mohon izinkan popup browser untuk mencetak/menyimpan PDF!');
+            return;
+          }
+          printWin.document.write(`
+            <!DOCTYPE html>
+            <html>
+            <head>
+              <title>Nota-${makeSlug(storeName)}-${ord.id || Date.now()}</title>
+              <style>
+                @page { size: auto; margin: 10mm; }
+                body { margin: 0; background: #f1f5f9; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; font-family: sans-serif; }
+                .nota-img { max-width: 480px; width: 100%; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.12); border: 1px solid #cbd5e1; background: #fff; }
+                .action-bar { margin-top: 18px; display: flex; gap: 10px; }
+                .btn { padding: 10px 20px; border-radius: 10px; font-weight: bold; border: none; cursor: pointer; font-size: 13px; }
+                .btn-print { background: #059669; color: #fff; }
+                .btn-close { background: #e2e8f0; color: #475569; }
+                @media print {
+                  body { background: #fff; min-height: auto; padding: 0; }
+                  .nota-img { box-shadow: none; border: none; max-width: 100%; width: 100%; border-radius: 0; }
+                  .action-bar { display: none !important; }
+                }
+              </style>
+            </head>
+            <body>
+              <img src="${dataUrl}" class="nota-img">
+              <div class="action-bar">
+                <button onclick="window.print()" class="btn btn-print">🖨️ Cetak / Simpan PDF</button>
+                <button onclick="window.close()" class="btn btn-close">Tutup</button>
+              </div>
+              <scr` + `ipt>
+                setTimeout(() => { window.print(); }, 400);
+              </scr` + `ipt>
+            </body>
+            </html>
+          `);
+          printWin.document.close();
+        } else {
+          // JIKA MEMILIH FORMAT GAMBAR (JPG/PNG): Langsung download file gambarnya
+          const link = document.createElement('a');
+          link.download = `Nota-${makeSlug(storeName)}-${Date.now()}.png`;
+          link.href = dataUrl;
+          link.click();
+        }
       };
 
       if (currentStore.logo && currentStore.logo.trim() !== '') {
