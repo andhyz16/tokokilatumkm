@@ -243,8 +243,8 @@
             <span class="flex items-center gap-2.5"><i data-lucide="crown" class="w-4 h-4"></i> Super Admin Dashboard</span>
             <i data-lucide="chevron-right" class="w-4 h-4"></i>
           </button>
-          <button onclick="toggleEditMode(); closeOwnerMenuDropdown();" id="btnEditMode" class="w-full px-4 py-3 bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs md:text-sm rounded-xl border border-slate-700 flex items-center justify-between transition-all">
-            <span class="flex items-center gap-2.5"><i data-lucide="edit-3" class="w-4 h-4 text-emerald-400"></i> <span id="textEditMode">Edit Barang & Foto</span></span>
+          <button onclick="openProductModal(); closeOwnerMenuDropdown();" id="btnAddProductMenu" class="w-full px-4 py-3 bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs md:text-sm rounded-xl border border-slate-700 flex items-center justify-between transition-all">
+            <span class="flex items-center gap-2.5"><i data-lucide="plus-circle" class="w-4 h-4 text-emerald-400"></i> Tambah Barang Baru</span>
             <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400"></i>
           </button>
           <button onclick="openBulkEditModal(); closeOwnerMenuDropdown();" class="w-full px-4 py-3 bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs md:text-sm rounded-xl border border-slate-700 flex items-center justify-between transition-all">
@@ -386,17 +386,17 @@
           <div id="categoryFilterBar" class="hidden flex items-center gap-1.5 overflow-x-auto pb-1"></div>
         </div>
 
-        <!-- ADD PRODUCT BAR (VISIBLE ONLY IN EDIT MODE) -->
-        <div id="adminAddProductBar" class="hidden p-4 bg-amber-50 border-b border-amber-200 flex flex-wrap justify-between items-center gap-2">
-          <span class="text-xs font-bold text-amber-900 flex items-center gap-1.5">
-            <i data-lucide="wrench" class="w-4 h-4 text-amber-600"></i> Mode Edit Aktif: Klik pada kartu produk untuk ubah harga & pasang foto
+        <!-- ADD PRODUCT BAR (VISIBLE ONLY FOR OWNER / SELLER) -->
+        <div id="adminAddProductBar" class="hidden p-4 bg-emerald-50/70 border-b border-emerald-200 flex flex-wrap justify-between items-center gap-2">
+          <span class="text-xs font-bold text-emerald-950 flex items-center gap-1.5">
+            <i data-lucide="store" class="w-4 h-4 text-emerald-600"></i> Tampilan Penjual: Klik kartu barang atau tombol Edit untuk mengubah produk
           </span>
           <div class="flex items-center gap-2">
             <button onclick="openBulkEditModal()" class="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold flex items-center gap-1 shadow-sm">
               <i data-lucide="zap" class="w-3.5 h-3.5 text-amber-400"></i> Edit Cepat Semua
             </button>
-            <button onclick="openProductModal()" class="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-xs font-bold flex items-center gap-1 shadow-sm">
-              <i data-lucide="plus" class="w-4 h-4"></i> Tambah Produk Baru
+            <button onclick="openProductModal()" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold flex items-center gap-1 shadow-sm">
+              <i data-lucide="plus" class="w-4 h-4"></i> Tambah Barang Baru
             </button>
           </div>
         </div>
@@ -2026,12 +2026,15 @@
       }
 
       const adminBar = document.getElementById('adminActionBar');
+      const addProdBar = document.getElementById('adminAddProductBar');
       updateSuperAdminButtons();
       if (isOwner) {
         if (adminBar) adminBar.classList.remove('hidden');
+        if (addProdBar) addProdBar.classList.remove('hidden');
+        isEditMode = true;
       } else {
         if (adminBar) adminBar.classList.add('hidden');
-        document.getElementById('adminAddProductBar').classList.add('hidden');
+        if (addProdBar) addProdBar.classList.add('hidden');
         isEditMode = false;
       }
 
@@ -2313,7 +2316,7 @@
           </div>
         ` : '';
 
-        const clickAction = isEditMode ? `openProductModal('${p.id}')` : `openProductDetailModal('${p.id}')`;
+        const clickAction = isOwner ? `openProductModal('${p.id}')` : `openProductDetailModal('${p.id}')`;
 
         const card = document.createElement('div');
         card.className = "bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col group relative";
@@ -2340,7 +2343,7 @@
               <div class="w-10 h-10 rounded-full bg-white shadow-sm border border-slate-200 flex items-center justify-center text-slate-400 mb-1.5 group-hover:scale-110 transition-transform">
                 <i data-lucide="camera" class="w-5 h-5 text-slate-400"></i>
               </div>
-              ${isEditMode ? `
+              ${isOwner ? `
                 <span class="text-xs font-bold text-emerald-700 bg-emerald-100/70 px-2.5 py-0.5 rounded-full">
                   + Pasang Foto Produk
                 </span>
@@ -2382,7 +2385,19 @@
         `;
 
         let actionButtonHtml = '';
-        if (isStoreClosed) {
+        if (isOwner) {
+          // TAMPILAN KHUSUS PENJUAL: Tombol Edit Barang & Hapus langsung di tempat tombol Pesan
+          actionButtonHtml = `
+            <div class="flex items-center gap-1.5">
+              <button onclick="openProductModal('${p.id}')" class="px-3 py-2 bg-amber-500 hover:bg-amber-600 text-slate-950 text-xs font-extrabold rounded-xl shadow-sm flex items-center gap-1 transition-all active:scale-95">
+                <i data-lucide="edit-3" class="w-3.5 h-3.5"></i> Edit Barang
+              </button>
+              <button onclick="deleteProduct('${p.id}')" title="Hapus Barang" class="p-2 bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 rounded-xl transition-all">
+                <i data-lucide="trash-2" class="w-4 h-4"></i>
+              </button>
+            </div>
+          `;
+        } else if (isStoreClosed) {
           actionButtonHtml = `
             <button disabled class="px-3 py-2 bg-slate-200 text-slate-500 text-[11px] font-bold rounded-xl cursor-not-allowed">
               Toko Tutup
@@ -2412,16 +2427,6 @@
 
         card.innerHTML = `
           ${imageSectionHtml}
-          ${isEditMode ? `
-            <div class="absolute top-2 right-2 flex gap-1 z-10">
-              <button onclick="event.stopPropagation(); openProductModal('${p.id}')" title="Edit Produk & Harga" class="p-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg shadow text-xs flex items-center gap-1 font-bold">
-                <i data-lucide="edit" class="w-3.5 h-3.5"></i> Edit
-              </button>
-              <button onclick="event.stopPropagation(); deleteProduct('${p.id}')" title="Hapus Produk" class="p-1.5 bg-rose-500 hover:bg-rose-600 text-white rounded-lg shadow text-xs">
-                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
-              </button>
-            </div>
-          ` : ''}
           <div class="p-4 flex-1 flex flex-col justify-between">
             <div>
               ${p.category ? `<span class="text-[10px] font-bold text-emerald-700 uppercase tracking-wider">${p.category}</span>` : ''}
@@ -4063,9 +4068,7 @@ Cobain bikin katalog tokomu di sini:
       const pin = prompt('Masukkan PIN Rahasia Pemilik Toko:');
       if (pin === expectedPin) {
         isOwner = true;
-        isEditMode = true; // Langsung aktifkan mode edit begitu login PIN benar!
-        document.getElementById('adminAddProductBar').classList.remove('hidden');
-        document.getElementById('textEditMode').innerText = 'Selesai Edit';
+        isEditMode = true;
         renderStore();
         cleanBrowserAddressBar();
         lucide.createIcons();
@@ -4204,7 +4207,7 @@ Cobain bikin katalog tokomu di sini:
       }
 
       const floatBtn = document.getElementById('floatingCartContainer');
-      if (totalQty > 0) {
+      if (!isOwner && totalQty > 0) {
         floatBtn.classList.remove('hidden');
       } else {
         floatBtn.classList.add('hidden');
@@ -4458,21 +4461,7 @@ Mohon info ketersediaan barang dan total pembayarannya ya, terima kasih! 🙏`;
     }
 
     function toggleEditMode() {
-      isEditMode = !isEditMode;
-      const bar = document.getElementById('adminAddProductBar');
-      const text = document.getElementById('textEditMode');
-      const btn = document.getElementById('btnEditMode');
-
-      if (isEditMode) {
-        bar.classList.remove('hidden');
-        text.innerText = 'Selesai Edit';
-        btn.classList.add('bg-amber-600', 'hover:bg-amber-700');
-      } else {
-        bar.classList.add('hidden');
-        text.innerText = 'Edit Barang & Foto';
-        btn.classList.remove('bg-amber-600', 'hover:bg-amber-700');
-      }
-      renderProductGrid(currentStore.products);
+      openProductModal();
     }
 
     function resetToGenerator() {
