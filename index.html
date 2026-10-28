@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TokoKilat WA - Platform Toko Online UMKM Instan</title>
+  <title>TokoKilat - Platform Toko Online UMKM Instan</title>
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Google Font: Plus Jakarta Sans -->
@@ -26,8 +26,7 @@
           <i data-lucide="zap" class="w-6 h-6"></i>
         </div>
         <div>
-          <span class="font-extrabold text-lg tracking-tight bg-gradient-to-r from-emerald-700 to-green-600 bg-clip-text text-transparent">TokoKilat WA</span>
-          <span class="text-xs ml-1.5 px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-semibold">Semua Bisnis Bisa</span>
+          <span class="font-extrabold text-lg tracking-tight bg-gradient-to-r from-emerald-700 to-green-600 bg-clip-text text-transparent">TokoKilat</span>
         </div>
       </div>
 
@@ -263,7 +262,7 @@
             <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400"></i>
           </button>
           <button onclick="openStoreSettingsModal(); closeOwnerMenuDropdown();" class="w-full px-4 py-3 bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs md:text-sm rounded-xl border border-slate-700 flex items-center justify-between transition-all">
-            <span class="flex items-center gap-2.5"><i data-lucide="settings" class="w-4 h-4 text-sky-400"></i> Pengaturan Toko & Password</span>
+            <span class="flex items-center gap-2.5"><i data-lucide="settings" class="w-4 h-4 text-sky-400"></i> Pengaturan</span>
             <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400"></i>
           </button>
           <button onclick="openRenewLicenseModal(); closeOwnerMenuDropdown();" class="w-full px-4 py-3 bg-slate-800 hover:bg-slate-700 text-amber-300 font-bold text-xs md:text-sm rounded-xl border border-slate-700 flex items-center justify-between transition-all">
@@ -414,7 +413,7 @@
 
         <!-- FOOTER STORE -->
         <div class="border-t border-slate-100 p-6 text-center bg-slate-50 text-slate-400 text-xs">
-          <div>Dibuat otomatis oleh <span class="font-bold text-emerald-700">TokoKilat WA</span> • Pesan Cepat via WhatsApp</div>
+          <div>Dibuat otomatis oleh <span class="font-bold text-emerald-700">TokoKilat</span> • Katalog Toko Online Instan</div>
         </div>
 
       </div>
@@ -902,7 +901,7 @@
               <h3 class="font-extrabold text-white text-base md:text-lg">Super Admin Dashboard</h3>
               <span class="px-2 py-0.5 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/40 text-[10px] font-black uppercase tracking-wider">Akses Penuh</span>
             </div>
-            <p class="text-xs text-slate-400">Kelola semua member, lisensi, dan toko online TokoKilat WA</p>
+            <p class="text-xs text-slate-400">Kelola semua member, lisensi, dan toko online TokoKilat</p>
           </div>
         </div>
         <button onclick="closeMasterAdminGenerator()" class="w-8 h-8 rounded-full hover:bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center transition-colors">
@@ -3316,7 +3315,7 @@
       const storeName = currentStore?.name || 'Toko Saya';
       const storePhone = currentStore?.phone ? `+${currentStore.phone}` : '-';
       const msg =
-`Halo Admin *TokoKilat WA*, saya ingin memperpanjang masa aktif sewa toko saya 🙏
+`Halo Admin *TokoKilat*, saya ingin memperpanjang masa aktif sewa toko saya 🙏
 
 📌 *Detail Toko:*
 • Nama Toko: *${storeName}*
@@ -3546,7 +3545,7 @@ Mohon info rekening / cara pembayarannya ya Admin. Terima kasih!`;
       const msg =
 `Halo Kak pemilik toko *${store.name}* 🙏
 
-Kami dari Admin *TokoKilat WA* ingin menginformasikan bahwa katalog toko online Anda ${statusMsg}.
+Kami dari Admin *TokoKilat* ingin menginformasikan bahwa katalog toko online Anda ${statusMsg}.
 
 Agar link katalog tetap aktif dan bisa diakses pelanggan tanpa kendala, silakan pilih paket perpanjangan:
 • *Paket Standar (1 Bulan):* Rp 30.000/bulan
@@ -3743,7 +3742,7 @@ ${directResetUrl}
       const baseUrl = window.location.origin + window.location.pathname;
       const pkgLabel = lastGeneratedLicense.days === 365 ? 'Paket Eksklusif (12 Bulan)' : (lastGeneratedLicense.days === 180 ? 'Paket Premium (6 Bulan)' : 'Paket Standar (1 Bulan)');
       const msg = 
-`Halo Kak! Terima kasih sudah berlangganan *TokoKilat WA* 🙏
+`Halo Kak! Terima kasih sudah berlangganan *TokoKilat* 🙏
 
 Masa aktif sewa toko Anda telah *OTOMATIS DIPERPANJANG* di sistem kami! ✅
 
@@ -3864,8 +3863,8 @@ Terima kasih, ditunggu pesanannya ya! 🙏`;
       const baseUrl = window.location.origin + window.location.pathname;
       const myStoreName = currentStore?.name || 'Toko Saya';
       const refCode = document.getElementById('myReferralCodeDisplay')?.value || ('REF-' + makeSlug(myStoreName).toUpperCase().replace(/[^A-Z0-9]/g, '').substring(0, 12));
-      const text =
-`Halo! Saya pakai aplikasi *TokoKilat WA* untuk bikin katalog toko online *${myStoreName}* yang langsung nyambung ke WhatsApp. Praktis banget & lagi ada *Uji Coba Gratis 7 Hari*! 🚀
+      const text = 
+`Halo! Saya pakai aplikasi *TokoKilat* untuk bikin katalog toko online *${myStoreName}*. Praktis banget & lagi ada *Uji Coba Gratis 7 Hari*! 🚀
 
 Cobain bikin katalog tokomu di sini:
 👉 ${baseUrl}?ref=${encodeURIComponent(refCode)}
