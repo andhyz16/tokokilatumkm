@@ -242,7 +242,6 @@
                   ⏳ Aktif s/d: -
                 </span>
               </div>
-              <p class="text-slate-400 text-[11px] truncate">Ketuk menu garis 3 di kanan untuk kelola toko</p>
             </div>
           </div>
 
@@ -400,10 +399,7 @@
             <i data-lucide="store" class="w-4 h-4 text-emerald-600"></i> Tampilan Penjual: Klik kartu barang atau tombol Edit untuk mengubah produk
           </span>
           <div class="flex items-center gap-2">
-            <button onclick="openBulkEditModal()" class="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold flex items-center gap-1 shadow-sm">
-              <i data-lucide="zap" class="w-3.5 h-3.5 text-amber-400"></i> Edit Cepat Semua
-            </button>
-            <button onclick="openProductModal()" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold flex items-center gap-1 shadow-sm">
+            <button onclick="openProductModal()" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm">
               <i data-lucide="plus" class="w-4 h-4"></i> Tambah Barang Baru
             </button>
           </div>
@@ -414,14 +410,6 @@
           <div id="productsGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             <!-- Dynamically populated products -->
           </div>
-        </div>
-
-        <!-- GALERI BUKTI PENGIRIMAN / TESTIMONI TOKO (OPSIONAL) -->
-        <div id="storeTestimonialsSection" class="hidden px-4 md:px-8 pb-6 pt-2 border-t border-slate-100 bg-slate-50/40">
-          <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-700 mb-3 flex items-center gap-1.5">
-            <i data-lucide="shield-check" class="w-4 h-4 text-emerald-600"></i> Bukti Pengiriman & Testimoni Pelanggan
-          </h4>
-          <div id="storeTestimonialsGrid" class="grid grid-cols-3 gap-3"></div>
         </div>
 
         <!-- FOOTER STORE -->
@@ -677,10 +665,30 @@
 
         <!-- INFO REKENING, MAPS, & ADMIN KEDUA -->
         <div class="space-y-3 pt-2 border-t border-slate-100">
-          <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">💳 Info Rekening / Pembayaran Toko <span class="text-slate-400 font-normal">(Otomatis tampil di WA Checkout)</span>:</label>
-            <input type="text" id="settingsBankInfo" placeholder="Contoh: BRI 1234-5678-90 a/n Toko Berkah / QRIS Tersedia"
-              class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500">
+          <div class="p-3.5 bg-blue-50/60 border border-blue-200 rounded-2xl space-y-2.5">
+            <div class="flex items-center gap-1.5 text-xs font-bold text-blue-950">
+              <i data-lucide="credit-card" class="w-4 h-4 text-blue-600"></i>
+              <span>Info Rekening Pembayaran Toko <span class="text-slate-400 font-normal">(Otomatis tampil di WA Checkout)</span>:</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+              <div>
+                <label class="block text-[11px] font-bold text-slate-700 mb-0.5">Nama Bank / e-Wallet:</label>
+                <input type="text" id="settingsBankName" placeholder="Contoh: BCA / BRI / Mandiri / DANA"
+                  class="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500">
+              </div>
+              <div>
+                <label class="block text-[11px] font-bold text-slate-700 mb-0.5">Nomor Rekening / No. HP:</label>
+                <input type="text" id="settingsBankNumber" placeholder="Contoh: 1234567890"
+                  class="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500">
+              </div>
+              <div>
+                <label class="block text-[11px] font-bold text-slate-700 mb-0.5">Atas Nama (Pemilik):</label>
+                <input type="text" id="settingsBankHolder" placeholder="Contoh: Budi Santoso"
+                  class="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500">
+              </div>
+            </div>
+            <!-- Simpanan input legacy untuk backward-compatibility -->
+            <input type="hidden" id="settingsBankInfo">
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
@@ -716,17 +724,6 @@
             <input type="text" inputmode="numeric" id="settingsFreeOngkirMin" oninput="formatPriceInput(this)" placeholder="Contoh: 100.000 (Kosongkan jika tidak ada)"
               class="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-800">
           </div>
-        </div>
-
-        <!-- UPLOAD BUKTI PENGIRIMAN / TESTIMONI (MAKS 3 FOTO) -->
-        <div class="p-3 bg-slate-50 border border-slate-200 rounded-2xl space-y-2">
-          <div class="flex items-center justify-between">
-            <label class="block text-xs font-bold text-slate-700">📸 Foto Bukti Pengiriman / Testimoni (Maks. 3):</label>
-            <button type="button" onclick="clearStoreTestimonials()" class="text-[11px] font-bold text-rose-600 hover:underline">Hapus Semua</button>
-          </div>
-          <input type="file" id="settingsTestiFileInput" accept="image/*" onchange="handleTestimonialUpload(event)"
-            class="block w-full text-xs text-slate-500 file:mr-2 file:py-1 file:px-2.5 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-emerald-100 file:text-emerald-800 cursor-pointer">
-          <div id="settingsTestiPreviewGrid" class="grid grid-cols-3 gap-2 pt-1"></div>
         </div>
         <div class="pt-2 border-t border-slate-100 space-y-2">
           <!-- Banner khusus saat Mode Reset Password (Lupa Password) aktif -->
@@ -1187,15 +1184,37 @@
         </div>
 
         <!-- PILIHAN PENGIRIMAN / PENGAMBILAN -->
-        <div class="grid grid-cols-2 gap-2">
-          <label class="flex items-center gap-2 p-2 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-800 cursor-pointer">
-            <input type="radio" name="deliveryMethod" value="Diantar Kurir / Ekspedisi" checked class="text-emerald-600">
-            <span>🛵 Diantar / Kurir</span>
-          </label>
-          <label class="flex items-center gap-2 p-2 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-800 cursor-pointer">
-            <input type="radio" name="deliveryMethod" value="Ambil Sendiri di Toko" class="text-emerald-600">
-            <span>🏪 Ambil di Toko</span>
-          </label>
+        <div>
+          <label class="block text-[11px] font-bold text-slate-700 mb-1">Metode Pengiriman:</label>
+          <div class="grid grid-cols-2 gap-2">
+            <label class="flex items-center gap-2 p-2 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-800 cursor-pointer">
+              <input type="radio" name="deliveryMethod" value="Diantar Kurir / Ekspedisi" checked class="text-emerald-600">
+              <span>🛵 Diantar / Kurir</span>
+            </label>
+            <label class="flex items-center gap-2 p-2 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-800 cursor-pointer">
+              <input type="radio" name="deliveryMethod" value="Ambil Sendiri di Toko" class="text-emerald-600">
+              <span>🏪 Ambil di Toko</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- PILIHAN CARA PEMBAYARAN: CASH / TRANSFER / COD -->
+        <div>
+          <label class="block text-[11px] font-bold text-slate-700 mb-1">Metode Pembayaran:</label>
+          <div class="grid grid-cols-3 gap-2">
+            <label class="flex items-center justify-center gap-1.5 p-2 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-800 cursor-pointer hover:border-emerald-500 transition-all text-center">
+              <input type="radio" name="paymentMethod" value="Transfer Bank / e-Wallet" checked class="text-emerald-600">
+              <span>💳 Transfer</span>
+            </label>
+            <label class="flex items-center justify-center gap-1.5 p-2 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-800 cursor-pointer hover:border-emerald-500 transition-all text-center">
+              <input type="radio" name="paymentMethod" value="Tunai / Cash" class="text-emerald-600">
+              <span>💵 Cash</span>
+            </label>
+            <label class="flex items-center justify-center gap-1.5 p-2 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-800 cursor-pointer hover:border-emerald-500 transition-all text-center">
+              <input type="radio" name="paymentMethod" value="COD (Bayar di Tempat)" class="text-emerald-600">
+              <span>📦 COD</span>
+            </label>
+          </div>
         </div>
 
         <div class="space-y-2">
@@ -1358,6 +1377,25 @@
     let isEditMode = false;
     let isOwner = false;
     let isSuperAdmin = false;
+
+    // Toast Notification Ringan (Tanpa Popup Alert Browser yang Mengganggu)
+    let toastTimer = null;
+    function showToast(msg) {
+      let el = document.getElementById('tokokilatToast');
+      if (!el) {
+        el = document.createElement('div');
+        el.id = 'tokokilatToast';
+        el.className = 'fixed bottom-6 left-1/2 -translate-x-1/2 z-[9999] max-w-sm w-[92%] px-4 py-3 rounded-2xl bg-slate-900/95 text-white text-xs md:text-sm font-bold shadow-2xl border border-slate-700 text-center transition-all duration-300 pointer-events-none';
+        document.body.appendChild(el);
+      }
+      el.innerText = String(msg || '').replace(/\n+/g, ' • ');
+      el.classList.remove('hidden', 'opacity-0');
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        el.classList.add('hidden');
+      }, 3000);
+    }
+    window.alert = function(msg) { showToast(msg); };
 
     function updateSuperAdminButtons() {
       const btnPanel = document.getElementById('btnSuperAdminPanel');
@@ -2083,7 +2121,15 @@
       document.title = `${currentStore.name} - Katalog Resmi Order WA`;
       document.getElementById('displayStoreName').innerText = currentStore.name;
       document.getElementById('displayLocation').innerText = currentStore.location || 'Indonesia';
-      document.getElementById('btnDirectWa').href = `https://wa.me/${currentStore.phone}?text=Halo%20${encodeURIComponent(currentStore.name)},%20saya%20mau%20tanya%20produk%20nih`;
+      const btnDirectWa = document.getElementById('btnDirectWa');
+      if (btnDirectWa) {
+        btnDirectWa.href = `https://wa.me/${currentStore.phone}?text=Halo%20${encodeURIComponent(currentStore.name)},%20saya%20mau%20tanya%20produk%20nih`;
+        if (isOwner) {
+          btnDirectWa.classList.add('hidden');
+        } else {
+          btnDirectWa.classList.remove('hidden');
+        }
+      }
 
       // #10: Link Google Maps pada badge lokasi
       const locBadge = document.getElementById('storeLocationBadge');
@@ -2977,6 +3023,15 @@
       if (document.getElementById('settingsBankInfo')) {
         document.getElementById('settingsBankInfo').value = currentStore.bankInfo || '';
       }
+      if (document.getElementById('settingsBankName')) {
+        document.getElementById('settingsBankName').value = currentStore.bankName || '';
+      }
+      if (document.getElementById('settingsBankNumber')) {
+        document.getElementById('settingsBankNumber').value = currentStore.bankNumber || '';
+      }
+      if (document.getElementById('settingsBankHolder')) {
+        document.getElementById('settingsBankHolder').value = currentStore.bankHolder || '';
+      }
       if (document.getElementById('settingsMapsUrl')) {
         document.getElementById('settingsMapsUrl').value = currentStore.mapsUrl || '';
       }
@@ -3200,7 +3255,20 @@
       }
       currentStore.announcement = (document.getElementById('settingsAnnouncement')?.value || '').trim();
       currentStore.flashTimer = !!document.getElementById('settingsFlashTimer')?.checked;
-      currentStore.bankInfo = (document.getElementById('settingsBankInfo')?.value || '').trim();
+      
+      const bName = (document.getElementById('settingsBankName')?.value || '').trim();
+      const bNum = (document.getElementById('settingsBankNumber')?.value || '').trim();
+      const bHolder = (document.getElementById('settingsBankHolder')?.value || '').trim();
+      currentStore.bankName = bName;
+      currentStore.bankNumber = bNum;
+      currentStore.bankHolder = bHolder;
+
+      if (bName || bNum || bHolder) {
+        currentStore.bankInfo = `${bName} ${bNum}${bHolder ? ` a/n ${bHolder}` : ''}`.trim();
+      } else {
+        currentStore.bankInfo = (document.getElementById('settingsBankInfo')?.value || '').trim();
+      }
+
       currentStore.mapsUrl = (document.getElementById('settingsMapsUrl')?.value || '').trim();
       const rawPhone2 = (document.getElementById('settingsPhone2')?.value || '').trim();
       currentStore.phone2 = rawPhone2 ? normalizeWaPhone(rawPhone2) : '';
@@ -3731,7 +3799,13 @@ Silakan buka kembali toko Anda di: ${baseUrl}`;
     function copyGeneratedShortLink() {
       if (!currentShortUrl) return;
       navigator.clipboard.writeText(currentShortUrl).then(() => {
-        alert('✅ Link singkat toko berhasil disalin!\n\nSilakan bagikan ke pembeli atau CS Anda.');
+        const btn = document.getElementById('btnCopyShortUrl');
+        if (btn) {
+          const orig = btn.innerHTML;
+          btn.innerHTML = `<i data-lucide="check" class="w-4 h-4"></i> Tersalin!`;
+          lucide.createIcons();
+          setTimeout(() => { btn.innerHTML = orig; lucide.createIcons(); }, 1800);
+        }
       }).catch(() => {
         prompt('Salin link ini:', currentShortUrl);
       });
@@ -3829,36 +3903,34 @@ Cobain bikin katalog tokomu di sini:
       if (p.isPreOrder) badgesEl.innerHTML += `<span class="bg-indigo-600 text-white px-2.5 py-0.5 rounded-full text-[11px] font-extrabold shadow">⏳ Pre-Order</span>`;
       if (p.isBundle) badgesEl.innerHTML += `<span class="bg-purple-600 text-white px-2.5 py-0.5 rounded-full text-[11px] font-extrabold shadow">🎁 Paket Hemat</span>`;
 
-      document.getElementById('detailModalCategory').innerText = p.category || 'Katalog Produk';
-      document.getElementById('detailModalName').innerText = p.name;
-      document.getElementById('detailModalPrice').innerText = formatRupiah(getEffectivePrice(p, 1));
+      const titleEl = document.getElementById('detailModalTitle') || document.getElementById('detailModalName');
+      if (titleEl) titleEl.innerText = p.name;
+      const priceEl = document.getElementById('detailModalPrice');
+      if (priceEl) priceEl.innerText = formatRupiah(getEffectivePrice(p, 1));
 
-      const oldPriceEl = document.getElementById('detailModalOldPrice');
-      if ((Number(p.discount) || 0) > 0) {
-        oldPriceEl.innerText = formatRupiah(p.price);
-        oldPriceEl.classList.remove('hidden');
-      } else {
-        oldPriceEl.classList.add('hidden');
-      }
-
-      const wBox = document.getElementById('detailModalWholesaleBox');
-      if ((parseInt(p.wholesaleMin, 10) || 0) >= 2 && (parseInt(p.wholesalePrice, 10) || 0) > 0) {
-        wBox.innerText = `📦 Harga Grosir: Beli minimal ${p.wholesaleMin} pcs jadi ${formatRupiah(p.wholesalePrice)}/pcs`;
-        wBox.classList.remove('hidden');
-      } else {
-        wBox.classList.add('hidden');
+      const wBox = document.getElementById('detailModalWholesaleInfo') || document.getElementById('detailModalWholesaleBox');
+      if (wBox) {
+        if ((parseInt(p.wholesaleMin, 10) || 0) >= 2 && (parseInt(p.wholesalePrice, 10) || 0) > 0) {
+          wBox.innerText = `📦 Harga Grosir: Beli minimal ${p.wholesaleMin} pcs jadi ${formatRupiah(p.wholesalePrice)}/pcs`;
+          wBox.classList.remove('hidden');
+        } else {
+          wBox.classList.add('hidden');
+        }
       }
 
       document.getElementById('detailModalDesc').innerText = p.desc || '-';
 
       const askMsg = `Halo *${currentStore.name}*, saya mau tanya untuk produk *${p.name}* (${formatRupiah(getEffectivePrice(p, 1))}) apakah masih tersedia?`;
-      document.getElementById('detailModalAskWaBtn').href = `https://api.whatsapp.com/send?phone=${currentStore.phone}&text=${encodeURIComponent(askMsg)}`;
+      const askBtn = document.getElementById('btnAskProductWa') || document.getElementById('detailModalAskWaBtn');
+      if (askBtn) askBtn.href = `https://api.whatsapp.com/send?phone=${currentStore.phone}&text=${encodeURIComponent(askMsg)}`;
 
-      const addBtn = document.getElementById('detailModalAddCartBtn');
-      addBtn.onclick = () => {
-        addToCart(p.id);
-        closeProductDetailModal();
-      };
+      const addBtn = document.getElementById('btnAddDetailToCart') || document.getElementById('detailModalAddCartBtn');
+      if (addBtn) {
+        addBtn.onclick = () => {
+          addToCart(p.id);
+          closeProductDetailModal();
+        };
+      }
 
       document.getElementById('productDetailModal').classList.remove('hidden');
       lucide.createIcons();
@@ -3939,11 +4011,12 @@ Cobain bikin katalog tokomu di sini:
       let totalRev = 0;
       orders.forEach(o => { totalRev += (Number(o.total) || 0); });
 
-      document.getElementById('statStoreViews').innerText = views.toLocaleString('id-ID');
+      document.getElementById('statStoreViews').innerText = views.toLocaleString('id-ID') + 'x';
       document.getElementById('statTotalOrders').innerText = orders.length.toLocaleString('id-ID');
       document.getElementById('statTotalRevenue').innerText = formatRupiah(totalRev);
 
-      const listEl = document.getElementById('ordersHistoryList');
+      const listEl = document.getElementById('ordersListContainer') || document.getElementById('ordersHistoryList');
+      if (!listEl) return;
       listEl.innerHTML = '';
 
       if (orders.length === 0) {
@@ -3984,6 +4057,9 @@ Cobain bikin katalog tokomu di sini:
     }
 
     function closeOrdersModal() {
+      document.getElementById('ordersModal').classList.add('hidden');
+    }
+    function closeOrdersAndStatsModal() {
       document.getElementById('ordersModal').classList.add('hidden');
     }
 
@@ -4397,6 +4473,7 @@ Cobain bikin katalog tokomu di sini:
       const custName = document.getElementById('customerName').value.trim() || 'Pelanggan';
       const custAddress = document.getElementById('customerAddress').value.trim() || '-';
       const deliveryMethod = document.querySelector('input[name="deliveryMethod"]:checked')?.value || 'Diantar Kurir / Ekspedisi';
+      const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked')?.value || 'Transfer Bank / e-Wallet';
       const isDropship = document.getElementById('dropshipToggle')?.checked;
       const dropshipSender = document.getElementById('dropshipSenderName')?.value.trim() || '';
       const dropshipPhone = document.getElementById('dropshipSenderPhone')?.value.trim() || '';
@@ -4454,6 +4531,7 @@ Cobain bikin katalog tokomu di sini:
         customerName: custName,
         customerAddress: custAddress,
         deliveryMethod: deliveryMethod,
+        paymentMethod: paymentMethod,
         items: orderItemsRecord,
         discount: appliedPromoDiscount,
         promoCode: appliedPromoCodeStr,
@@ -4480,9 +4558,14 @@ Cobain bikin katalog tokomu di sini:
         ? `\n📦 *Kirim Sebagai Dropshipper:*\n• Pengirim: ${dropshipSender} (${dropshipPhone || '-'})\n`
         : '';
 
-      const bankLines = (currentStore.bankInfo && currentStore.bankInfo.trim() !== '')
-        ? `\n💳 *Info Pembayaran Toko:*\n${currentStore.bankInfo.trim()}\n`
-        : '';
+      let bankLines = '';
+      if (paymentMethod.includes('Transfer')) {
+        if (currentStore.bankName || currentStore.bankNumber) {
+          bankLines = `\n💳 *Rekening Pembayaran (${currentStore.bankName || 'Bank'}):*\n• No. Rek: *${currentStore.bankNumber || '-'}*\n• Atas Nama: *${currentStore.bankHolder || '-'}*\n`;
+        } else if (currentStore.bankInfo && currentStore.bankInfo.trim() !== '') {
+          bankLines = `\n💳 *Info Pembayaran Toko:*\n${currentStore.bankInfo.trim()}\n`;
+        }
+      }
 
       const message = 
 `Halo *${currentStore.name}*, saya mau pesan nih! 🛒
@@ -4492,9 +4575,10 @@ ${itemsText}${extraSummaryLines}💰 *Total Tagihan:* *${formatRupiah(finalGrand
 
 ----------------------------
 👤 *Nama Pemesan:* ${custName}
-🚚 *Metode Terima:* ${deliveryMethod}
+🚚 *Pengiriman:* ${deliveryMethod}
+💵 *Pembayaran:* ${paymentMethod}
 📍 *Alamat / Catatan:* ${custAddress}${dropshipLines}${bankLines}
-Mohon info ketersediaan barang dan total pembayarannya ya, terima kasih! 🙏`;
+Mohon konfirmasi pesanan dan prosesnya ya, terima kasih! 🙏`;
 
       // #30: Kirim ke Admin yang dipilih (Admin 1 atau Admin 2)
       let targetPhone = currentStore.phone;
