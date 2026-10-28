@@ -4143,155 +4143,326 @@ Cobain bikin katalog tokomu di sini:
       const storePhone = currentStore.phone ? `+${currentStore.phone}` : '-';
       const storeLoc = currentStore.location || 'Indonesia';
 
-      const canvas = document.createElement('canvas');
-      const width = 480;
-      const baseHeight = 340 + (items.length * 36);
-      canvas.width = width;
-      canvas.height = baseHeight;
-      const ctx = canvas.getContext('2d');
+      // 1. OPSI PDF: Menggunakan desain HTML Receipt bersih & elegan sebelumnya (dengan logo toko di tengah atas)
+      if (format === 'pdf') {
+        const logoHtml = (currentStore.logo && currentStore.logo.trim() !== '')
+          ? `<img src="${currentStore.logo}" style="width:68px;height:68px;object-fit:cover;border-radius:14px;border:1px solid #e2e8f0;margin-bottom:8px;box-shadow:0 2px 8px rgba(0,0,0,0.06);">`
+          : `<div style="font-size:40px;margin-bottom:6px;">🏪</div>`;
 
-      const renderCanvasContent = (loadedLogoImg = null) => {
-        // Background Putih Bersih
-        ctx.fillStyle = '#ffffff';
-        ctx.fillRect(0, 0, width, baseHeight);
-
-        // Header Hijau Elegan
-        ctx.fillStyle = '#065f46';
-        ctx.fillRect(0, 0, width, 95);
-
-        // Render Logo jika ada gambar
-        let textLeft = 24;
-        if (loadedLogoImg) {
-          try {
-            ctx.save();
-            ctx.beginPath();
-            ctx.arc(54, 48, 28, 0, Math.PI * 2, true);
-            ctx.closePath();
-            ctx.clip();
-            ctx.drawImage(loadedLogoImg, 26, 20, 56, 56);
-            ctx.restore();
-            textLeft = 94;
-          } catch (e) {
-            textLeft = 24;
-          }
-        }
-
-        ctx.fillStyle = '#ffffff';
-        ctx.font = 'bold 20px sans-serif';
-        ctx.fillText((storeName).substring(0, 26), textLeft, 42);
-        ctx.font = '12px sans-serif';
-        ctx.fillStyle = '#a7f3d0';
-        ctx.fillText(`WA: ${storePhone} • ${storeLoc}`, textLeft, 66);
-
-        // Info Pembeli & Detail Pesanan
-        ctx.fillStyle = '#0f172a';
-        ctx.font = 'bold 13px sans-serif';
-        ctx.fillText(`Pelanggan: ${ord.customerName || 'Pelanggan'}`, 24, 126);
-        ctx.font = '12px sans-serif';
-        ctx.fillStyle = '#475569';
-        ctx.fillText(`Tanggal: ${ord.date || '-'} (${ord.deliveryMethod || 'Diantar'})`, 24, 146);
-
-        // Garis Pemisah
-        ctx.strokeStyle = '#cbd5e1';
-        ctx.beginPath();
-        ctx.moveTo(24, 162);
-        ctx.lineTo(width - 24, 162);
-        ctx.stroke();
-
-        // Daftar Item Produk
-        let y = 190;
+        let itemRowsHtml = '';
         items.forEach((it, i) => {
-          ctx.fillStyle = '#1e293b';
-          ctx.font = 'bold 12px sans-serif';
-          const title = `${i + 1}. ${it.name}${it.variant ? ` (${it.variant})` : ''} x${it.qty}`;
-          ctx.fillText(title.substring(0, 36), 24, y);
-          ctx.textAlign = 'right';
-          ctx.fillText(formatRupiah((it.price || 0) * (it.qty || 1)), width - 24, y);
-          ctx.textAlign = 'left';
-          y += 32;
+          const title = `${it.name}${it.variant ? ` (${it.variant})` : ''}`;
+          const sub = (it.price || 0) * (it.qty || 1);
+          itemRowsHtml += `
+            <tr style="border-bottom:1px solid #f1f5f9;">
+              <td style="padding:10px 4px;font-size:13px;color:#1e293b;">
+                <b style="color:#0f172a;">${i + 1}. ${title}</b><br>
+                <span style="font-size:11px;color:#64748b;">${formatRupiah(it.price || 0)} x ${it.qty}</span>
+              </td>
+              <td style="padding:10px 4px;font-size:13px;font-weight:bold;color:#0f172a;text-align:right;white-space:nowrap;">
+                ${formatRupiah(sub)}
+              </td>
+            </tr>
+          `;
         });
 
-        // Garis Total
+        const discRowHtml = (ord.discount > 0) ? `
+          <tr style="color:#e11d48;font-size:12px;">
+            <td style="padding:8px 4px;">Potongan Kupon (${ord.promoCode || 'PROMO'})</td>
+            <td style="padding:8px 4px;text-align:right;font-weight:bold;">-${formatRupiah(ord.discount)}</td>
+          </tr>
+        ` : '';
+
+        const printWin = window.open('', '_blank');
+        if (!printWin) {
+          alert('Mohon izinkan popup browser untuk mengunduh PDF / Cetak Nota!');
+          return;
+        }
+
+        printWin.document.write(`
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>Nota-${makeSlug(storeName)}-${ord.id || Date.now()}</title>
+            <style>
+              body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background:#f8fafc; margin:0; padding:28px 16px; display:flex; justify-content:center; }
+              .receipt-card { background:#ffffff; width:100%; max-width:440px; padding:28px; border-radius:24px; box-shadow:0 8px 30px rgba(0,0,0,0.06); border:1px solid #e2e8f0; }
+              @media print {
+                body { background:#ffffff; padding:0; }
+                .receipt-card { box-shadow:none; border:none; padding:12px; max-width:100%; }
+                .no-print { display:none !important; }
+              }
+            </style>
+          </head>
+          <body>
+            <div class="receipt-card">
+              <div style="text-align:center;border-bottom:2px dashed #e2e8f0;padding-bottom:18px;">
+                ${logoHtml}
+                <h2 style="margin:0;font-size:20px;color:#0f172a;font-weight:900;letter-spacing:-0.5px;">${storeName}</h2>
+                <div style="font-size:12px;color:#64748b;margin-top:4px;">WA: ${storePhone} • ${storeLoc}</div>
+              </div>
+
+              <div style="padding:16px 0;border-bottom:1px solid #e2e8f0;font-size:12px;color:#475569;line-height:1.6;">
+                <div><b>No. Nota:</b> ${ord.id || '-'}</div>
+                <div><b>Pelanggan:</b> <span style="color:#0f172a;font-weight:bold;">${ord.customerName || 'Pelanggan'}</span></div>
+                <div><b>Tanggal:</b> ${ord.date || '-'}</div>
+                <div><b>Pengiriman:</b> ${ord.deliveryMethod || 'Diantar'}</div>
+                <div><b>Pembayaran:</b> ${ord.paymentMethod || 'Transfer / Tunai'}</div>
+              </div>
+
+              <table style="width:100%;border-collapse:collapse;margin:12px 0;">
+                ${itemRowsHtml}
+                ${discRowHtml}
+                <tr style="border-top:2px solid #0f172a;font-size:16px;">
+                  <td style="padding:14px 4px 6px;font-weight:900;color:#0f172a;">TOTAL BAYAR</td>
+                  <td style="padding:14px 4px 6px;text-align:right;font-weight:900;color:#047857;">${formatRupiah(ord.total || 0)}</td>
+                </tr>
+              </table>
+
+              <div style="text-align:center;font-size:11px;color:#94a3b8;margin-top:20px;border-top:1px dashed #e2e8f0;padding-top:14px;line-height:1.5;">
+                Terima kasih sudah berbelanja di <b>${storeName}</b> 🙏<br>
+                <span style="font-size:10px;">Dibuat otomatis via TokoKilat</span>
+              </div>
+
+              <div class="no-print" style="margin-top:24px;display:flex;gap:8px;">
+                <button onclick="window.print()" style="flex:1;background:#059669;color:#fff;border:none;padding:12px;border-radius:12px;font-weight:bold;cursor:pointer;font-size:13px;">🖨️ Cetak / Simpan PDF</button>
+                <button onclick="window.close()" style="background:#e2e8f0;color:#475569;border:none;padding:12px 18px;border-radius:12px;font-weight:bold;cursor:pointer;font-size:13px;">Tutup</button>
+              </div>
+            </div>
+            <scr` + `ipt>
+              setTimeout(() => { window.print(); }, 400);
+            </scr` + `ipt>
+          </body>
+          </html>
+        `);
+        printWin.document.close();
+        return;
+      }
+
+      // 2. OPSI GAMBAR (JPG): Menggunakan Canvas dengan desain kartu putih elegan (sama persis dengan PDF)
+      const canvas = document.createElement('canvas');
+      const width = 460;
+      const cx = width / 2;
+      const hasLogo = (currentStore.logo && currentStore.logo.trim() !== '');
+      const logoH = hasLogo ? (68 + 14) : 50;
+      const computedHeight = 28 + logoH + 20 + 18 + 20 + 100 + 24 + (items.length * 48) + (ord.discount > 0 ? 26 : 0) + 54 + 64;
+      canvas.width = width;
+      canvas.height = computedHeight;
+      const ctx = canvas.getContext('2d');
+
+      const drawRoundRect = (c, x, y, w, h, r, fill = true, stroke = false) => {
+        if (w < 2 * r) r = w / 2;
+        if (h < 2 * r) r = h / 2;
+        c.beginPath();
+        c.moveTo(x + r, y);
+        c.arcTo(x + w, y, x + w, y + h, r);
+        c.arcTo(x + w, y + h, x, y + h, r);
+        c.arcTo(x, y + h, x, y, r);
+        c.arcTo(x, y, x + w, y, r);
+        c.closePath();
+        if (fill) c.fill();
+        if (stroke) c.stroke();
+      };
+
+      const renderCanvasContent = (loadedLogoImg = null, forceFallback = false) => {
+        // 1. Background Kartu Putih Bersih
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, width, computedHeight);
+
+        // Border Halus Sekeliling Nota
+        ctx.strokeStyle = '#e2e8f0';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(1, 1, width - 2, computedHeight - 2);
+
+        let y = 28;
+
+        // 2. Logo Toko di Tengah Atas (Rounded Box & Border)
+        if (loadedLogoImg && !forceFallback) {
+          try {
+            ctx.save();
+            drawRoundRect(ctx, cx - 34, y, 68, 68, 14, false, false);
+            ctx.clip();
+            ctx.drawImage(loadedLogoImg, cx - 34, y, 68, 68);
+            ctx.restore();
+
+            ctx.strokeStyle = '#e2e8f0';
+            ctx.lineWidth = 1;
+            drawRoundRect(ctx, cx - 34, y, 68, 68, 14, false, true);
+            y += 68 + 14;
+          } catch (e) {
+            ctx.textAlign = 'center';
+            ctx.font = '38px sans-serif';
+            ctx.fillText('🏪', cx, y + 36);
+            y += 50;
+          }
+        } else {
+          ctx.textAlign = 'center';
+          ctx.font = '38px sans-serif';
+          ctx.fillText('🏪', cx, y + 36);
+          y += 50;
+        }
+
+        // 3. Nama Toko & Subtitle
+        ctx.textAlign = 'center';
+        ctx.font = 'bold 20px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+        ctx.fillStyle = '#0f172a';
+        ctx.fillText(storeName.substring(0, 32), cx, y);
+        y += 20;
+
+        ctx.font = '12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+        ctx.fillStyle = '#64748b';
+        ctx.fillText(`WA: ${storePhone} • ${storeLoc}`, cx, y);
+        y += 18;
+
+        // 4. Garis Putus-putus Pemisah Header
         ctx.beginPath();
+        ctx.setLineDash([5, 5]);
+        ctx.strokeStyle = '#e2e8f0';
+        ctx.lineWidth = 1.5;
         ctx.moveTo(24, y);
         ctx.lineTo(width - 24, y);
         ctx.stroke();
-        y += 28;
+        ctx.setLineDash([]);
+        y += 20;
 
-        if (ord.discount > 0) {
-          ctx.fillStyle = '#e11d48';
-          ctx.font = 'bold 12px sans-serif';
-          ctx.fillText(`Potongan Kupon (${ord.promoCode || 'PROMO'})`, 24, y);
-          ctx.textAlign = 'right';
-          ctx.fillText(`-${formatRupiah(ord.discount)}`, width - 24, y);
+        // 5. Metadata Pesanan
+        const metaList = [
+          { label: 'No. Nota:', val: ord.id || '-' },
+          { label: 'Pelanggan:', val: ord.customerName || 'Pelanggan', isBold: true },
+          { label: 'Tanggal:', val: ord.date || '-' },
+          { label: 'Pengiriman:', val: ord.deliveryMethod || 'Diantar' },
+          { label: 'Pembayaran:', val: ord.paymentMethod || 'Transfer / Tunai' }
+        ];
+
+        metaList.forEach(m => {
           ctx.textAlign = 'left';
-          y += 24;
+          ctx.font = '12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+          ctx.fillStyle = '#475569';
+          ctx.fillText(m.label, 24, y);
+
+          ctx.font = m.isBold
+            ? 'bold 12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+            : '12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+          ctx.fillStyle = m.isBold ? '#0f172a' : '#475569';
+          ctx.fillText(m.val, 115, y);
+          y += 20;
+        });
+
+        // 6. Garis Solid Pemisah Metadata
+        y += 4;
+        ctx.beginPath();
+        ctx.strokeStyle = '#e2e8f0';
+        ctx.lineWidth = 1;
+        ctx.moveTo(24, y);
+        ctx.lineTo(width - 24, y);
+        ctx.stroke();
+        y += 20;
+
+        // 7. Daftar Produk yang Dipesan
+        items.forEach((it, i) => {
+          const title = `${i + 1}. ${it.name}${it.variant ? ` (${it.variant})` : ''}`;
+          const sub = (it.price || 0) * (it.qty || 1);
+
+          ctx.textAlign = 'left';
+          ctx.font = 'bold 13px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+          ctx.fillStyle = '#0f172a';
+          ctx.fillText(title.substring(0, 34), 24, y);
+
+          ctx.textAlign = 'right';
+          ctx.font = 'bold 13px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+          ctx.fillStyle = '#0f172a';
+          ctx.fillText(formatRupiah(sub), width - 24, y);
+
+          y += 18;
+          ctx.textAlign = 'left';
+          ctx.font = '11px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+          ctx.fillStyle = '#64748b';
+          ctx.fillText(`${formatRupiah(it.price || 0)} x ${it.qty || 1}`, 24, y);
+
+          y += 12;
+          ctx.beginPath();
+          ctx.strokeStyle = '#f1f5f9';
+          ctx.lineWidth = 1;
+          ctx.moveTo(24, y);
+          ctx.lineTo(width - 24, y);
+          ctx.stroke();
+          y += 18;
+        });
+
+        // 8. Baris Potongan Diskon / Kupon
+        if (ord.discount > 0) {
+          ctx.textAlign = 'left';
+          ctx.font = '12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+          ctx.fillStyle = '#e11d48';
+          ctx.fillText(`Potongan Kupon (${ord.promoCode || 'PROMO'})`, 24, y);
+
+          ctx.textAlign = 'right';
+          ctx.font = 'bold 12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+          ctx.fillText(`-${formatRupiah(ord.discount)}`, width - 24, y);
+          y += 22;
         }
 
-        ctx.fillStyle = '#065f46';
-        ctx.font = 'bold 16px sans-serif';
-        ctx.fillText('TOTAL BAYAR', 24, y);
-        ctx.textAlign = 'right';
-        ctx.fillText(formatRupiah(ord.total || 0), width - 24, y);
+        // 9. Total Bayar (Garis Tebal & Angka Hijau)
+        y += 4;
+        ctx.beginPath();
+        ctx.strokeStyle = '#0f172a';
+        ctx.lineWidth = 2;
+        ctx.moveTo(24, y);
+        ctx.lineTo(width - 24, y);
+        ctx.stroke();
+        y += 24;
+
         ctx.textAlign = 'left';
+        ctx.font = '900 16px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+        ctx.fillStyle = '#0f172a';
+        ctx.fillText('TOTAL BAYAR', 24, y);
 
-        y += 32;
+        ctx.textAlign = 'right';
+        ctx.font = '900 16px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+        ctx.fillStyle = '#047857';
+        ctx.fillText(formatRupiah(ord.total || 0), width - 24, y);
+        y += 26;
+
+        // 10. Footer Terima Kasih & Watermark TokoKilat
+        ctx.beginPath();
+        ctx.setLineDash([5, 5]);
+        ctx.strokeStyle = '#e2e8f0';
+        ctx.lineWidth = 1;
+        ctx.moveTo(24, y);
+        ctx.lineTo(width - 24, y);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        y += 20;
+
+        ctx.textAlign = 'center';
+        ctx.font = '11px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
         ctx.fillStyle = '#64748b';
-        ctx.font = 'italic 11px sans-serif';
-        ctx.fillText('Terima kasih sudah berbelanja di toko kami! 🙏', 24, y);
+        ctx.fillText(`Terima kasih sudah berbelanja di ${storeName} 🙏`, cx, y);
+        y += 16;
 
-        const dataUrl = canvas.toDataURL('image/png');
+        ctx.font = '10px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+        ctx.fillStyle = '#94a3b8';
+        ctx.fillText('Dibuat otomatis via TokoKilat', cx, y);
 
-        // JIKA MEMILIH FORMAT PDF: Gunakan gambar canvas yang sama persis agar tampilannya 100% identik!
-        if (format === 'pdf') {
-          const printWin = window.open('', '_blank');
-          if (!printWin) {
-            alert('Mohon izinkan popup browser untuk mencetak/menyimpan PDF!');
+        // Ekspor ke file JPG / PNG
+        let dataUrl;
+        try {
+          dataUrl = canvas.toDataURL('image/jpeg', 0.95);
+        } catch (secErr) {
+          if (!forceFallback) {
+            renderCanvasContent(null, true);
             return;
           }
-          printWin.document.write(`
-            <!DOCTYPE html>
-            <html>
-            <head>
-              <title>Nota-${makeSlug(storeName)}-${ord.id || Date.now()}</title>
-              <style>
-                @page { size: auto; margin: 10mm; }
-                body { margin: 0; background: #f1f5f9; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; font-family: sans-serif; }
-                .nota-img { max-width: 480px; width: 100%; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.12); border: 1px solid #cbd5e1; background: #fff; }
-                .action-bar { margin-top: 18px; display: flex; gap: 10px; }
-                .btn { padding: 10px 20px; border-radius: 10px; font-weight: bold; border: none; cursor: pointer; font-size: 13px; }
-                .btn-print { background: #059669; color: #fff; }
-                .btn-close { background: #e2e8f0; color: #475569; }
-                @media print {
-                  body { background: #fff; min-height: auto; padding: 0; }
-                  .nota-img { box-shadow: none; border: none; max-width: 100%; width: 100%; border-radius: 0; }
-                  .action-bar { display: none !important; }
-                }
-              </style>
-            </head>
-            <body>
-              <img src="${dataUrl}" class="nota-img">
-              <div class="action-bar">
-                <button onclick="window.print()" class="btn btn-print">🖨️ Cetak / Simpan PDF</button>
-                <button onclick="window.close()" class="btn btn-close">Tutup</button>
-              </div>
-              <scr` + `ipt>
-                setTimeout(() => { window.print(); }, 400);
-              </scr` + `ipt>
-            </body>
-            </html>
-          `);
-          printWin.document.close();
-        } else {
-          // JIKA MEMILIH FORMAT GAMBAR (JPG/PNG): Langsung download file gambarnya
-          const link = document.createElement('a');
-          link.download = `Nota-${makeSlug(storeName)}-${Date.now()}.png`;
-          link.href = dataUrl;
-          link.click();
+          dataUrl = canvas.toDataURL('image/png');
         }
+
+        const link = document.createElement('a');
+        link.download = `Nota-${makeSlug(storeName)}-${ord.id || Date.now()}.jpg`;
+        link.href = dataUrl;
+        link.click();
       };
 
-      if (currentStore.logo && currentStore.logo.trim() !== '') {
+      if (hasLogo) {
         const logoImg = new Image();
         logoImg.crossOrigin = 'anonymous';
         logoImg.onload = () => { renderCanvasContent(logoImg); };
